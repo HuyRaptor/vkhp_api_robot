@@ -60,7 +60,7 @@ Generate Unique Parent Category Data
     ...                 warehouseId=${WAREHOUSE_ID}
     ...                 divisonId=${DIVISION_ID}
     ...                 exportStrategy=FIFO
-    [Return]            ${category_data}
+    RETURN            ${category_data}
 
 Create Parent Category
     [Documentation]     Create a new parent product category and return its ID
@@ -100,7 +100,7 @@ Create Parent Category
     
     # Return parent category ID and full response
     ${category_id}=     Convert To String    ${json}[id]
-    [Return]            ${category_id}    ${json}
+    RETURN            ${category_id}    ${json}
 
 Get Parent Category By ID
     [Documentation]     Retrieve a specific parent product category by ID
@@ -127,7 +127,7 @@ Get Parent Category By ID
     Dictionary Should Contain Key        ${json}    id
     ...    msg=Get parent category response missing ID field
     
-    [Return]            ${json}
+    RETURN            ${json}
 
 Update Parent Category
     [Documentation]     Update an existing parent product category
@@ -171,7 +171,7 @@ Update Parent Category
     Dictionary Should Contain Key        ${json}    id
     ...    msg=Update parent category response missing ID field
     
-    [Return]            ${json}
+    RETURN            ${json}
 
 Delete Parent Category
     [Documentation]     Delete a parent product category from the system
@@ -192,7 +192,7 @@ Delete Parent Category
     ...                 expected_status=200
     
     # Return deletion status
-    [Return]            ${TRUE}
+    RETURN            ${TRUE}
 
 Get All Parent Categories
     [Documentation]     Retrieve all parent product categories with optional filtering
@@ -224,7 +224,7 @@ Get All Parent Categories
     Should Not Be Empty    ${json}
     ...    msg=Get all parent categories response was empty
     
-    [Return]            ${json}
+    RETURN            ${json}
 
 Assert Parent Category Details
     [Documentation]     Verify parent category details match expected values

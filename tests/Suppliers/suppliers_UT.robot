@@ -69,7 +69,7 @@ Generate Unique Supplier Data
     ...                 taxCode=${tax_code}
     ...                 cooperationDay=2023-03-20T00:00:00.000Z
     ...                 warehouseId=${WAREHOUSE_ID}
-    [Return]            ${supplier_data}
+    RETURN            ${supplier_data}
 
 Create Supplier
     [Documentation]     Create a new supplier and return its ID
@@ -113,7 +113,7 @@ Create Supplier
     
     # Return supplier ID and full response
     ${supplier_id}=     Convert To String    ${json}[id]
-    [Return]            ${supplier_id}    ${json}
+    RETURN            ${supplier_id}    ${json}
 
 Get Supplier By ID
     [Documentation]     Retrieve a specific supplier by ID
@@ -140,7 +140,7 @@ Get Supplier By ID
     Dictionary Should Contain Key        ${json}    id
     ...    msg=Get supplier response missing ID field
     
-    [Return]            ${json}
+    RETURN            ${json}
 
 Update Supplier
     [Documentation]     Update an existing supplier
@@ -180,7 +180,7 @@ Update Supplier
     Dictionary Should Contain Key        ${json}    id
     ...    msg=Update supplier response missing ID field
     
-    [Return]            ${json}
+    RETURN            ${json}
 
 Delete Supplier
     [Documentation]     Delete a supplier from the system
@@ -201,7 +201,7 @@ Delete Supplier
     ...                 expected_status=200
     
     # Return deletion status
-    [Return]            ${TRUE}
+    RETURN            ${TRUE}
 
 Get All Suppliers
     [Documentation]     Retrieve all suppliers with optional filtering
@@ -233,7 +233,7 @@ Get All Suppliers
     Should Not Be Empty    ${json}
     ...    msg=Get all suppliers response was empty
     
-    [Return]            ${json}
+    RETURN            ${json}
 
 Assert Supplier Details
     [Documentation]     Verify supplier details match expected values
@@ -265,7 +265,7 @@ Verify Response Indicates Deletion
     ${is_deleted}=      Run Keyword If    ${has_status}    Check Deletion Status    ${json}[status]
     ...    ELSE         Check Other Deletion Indicators    ${json}
     
-    [Return]            ${is_deleted}
+    RETURN            ${is_deleted}
 
 Check Deletion Status
     [Documentation]     Check if status field indicates deletion
@@ -282,7 +282,7 @@ Check Deletion Status
         ${is_deleted}=  Set Variable    ${TRUE}
     END
     
-    [Return]            ${is_deleted}
+    RETURN            ${is_deleted}
 
 Check Other Deletion Indicators
     [Documentation]     Check for other indicators of deletion
@@ -295,7 +295,7 @@ Check Other Deletion Indicators
     ${is_deleted}=      Run Keyword If    ${has_active} and '${json}[isActive]' == 'false'    Set Variable    ${TRUE}
     ...    ELSE         Set Variable    ${FALSE}
     
-    [Return]            ${is_deleted}
+    RETURN            ${is_deleted}
 
 *** Test Cases ***
 01 - Setup Test Environment

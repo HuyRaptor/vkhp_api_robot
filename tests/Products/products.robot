@@ -59,7 +59,7 @@ Generate Unique Product Category Data
     ...                 name=${category_name}
     ...                 parentProductCategoryId=${PARENT_PRODUCT_CATEGORY_ID}
     ...                 warehouseId=${WAREHOUSE_ID}
-    [Return]            ${category_data}
+    RETURN            ${category_data}
 
 Create Product Category
     [Documentation]     Create a new product category and return its ID
@@ -97,7 +97,7 @@ Create Product Category
     
     # Return product category ID and full response
     ${category_id}=     Convert To String    ${json}[id]
-    [Return]            ${category_id}    ${json}
+    RETURN            ${category_id}    ${json}
 
 Get Product Category By ID
     [Documentation]     Retrieve a specific product category by ID
@@ -124,7 +124,7 @@ Get Product Category By ID
     Dictionary Should Contain Key        ${json}    id
     ...    msg=Get product category response missing ID field
     
-    [Return]            ${json}
+    RETURN            ${json}
 
 Update Product Category
     [Documentation]     Update an existing product category
@@ -166,7 +166,7 @@ Update Product Category
     Dictionary Should Contain Key        ${json}    id
     ...    msg=Update product category response missing ID field
     
-    [Return]            ${json}
+    RETURN            ${json}
 
 Delete Product Category
     [Documentation]     Delete a product category from the system
@@ -187,7 +187,7 @@ Delete Product Category
     ...                 expected_status=200
     
     # Return deletion status
-    [Return]            ${TRUE}
+    RETURN            ${TRUE}
 
 Get All Product Categories
     [Documentation]     Retrieve all product categories with optional filtering
@@ -219,7 +219,7 @@ Get All Product Categories
     Should Not Be Empty    ${json}
     ...    msg=Get all product categories response was empty
     
-    [Return]            ${json}
+    RETURN            ${json}
 
 Assert Product Category Details
     [Documentation]     Verify product category details match expected values

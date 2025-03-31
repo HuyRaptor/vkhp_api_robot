@@ -1,0 +1,4879 @@
+openapi: 3.0.0
+info:
+  title: vKho
+  description: The vKho API description
+  version: '1.0'
+  contact: {}
+tags: []
+servers:
+  - url: https://api.vkho.net
+    variables: {}
+components:
+  securitySchemes:
+    bearer:
+      scheme: bearer
+      bearerFormat: JWT
+      type: http
+  schemas:
+    CreateProductOrderDto:
+      type: object
+      properties:
+        total:
+          type: number
+        boothCode:
+          type: string
+        sku:
+          type: string
+      required:
+        - total
+        - boothCode
+        - sku
+    CreateOrder:
+      type: object
+      properties:
+        nameCustomer:
+          type: string
+        code:
+          type: string
+        boothCode:
+          type: string
+        deliveryAdress:
+          type: string
+        deliveryTime:
+          format: date-time
+          type: string
+        driverName:
+          type: string
+        warehouseId:
+          type: number
+        productOrders:
+          type: array
+          items:
+            $ref: '#/components/schemas/CreateProductOrderDto'
+      required:
+        - nameCustomer
+        - code
+        - boothCode
+        - deliveryAdress
+        - deliveryTime
+        - driverName
+        - warehouseId
+        - productOrders
+    UpdateProductOrder:
+      type: object
+      properties:
+        id:
+          type: number
+        pickingQuantity:
+          type: number
+      required:
+        - id
+        - pickingQuantity
+    UpdateOrder:
+      type: object
+      properties:
+        id:
+          type: number
+        boothCode:
+          type: string
+        deliveryAdress:
+          type: string
+        deliveryTime:
+          format: date-time
+          type: string
+        driverName:
+          type: string
+        status:
+          type: string
+          enum:
+            - ENABLE
+            - PICKING
+            - PACKAGED
+            - READY
+            - DISABLE
+            - MOVING
+            - SUCCESS
+            - WAITING
+            - NEW
+            - INITIAL
+            - WAIT_PAYMENT
+            - SUBMITTED
+            - AWAITING_PICKUP
+            - DELIVERING
+            - DELIVERED
+            - CANCELLED
+            - PAYMENT_FAILED
+            - RETURN
+        updateProductOrder:
+          type: array
+          items:
+            $ref: '#/components/schemas/UpdateProductOrder'
+      required:
+        - id
+        - boothCode
+        - deliveryAdress
+        - deliveryTime
+        - driverName
+        - status
+        - updateProductOrder
+    UpdateOrders:
+      type: object
+      properties:
+        ids:
+          type: array
+          items:
+            type: number
+        status:
+          type: string
+          enum:
+            - ENABLE
+            - PICKING
+            - PACKAGED
+            - READY
+            - DISABLE
+            - MOVING
+            - SUCCESS
+            - WAITING
+            - NEW
+            - INITIAL
+            - WAIT_PAYMENT
+            - SUBMITTED
+            - AWAITING_PICKUP
+            - DELIVERING
+            - DELIVERED
+            - CANCELLED
+            - PAYMENT_FAILED
+            - RETURN
+      required:
+        - ids
+        - status
+    CheckPickingOrder:
+      type: object
+      properties:
+        ids:
+          type: array
+          items:
+            type: number
+        userId:
+          type: string
+      required:
+        - ids
+        - userId
+    ConfirmOrder:
+      type: object
+      properties:
+        id:
+          type: number
+      required:
+        - id
+    CreatePackageDto:
+      type: object
+      properties:
+        orderId:
+          type: number
+        warehouseId:
+          type: number
+        zoneId:
+          type: number
+      required:
+        - orderId
+        - warehouseId
+        - zoneId
+    UpdatePackage:
+      type: object
+      properties:
+        orderId:
+          type: number
+        warehouseId:
+          type: number
+        zoneId:
+          type: number
+        id:
+          type: number
+        status:
+          type: string
+          enum:
+            - ENABLE
+            - DISABLE
+            - NEW
+            - WAITING
+            - SHIPPING
+            - LOST
+            - ERROR
+      required:
+        - orderId
+        - warehouseId
+        - zoneId
+        - id
+        - status
+    UpdateMultipleDto:
+      type: object
+      properties:
+        id:
+          type: array
+          items:
+            type: number
+        status:
+          type: string
+          enum:
+            - ENABLE
+            - DISABLE
+            - NEW
+            - WAITING
+            - SHIPPING
+            - LOST
+            - ERROR
+      required:
+        - id
+        - status
+    UpdateProductOrderDto:
+      type: object
+      properties:
+        total:
+          type: number
+        boothCode:
+          type: string
+        sku:
+          type: string
+        id:
+          type: number
+      required:
+        - total
+        - boothCode
+        - sku
+        - id
+    inboundKind:
+      type: string
+      enum:
+        - NEW
+        - INTERNAL
+        - RETURN
+    CreateProduct:
+      type: object
+      properties:
+        name:
+          type: string
+        totalQuantity:
+          type: number
+        expectedQuantity:
+          type: number
+        importDate:
+          format: date-time
+          type: string
+        cost:
+          type: number
+        salePrice:
+          type: number
+        warehouseId:
+          type: number
+        inboundKind:
+          $ref: '#/components/schemas/inboundKind'
+        expireDate:
+          format: date-time
+          type: string
+        productCode:
+          type: string
+        idRackReallocate:
+          type: number
+        imageProduct:
+          type: string
+        imageQRCode:
+          type: string
+        imageBarcode:
+          type: string
+        blockId:
+          type: number
+        supplierId:
+          type: number
+        productCategoryId:
+          type: number
+        rackId:
+          type: number
+        receiptId:
+          type: number
+        zoneId:
+          type: number
+        orderId:
+          type: number
+        packageId:
+          type: number
+        masterProductId:
+          type: number
+        note:
+          type: string
+        barCode:
+          type: string
+      required:
+        - name
+        - totalQuantity
+        - expectedQuantity
+        - importDate
+        - cost
+        - salePrice
+        - warehouseId
+        - inboundKind
+        - expireDate
+        - productCode
+        - idRackReallocate
+        - imageProduct
+        - imageQRCode
+        - imageBarcode
+        - blockId
+        - supplierId
+        - productCategoryId
+        - rackId
+        - receiptId
+        - zoneId
+        - orderId
+        - packageId
+        - masterProductId
+        - note
+        - barCode
+    RackProductDTO:
+      type: object
+      properties:
+        rackId:
+          type: number
+        productIds:
+          type: array
+          items:
+            type: number
+      required:
+        - rackId
+        - productIds
+    UpdateLocationProduct:
+      type: object
+      properties:
+        productIds:
+          type: array
+          items:
+            type: string
+      required:
+        - productIds
+    SplitProduct:
+      type: object
+      properties:
+        id:
+          type: number
+        quantity:
+          type: number
+      required:
+        - id
+        - quantity
+    ScanProduct:
+      type: object
+      properties:
+        page:
+          type: number
+        limit:
+          type: number
+        startDate:
+          format: date-time
+          type: string
+        endDate:
+          format: date-time
+          type: string
+        sortBy:
+          type: string
+          default: id
+        sortDirection:
+          type: string
+          default: desc
+        warehouseId:
+          type: number
+        productCodes:
+          type: array
+          items:
+            type: string
+        packageCodes:
+          type: array
+          items:
+            type: string
+        barCodes:
+          type: array
+          items:
+            type: string
+        rackCode:
+          type: string
+        type:
+          type: string
+          enum:
+            - TEMPORARY_INBOUND
+            - STORING
+            - INBOUND_CONTROL
+            - PICKING
+            - REALOCATE
+      required:
+        - productCodes
+        - packageCodes
+        - barCodes
+        - rackCode
+        - type
+    status:
+      type: string
+      enum:
+        - NEW
+        - STORED
+        - MOVING
+        - REALLOCATE
+        - TEMPORARY
+        - TEMPORARY_OUT
+        - RECEVIE
+        - PICKING
+        - PACKAGE
+        - ERROR
+        - LOST
+        - ENABLE
+        - DISABLE
+    UpdateProduct:
+      type: object
+      properties:
+        name:
+          type: string
+        totalQuantity:
+          type: number
+        expectedQuantity:
+          type: number
+        importDate:
+          format: date-time
+          type: string
+        cost:
+          type: number
+        salePrice:
+          type: number
+        warehouseId:
+          type: number
+        inboundKind:
+          $ref: '#/components/schemas/inboundKind'
+        expireDate:
+          format: date-time
+          type: string
+        productCode:
+          type: string
+        idRackReallocate:
+          type: number
+        imageProduct:
+          type: string
+        imageQRCode:
+          type: string
+        imageBarcode:
+          type: string
+        blockId:
+          type: number
+        supplierId:
+          type: number
+        productCategoryId:
+          type: number
+        rackId:
+          type: number
+        receiptId:
+          type: number
+        zoneId:
+          type: number
+        orderId:
+          type: number
+        packageId:
+          type: number
+        masterProductId:
+          type: number
+        note:
+          type: string
+        barCode:
+          type: string
+        id:
+          type: number
+        description:
+          type: string
+        lostDate:
+          format: date-time
+          type: string
+        status:
+          $ref: '#/components/schemas/status'
+        lostNumber:
+          type: number
+      required:
+        - name
+        - totalQuantity
+        - expectedQuantity
+        - importDate
+        - cost
+        - salePrice
+        - warehouseId
+        - inboundKind
+        - expireDate
+        - productCode
+        - idRackReallocate
+        - imageProduct
+        - imageQRCode
+        - imageBarcode
+        - blockId
+        - supplierId
+        - productCategoryId
+        - rackId
+        - receiptId
+        - zoneId
+        - orderId
+        - packageId
+        - masterProductId
+        - note
+        - barCode
+        - id
+        - description
+        - lostDate
+        - status
+        - lostNumber
+    UpdateProducts:
+      type: object
+      properties:
+        ids:
+          type: array
+          items:
+            type: number
+        status:
+          type: string
+          enum:
+            - NEW
+            - STORED
+            - MOVING
+            - REALLOCATE
+            - TEMPORARY
+            - TEMPORARY_OUT
+            - RECEVIE
+            - PICKING
+            - PACKAGE
+            - ERROR
+            - LOST
+            - ENABLE
+            - DISABLE
+        rackId:
+          type: number
+        orderId:
+          type: number
+        group:
+          type: string
+        packageCode:
+          type: string
+      required:
+        - ids
+        - status
+        - rackId
+        - orderId
+        - group
+        - packageCode
+    IdsDTO:
+      type: object
+      properties:
+        ids:
+          type: array
+          items:
+            type: number
+      required:
+        - ids
+    CreateZone:
+      type: object
+      properties:
+        capcity:
+          type: number
+        name:
+          type: string
+        warehouseId:
+          type: number
+      required:
+        - capcity
+        - name
+        - warehouseId
+    UpdateZone:
+      type: object
+      properties:
+        capcity:
+          type: number
+        name:
+          type: string
+        warehouseId:
+          type: number
+        id:
+          type: number
+        status:
+          type: string
+          enum:
+            - ENABLE
+            - DISABLE
+      required:
+        - capcity
+        - name
+        - warehouseId
+        - id
+        - status
+    CreateProductCategory:
+      type: object
+      properties:
+        name:
+          type: string
+        parentProductCategoryId:
+          type: number
+        warehouseId:
+          type: number
+      required:
+        - name
+        - parentProductCategoryId
+        - warehouseId
+    UpdateProductCategory:
+      type: object
+      properties:
+        name:
+          type: string
+        parentProductCategoryId:
+          type: number
+        warehouseId:
+          type: number
+        id:
+          type: number
+        status:
+          type: string
+          enum:
+            - ENABLE
+            - DISABLE
+      required:
+        - name
+        - parentProductCategoryId
+        - warehouseId
+        - id
+        - status
+    CreateSupplier:
+      type: object
+      properties:
+        name:
+          type: string
+        email:
+          type: string
+        phoneNumber:
+          type: string
+        address:
+          type: string
+        isActive:
+          type: boolean
+        contractNumber:
+          type: string
+        taxCode:
+          type: string
+        cooperationDay:
+          format: date-time
+          type: string
+        warehouseId:
+          type: number
+        productCategoryIds:
+          type: array
+          items:
+            type: number
+      required:
+        - name
+        - email
+        - phoneNumber
+        - address
+        - isActive
+        - contractNumber
+        - taxCode
+        - cooperationDay
+        - warehouseId
+        - productCategoryIds
+    UpdateSupplier:
+      type: object
+      properties:
+        name:
+          type: string
+        email:
+          type: string
+        phoneNumber:
+          type: string
+        address:
+          type: string
+        isActive:
+          type: boolean
+        contractNumber:
+          type: string
+        taxCode:
+          type: string
+        cooperationDay:
+          format: date-time
+          type: string
+        warehouseId:
+          type: number
+        productCategoryIds:
+          type: array
+          items:
+            type: number
+        id:
+          type: number
+        status:
+          type: string
+          enum:
+            - ENABLE
+            - DISABLE
+      required:
+        - name
+        - email
+        - phoneNumber
+        - address
+        - isActive
+        - contractNumber
+        - taxCode
+        - cooperationDay
+        - warehouseId
+        - productCategoryIds
+        - id
+        - status
+    CreateRack:
+      type: object
+      properties:
+        capacity:
+          type: number
+        warehouseId:
+          type: number
+        shelfId:
+          type: number
+      required:
+        - capacity
+        - warehouseId
+        - shelfId
+    UpdateRack:
+      type: object
+      properties:
+        capacity:
+          type: number
+        warehouseId:
+          type: number
+        shelfId:
+          type: number
+        id:
+          type: number
+        status:
+          type: string
+          enum:
+            - ENABLE
+            - FULL
+            - DISABLE
+      required:
+        - capacity
+        - warehouseId
+        - shelfId
+        - id
+        - status
+    CreateReceipt:
+      type: object
+      properties:
+        receiptDate:
+          format: date-time
+          type: string
+        driverName:
+          type: string
+        boothCode:
+          type: string
+        inboundkind:
+          $ref: '#/components/schemas/inboundKind'
+        description:
+          type: string
+        warehouseId:
+          type: number
+        supplierId:
+          type: number
+        products:
+          type: array
+          items:
+            $ref: '#/components/schemas/CreateProduct'
+      required:
+        - receiptDate
+        - driverName
+        - boothCode
+        - inboundkind
+        - description
+        - warehouseId
+        - supplierId
+        - products
+    UpdateReceipt:
+      type: object
+      properties:
+        receiptDate:
+          format: date-time
+          type: string
+        driverName:
+          type: string
+        boothCode:
+          type: string
+        inboundkind:
+          $ref: '#/components/schemas/inboundKind'
+        description:
+          type: string
+        warehouseId:
+          type: number
+        supplierId:
+          type: number
+        products:
+          type: array
+          items:
+            $ref: '#/components/schemas/CreateProduct'
+        id:
+          type: number
+        status:
+          type: string
+          enum:
+            - ENABLE
+            - DISABLE
+            - NEW
+            - RECEIVE
+      required:
+        - receiptDate
+        - driverName
+        - boothCode
+        - inboundkind
+        - description
+        - warehouseId
+        - supplierId
+        - products
+        - id
+        - status
+    ConfirmProduct:
+      type: object
+      properties:
+        id:
+          type: number
+        quantity:
+          type: number
+      required:
+        - id
+        - quantity
+    ConfirmReceipt:
+      type: object
+      properties:
+        id:
+          type: number
+        zoneId:
+          type: number
+        products:
+          type: array
+          items:
+            $ref: '#/components/schemas/ConfirmProduct'
+      required:
+        - id
+        - zoneId
+        - products
+    ProductHistoryDTO:
+      type: object
+      properties:
+        name:
+          type: string
+        totalQuantity:
+          type: number
+        cost:
+          type: number
+        salePrice:
+          type: number
+        warehouseId:
+          type: number
+        inboundKind:
+          type: string
+        expireDate:
+          format: date-time
+          type: string
+        productCode:
+          type: string
+        createDate:
+          format: date-time
+          type: string
+        blockId:
+          type: number
+        supplierId:
+          type: number
+        productCategoryId:
+          type: number
+        rackId:
+          type: number
+      required:
+        - name
+        - totalQuantity
+        - cost
+        - salePrice
+        - warehouseId
+        - inboundKind
+        - expireDate
+        - productCode
+        - createDate
+        - blockId
+        - supplierId
+        - productCategoryId
+        - rackId
+    ProductHistory:
+      type: object
+      properties:
+        name:
+          type: string
+        totalQuantity:
+          type: number
+        cost:
+          type: number
+        salePrice:
+          type: number
+        warehouseId:
+          type: number
+        inboundKind:
+          type: string
+        expireDate:
+          format: date-time
+          type: string
+        productCode:
+          type: string
+        createDate:
+          format: date-time
+          type: string
+        blockId:
+          type: number
+        supplierId:
+          type: number
+        productCategoryId:
+          type: number
+        rackId:
+          type: number
+        id:
+          type: number
+      required:
+        - name
+        - totalQuantity
+        - cost
+        - salePrice
+        - warehouseId
+        - inboundKind
+        - expireDate
+        - productCode
+        - createDate
+        - blockId
+        - supplierId
+        - productCategoryId
+        - rackId
+        - id
+    CreateBlock:
+      type: object
+      properties:
+        name:
+          type: string
+        position:
+          type: number
+        totalShelf:
+          type: number
+        warehouseId:
+          type: number
+      required:
+        - name
+        - position
+        - totalShelf
+        - warehouseId
+    UpdateBlock:
+      type: object
+      properties:
+        name:
+          type: string
+        position:
+          type: number
+        totalShelf:
+          type: number
+        warehouseId:
+          type: number
+        id:
+          type: number
+        status:
+          type: string
+          enum:
+            - ENABLE
+            - DISABLE
+      required:
+        - name
+        - position
+        - totalShelf
+        - warehouseId
+        - id
+        - status
+    CreateShelf:
+      type: object
+      properties:
+        name:
+          type: string
+        totalRack:
+          type: number
+        position:
+          type: number
+        medium:
+          type: number
+        high:
+          type: number
+        capacity:
+          type: number
+        blockId:
+          type: number
+        parentProductCategoryId:
+          type: number
+        warehouseId:
+          type: number
+      required:
+        - name
+        - totalRack
+        - position
+        - medium
+        - high
+        - capacity
+        - blockId
+        - parentProductCategoryId
+        - warehouseId
+    UpdateShelf:
+      type: object
+      properties:
+        name:
+          type: string
+        totalRack:
+          type: number
+        position:
+          type: number
+        medium:
+          type: number
+        high:
+          type: number
+        capacity:
+          type: number
+        blockId:
+          type: number
+        parentProductCategoryId:
+          type: number
+        warehouseId:
+          type: number
+        id:
+          type: number
+        status:
+          type: string
+          enum:
+            - ENABLE
+            - DISABLE
+      required:
+        - name
+        - totalRack
+        - position
+        - medium
+        - high
+        - capacity
+        - blockId
+        - parentProductCategoryId
+        - warehouseId
+        - id
+        - status
+    CreateReplenishment:
+      type: object
+      properties:
+        productName:
+          type: string
+        min:
+          type: number
+        max:
+          type: number
+        productCategoryId:
+          type: number
+        masterProductId:
+          type: number
+        warehouseId:
+          type: number
+      required:
+        - productName
+        - min
+        - max
+        - productCategoryId
+        - masterProductId
+        - warehouseId
+    UpdateReplenishment:
+      type: object
+      properties:
+        productName:
+          type: string
+        min:
+          type: number
+        max:
+          type: number
+        productCategoryId:
+          type: number
+        masterProductId:
+          type: number
+        warehouseId:
+          type: number
+        id:
+          type: number
+        status:
+          type: string
+          enum:
+            - ENABLE
+            - DISABLE
+      required:
+        - productName
+        - min
+        - max
+        - productCategoryId
+        - masterProductId
+        - warehouseId
+        - id
+        - status
+    CreateWarehouse:
+      type: object
+      properties:
+        name:
+          type: string
+        address:
+          type: string
+        acreage:
+          type: number
+      required:
+        - name
+        - address
+        - acreage
+    ResponseWarehouse:
+      type: object
+      properties:
+        id:
+          type: number
+        name:
+          type: string
+        code:
+          type: string
+        acreage:
+          type: number
+        address:
+          type: string
+        createDate:
+          format: date-time
+          type: string
+        status:
+          type: string
+      required:
+        - id
+        - name
+        - code
+        - acreage
+        - address
+        - createDate
+        - status
+    AddUserToWarehouse:
+      type: object
+      properties:
+        warehouseIds:
+          type: array
+          items:
+            type: number
+        userId:
+          type: string
+      required:
+        - warehouseIds
+        - userId
+    method:
+      type: string
+      enum:
+        - LIFO
+        - FEFO
+        - FIFO
+    CreateMasterProduct:
+      type: object
+      properties:
+        name:
+          type: string
+        capacity:
+          type: number
+        method:
+          $ref: '#/components/schemas/method'
+        stogareTime:
+          type: number
+        image:
+          type: string
+        warehouseId:
+          type: number
+        productCategoryId:
+          type: number
+        supplierIds:
+          type: array
+          items:
+            type: number
+        purchasePrice:
+          type: number
+        salePrice:
+          type: number
+        retailPrice:
+          type: number
+        barCode:
+          type: string
+        VAT:
+          type: number
+        DVT:
+          type: string
+        packing:
+          type: string
+        length:
+          type: number
+        width:
+          type: number
+        height:
+          type: number
+        itemCode:
+          type: string
+        description:
+          type: string
+        isActive:
+          type: boolean
+        discount:
+          type: number
+        isResources:
+          type: boolean
+        availableQuantity:
+          type: number
+      required:
+        - name
+        - capacity
+        - method
+        - stogareTime
+        - image
+        - warehouseId
+        - productCategoryId
+        - supplierIds
+        - purchasePrice
+        - salePrice
+        - retailPrice
+        - barCode
+        - VAT
+        - DVT
+        - packing
+        - length
+        - width
+        - height
+        - itemCode
+        - description
+        - isActive
+        - discount
+        - isResources
+        - availableQuantity
+    UpdateMasterProduct:
+      type: object
+      properties:
+        name:
+          type: string
+        capacity:
+          type: number
+        method:
+          $ref: '#/components/schemas/method'
+        stogareTime:
+          type: number
+        image:
+          type: string
+        warehouseId:
+          type: number
+        productCategoryId:
+          type: number
+        supplierIds:
+          type: array
+          items:
+            type: number
+        purchasePrice:
+          type: number
+        salePrice:
+          type: number
+        retailPrice:
+          type: number
+        barCode:
+          type: string
+        VAT:
+          type: number
+        DVT:
+          type: string
+        packing:
+          type: string
+        length:
+          type: number
+        width:
+          type: number
+        height:
+          type: number
+        itemCode:
+          type: string
+        description:
+          type: string
+        isActive:
+          type: boolean
+        discount:
+          type: number
+        isResources:
+          type: boolean
+        availableQuantity:
+          type: number
+        id:
+          type: number
+        status:
+          type: string
+          enum:
+            - ENABLE
+            - DISABLE
+      required:
+        - name
+        - capacity
+        - method
+        - stogareTime
+        - image
+        - warehouseId
+        - productCategoryId
+        - supplierIds
+        - purchasePrice
+        - salePrice
+        - retailPrice
+        - barCode
+        - VAT
+        - DVT
+        - packing
+        - length
+        - width
+        - height
+        - itemCode
+        - description
+        - isActive
+        - discount
+        - isResources
+        - availableQuantity
+        - id
+        - status
+    CreateParentProductCategory:
+      type: object
+      properties:
+        name:
+          type: string
+        warehouseId:
+          type: number
+        divisonId:
+          type: number
+        exportStrategy:
+          type: string
+      required:
+        - name
+        - warehouseId
+        - divisonId
+        - exportStrategy
+    UpdateParentProductCategory:
+      type: object
+      properties:
+        name:
+          type: string
+        warehouseId:
+          type: number
+        divisonId:
+          type: number
+        exportStrategy:
+          type: string
+        id:
+          type: number
+        status:
+          type: string
+          enum:
+            - ENABLE
+            - DISABLE
+      required:
+        - name
+        - warehouseId
+        - divisonId
+        - exportStrategy
+        - id
+        - status
+    CreateDivison:
+      type: object
+      properties:
+        name:
+          type: string
+        warehouseId:
+          type: number
+      required:
+        - name
+        - warehouseId
+    UpdateDivison:
+      type: object
+      properties:
+        name:
+          type: string
+        warehouseId:
+          type: number
+        id:
+          type: number
+        status:
+          type: string
+          enum:
+            - ENABLE
+            - DISABLE
+      required:
+        - name
+        - warehouseId
+        - id
+        - status
+    CreateVan:
+      type: object
+      properties:
+        name:
+          type: string
+        totalRack:
+          type: number
+        position:
+          type: number
+        medium:
+          type: number
+        high:
+          type: number
+        capacity:
+          type: number
+        blockId:
+          type: number
+        parentProductCategoryId:
+          type: number
+        warehouseId:
+          type: number
+      required:
+        - name
+        - totalRack
+        - position
+        - medium
+        - high
+        - capacity
+        - blockId
+        - parentProductCategoryId
+        - warehouseId
+    UpdateVan:
+      type: object
+      properties:
+        name:
+          type: string
+        totalRack:
+          type: number
+        position:
+          type: number
+        medium:
+          type: number
+        high:
+          type: number
+        capacity:
+          type: number
+        blockId:
+          type: number
+        parentProductCategoryId:
+          type: number
+        warehouseId:
+          type: number
+        id:
+          type: number
+        status:
+          type: string
+          enum:
+            - ENABLE
+            - DISABLE
+      required:
+        - name
+        - totalRack
+        - position
+        - medium
+        - high
+        - capacity
+        - blockId
+        - parentProductCategoryId
+        - warehouseId
+        - id
+        - status
+    LoginForm:
+      type: object
+      properties:
+        username:
+          type: string
+          default: admin
+        password:
+          type: string
+          default: admin
+      required:
+        - username
+        - password
+    RoleUser:
+      type: object
+      properties:
+        id:
+          type: string
+        name:
+          type: string
+      required:
+        - id
+        - name
+    UpdateUser:
+      type: object
+      properties:
+        id:
+          type: string
+        firstName:
+          type: string
+        lastName:
+          type: string
+        email:
+          type: string
+        realmRoles:
+          type: array
+          items:
+            $ref: '#/components/schemas/RoleUser'
+        warehouseIds:
+          type: array
+          items:
+            type: number
+        blockIds:
+          type: array
+          items:
+            type: number
+        enabled:
+          type: boolean
+      required:
+        - id
+        - firstName
+        - lastName
+        - email
+        - realmRoles
+        - warehouseIds
+        - blockIds
+        - enabled
+    CreateUser:
+      type: object
+      properties:
+        username:
+          type: string
+        password:
+          type: string
+        firstName:
+          type: string
+        lastName:
+          type: string
+        email:
+          type: string
+        realmRoles:
+          type: array
+          items:
+            $ref: '#/components/schemas/RoleUser'
+        warehouseIds:
+          type: array
+          items:
+            type: number
+        blockIds:
+          type: array
+          items:
+            type: number
+      required:
+        - username
+        - password
+        - firstName
+        - lastName
+        - email
+        - realmRoles
+        - warehouseIds
+        - blockIds
+    ChangePass:
+      type: object
+      properties:
+        value:
+          type: string
+        userId:
+          type: string
+      required:
+        - value
+        - userId
+    TokenUser:
+      type: object
+      properties:
+        refresh_token:
+          type: string
+      required:
+        - refresh_token
+paths:
+  /orders/create:
+    post:
+      operationId: OrdersController_create
+      parameters: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateOrder'
+      responses:
+        '201':
+          description: ''
+      tags:
+        - orders
+      security:
+        - bearer: []
+  /orders/get-all:
+    get:
+      operationId: OrdersController_getAll
+      parameters:
+        - name: page
+          required: false
+          in: query
+          schema:
+            type: number
+        - name: limit
+          required: false
+          in: query
+          schema:
+            type: number
+        - name: startDate
+          required: false
+          in: query
+          schema:
+            format: date-time
+            type: string
+        - name: endDate
+          required: false
+          in: query
+          schema:
+            format: date-time
+            type: string
+        - name: sortBy
+          required: false
+          in: query
+          schema:
+            default: id
+            type: string
+        - name: sortDirection
+          required: false
+          in: query
+          schema:
+            default: desc
+            type: string
+        - name: warehouseId
+          required: false
+          in: query
+          schema:
+            type: number
+        - name: orderCode
+          required: false
+          in: query
+          schema:
+            type: string
+        - name: boothCode
+          required: false
+          in: query
+          schema:
+            type: string
+        - name: customerName
+          required: false
+          in: query
+          schema:
+            type: string
+        - name: deliveryAdress
+          required: false
+          in: query
+          schema:
+            type: string
+        - name: deliveryTimeStart
+          required: false
+          in: query
+          schema:
+            format: date-time
+            type: string
+        - name: deliveryTimeEnd
+          required: false
+          in: query
+          schema:
+            format: date-time
+            type: string
+        - name: status
+          required: false
+          in: query
+          schema:
+            enum:
+              - ENABLE
+              - PICKING
+              - PACKAGED
+              - READY
+              - DISABLE
+              - MOVING
+              - SUCCESS
+              - WAITING
+              - NEW
+              - INITIAL
+              - WAIT_PAYMENT
+              - SUBMITTED
+              - AWAITING_PICKUP
+              - DELIVERING
+              - DELIVERED
+              - CANCELLED
+              - PAYMENT_FAILED
+              - RETURN
+            type: string
+      responses:
+        '200':
+          description: ''
+      tags:
+        - orders
+      security:
+        - bearer: []
+  /orders/get-one/{id}:
+    get:
+      operationId: OrdersController_getOne
+      parameters:
+        - name: id
+          required: true
+          in: path
+          schema:
+            type: string
+      responses:
+        '200':
+          description: ''
+      tags:
+        - orders
+      security:
+        - bearer: []
+  /orders/update:
+    put:
+      operationId: OrdersController_update
+      parameters: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateOrder'
+      responses:
+        '200':
+          description: ''
+      tags:
+        - orders
+      security:
+        - bearer: []
+  /orders/updates:
+    post:
+      operationId: OrdersController_updates
+      parameters: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateOrders'
+      responses:
+        '201':
+          description: ''
+      tags:
+        - orders
+      security:
+        - bearer: []
+  /orders/check/picking:
+    post:
+      operationId: OrdersController_checkPicking
+      parameters: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CheckPickingOrder'
+      responses:
+        '201':
+          description: ''
+      tags:
+        - orders
+      security:
+        - bearer: []
+  /orders/confirm:
+    post:
+      operationId: OrdersController_confirm
+      parameters: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ConfirmOrder'
+      responses:
+        '201':
+          description: ''
+      tags:
+        - orders
+      security:
+        - bearer: []
+  /orders/delete/{id}:
+    delete:
+      operationId: OrdersController_remove
+      parameters:
+        - name: id
+          required: true
+          in: path
+          schema:
+            type: string
+      responses:
+        '200':
+          description: ''
+      tags:
+        - orders
+      security:
+        - bearer: []
+  /packages/create:
+    post:
+      operationId: PackagesController_create
+      parameters: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreatePackageDto'
+      responses:
+        '201':
+          description: ''
+      tags:
+        - packages
+      security:
+        - bearer: []
+  /packages/get-all:
+    get:
+      operationId: PackagesController_getAll
+      parameters:
+        - name: page
+          required: false
+          in: query
+          schema:
+            type: number
+        - name: limit
+          required: false
+          in: query
+          schema:
+            type: number
+        - name: startDate
+          required: false
+          in: query
+          schema:
+            format: date-time
+            type: string
+        - name: endDate
+          required: false
+          in: query
+          schema:
+            format: date-time
+            type: string
+        - name: sortBy
+          required: false
+          in: query
+          schema:
+            default: id
+            type: string
+        - name: sortDirection
+          required: false
+          in: query
+          schema:
+            default: desc
+            type: string
+        - name: warehouseId
+          required: false
+          in: query
+          schema:
+            type: number
+        - name: packadeCode
+          required: false
+          in: query
+          schema:
+            type: string
+        - name: status
+          required: false
+          in: query
+          schema:
+            enum:
+              - ENABLE
+              - DISABLE
+              - NEW
+              - WAITING
+              - SHIPPING
+              - LOST
+              - ERROR
+            type: string
+        - name: orderId
+          required: false
+          in: query
+          schema:
+            type: number
+      responses:
+        '200':
+          description: ''
+      tags:
+        - packages
+      security:
+        - bearer: []
+  /packages/get-one/{id}:
+    get:
+      operationId: PackagesController_getOne
+      parameters:
+        - name: id
+          required: true
+          in: path
+          schema:
+            type: string
+      responses:
+        '200':
+          description: ''
+      tags:
+        - packages
+      security:
+        - bearer: []
+  /packages/update:
+    put:
+      operationId: PackagesController_update
+      parameters: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdatePackage'
+      responses:
+        '200':
+          description: ''
+      tags:
+        - packages
+      security:
+        - bearer: []
+  /packages/update-multiple:
+    put:
+      operationId: PackagesController_updateMultiple
+      parameters: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateMultipleDto'
+      responses:
+        '200':
+          description: ''
+      tags:
+        - packages
+      security:
+        - bearer: []
+  /packages/delete/{id}:
+    delete:
+      operationId: PackagesController_remove
+      parameters:
+        - name: id
+          required: true
+          in: path
+          schema:
+            type: string
+      responses:
+        '200':
+          description: ''
+      tags:
+        - packages
+      security:
+        - bearer: []
+  /product-orders/create:
+    post:
+      operationId: ProductOrderController_create
+      parameters: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateProductOrderDto'
+      responses:
+        '201':
+          description: ''
+      tags:
+        - product-orders
+      security:
+        - bearer: []
+  /product-orders/get-all:
+    get:
+      operationId: ProductOrderController_getAll
+      parameters: []
+      responses:
+        '200':
+          description: ''
+      tags:
+        - product-orders
+      security:
+        - bearer: []
+  /product-orders/get-one/{id}:
+    get:
+      operationId: ProductOrderController_getOne
+      parameters:
+        - name: id
+          required: true
+          in: path
+          schema:
+            type: string
+      responses:
+        '200':
+          description: ''
+      tags:
+        - product-orders
+      security:
+        - bearer: []
+  /product-orders/update:
+    put:
+      operationId: ProductOrderController_update
+      parameters: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateProductOrderDto'
+      responses:
+        '200':
+          description: ''
+      tags:
+        - product-orders
+      security:
+        - bearer: []
+  /product-orders/delete/{id}:
+    delete:
+      operationId: ProductOrderController_remove
+      parameters:
+        - name: id
+          required: true
+          in: path
+          schema:
+            type: string
+      responses:
+        '200':
+          description: ''
+      tags:
+        - product-orders
+      security:
+        - bearer: []
+  /products/create:
+    post:
+      operationId: ProductController_create
+      parameters: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateProduct'
+      responses:
+        '201':
+          description: ''
+      tags:
+        - products
+      security:
+        - bearer: []
+  /products/create/excel/{warehouseId}:
+    post:
+      operationId: ProductController_createExcel
+      parameters:
+        - name: warehouseId
+          required: true
+          in: path
+          schema:
+            type: number
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                excel:
+                  type: string
+                  format: binary
+      responses:
+        '201':
+          description: ''
+      tags:
+        - products
+      security:
+        - bearer: []
+  /products/cancel/reallocating:
+    post:
+      operationId: ProductController_cancelReallocating
+      parameters: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: array
+              items:
+                $ref: '#/components/schemas/CreateProduct'
+      responses:
+        '201':
+          description: ''
+      tags:
+        - products
+      security:
+        - bearer: []
+  /products/add/rack:
+    post:
+      operationId: ProductController_addRack
+      parameters: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RackProductDTO'
+      responses:
+        '201':
+          description: ''
+      tags:
+        - products
+      security:
+        - bearer: []
+  /products/update/location:
+    post:
+      operationId: ProductController_updateLocation
+      parameters: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateLocationProduct'
+      responses:
+        '201':
+          description: ''
+      tags:
+        - products
+      security:
+        - bearer: []
+  /products/split:
+    post:
+      operationId: ProductController_split
+      parameters: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SplitProduct'
+      responses:
+        '201':
+          description: ''
+      tags:
+        - products
+      security:
+        - bearer: []
+  /products/scan:
+    post:
+      operationId: ProductController_scan
+      parameters: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ScanProduct'
+      responses:
+        '201':
+          description: ''
+      tags:
+        - products
+      security:
+        - bearer: []
+  /products/get-all:
+    get:
+      operationId: ProductController_getAll
+      parameters:
+        - name: page
+          required: false
+          in: query
+          schema:
+            type: number
+        - name: limit
+          required: false
+          in: query
+          schema:
+            type: number
+        - name: startDate
+          required: false
+          in: query
+          schema:
+            format: date-time
+            type: string
+        - name: endDate
+          required: false
+          in: query
+          schema:
+            format: date-time
+            type: string
+        - name: sortBy
+          required: false
+          in: query
+          schema:
+            default: id
+            type: string
+        - name: sortDirection
+          required: false
+          in: query
+          schema:
+            default: desc
+            type: string
+        - name: warehouseId
+          required: false
+          in: query
+          schema:
+            type: number
+        - name: startLostDate
+          required: false
+          in: query
+          schema:
+            format: date-time
+            type: string
+        - name: endLostDate
+          required: false
+          in: query
+          schema:
+            format: date-time
+            type: string
+        - name: startReportDate
+          required: false
+          in: query
+          schema:
+            format: date-time
+            type: string
+        - name: endReportDate
+          required: false
+          in: query
+          schema:
+            format: date-time
+            type: string
+        - name: keyword
+          required: false
+          in: query
+          schema:
+            type: string
+        - name: receiptId
+          required: false
+          in: query
+          schema:
+            type: number
+        - name: orderId
+          required: false
+          in: query
+          schema:
+            type: number
+        - name: rackId
+          required: false
+          in: query
+          schema:
+            type: number
+        - name: blockId
+          required: false
+          in: query
+          schema:
+            type: number
+        - name: rackCode
+          required: false
+          in: query
+          schema:
+            type: string
+        - name: status
+          required: false
+          in: query
+          schema:
+            enum:
+              - NEW
+              - STORED
+              - MOVING
+              - REALLOCATE
+              - TEMPORARY
+              - TEMPORARY_OUT
+              - RECEVIE
+              - PICKING
+              - PACKAGE
+              - ERROR
+              - LOST
+              - ENABLE
+              - DISABLE
+            type: string
+        - name: packageCode
+          required: false
+          in: query
+          schema:
+            type: string
+        - name: productCategoryId
+          required: false
+          in: query
+          schema:
+            type: number
+        - name: masterProductCode
+          required: false
+          in: query
+          schema:
+            type: string
+        - name: multipleStatus
+          required: false
+          in: query
+          schema:
+            default: NEW,STORED
+            type: string
+        - name: startStorageDate
+          required: false
+          in: query
+          schema:
+            format: date-time
+            type: string
+        - name: endStorageDate
+          required: false
+          in: query
+          schema:
+            format: date-time
+            type: string
+        - name: startExpireDate
+          required: false
+          in: query
+          schema:
+            format: date-time
+            type: string
+        - name: endExpireDate
+          required: false
+          in: query
+          schema:
+            format: date-time
+            type: string
+        - name: group
+          required: false
+          in: query
+          schema:
+            type: string
+      responses:
+        '200':
+          description: ''
+      tags:
+        - products
+      security:
+        - bearer: []
+  /products/get-inventory:
+    get:
+      operationId: ProductController_getInventory
+      parameters:
+        - name: page
+          required: false
+          in: query
+          schema:
+            type: number
+        - name: limit
+          required: false
+          in: query
+          schema:
+            type: number
+        - name: startDate
+          required: false
+          in: query
+          schema:
+            format: date-time
+            type: string
+        - name: endDate
+          required: false
+          in: query
+          schema:
+            format: date-time
+            type: string
+        - name: sortBy
+          required: false
+          in: query
+          schema:
+            default: id
+            type: string
+        - name: sortDirection
+          required: false
+          in: query
+          schema:
+            default: desc
+            type: string
+        - name: warehouseId
+          required: false
+          in: query
+          schema:
+            type: number
+        - name: startLostDate
+          required: false
+          in: query
+          schema:
+            format: date-time
+            type: string
+        - name: endLostDate
+          required: false
+          in: query
+          schema:
+            format: date-time
+            type: string
+        - name: startReportDate
+          required: false
+          in: query
+          schema:
+            format: date-time
+            type: string
+        - name: endReportDate
+          required: false
+          in: query
+          schema:
+            format: date-time
+            type: string
+        - name: keyword
+          required: false
+          in: query
+          schema:
+            type: string
+        - name: receiptId
+          required: false
+          in: query
+          schema:
+            type: number
+        - name: orderId
+          required: false
+          in: query
+          schema:
+            type: number
+        - name: rackId
+          required: false
+          in: query
+          schema:
+            type: number
+        - name: blockId
+          required: false
+          in: query
+          schema:
+            type: number
+        - name: rackCode
+          required: false
+          in: query
+          schema:
+            type: string
+        - name: status
+          required: false
+          in: query
+          schema:
+            enum:
+              - NEW
+              - STORED
+              - MOVING
+              - REALLOCATE
+              - TEMPORARY
+              - TEMPORARY_OUT
+              - RECEVIE
+              - PICKING
+              - PACKAGE
+              - ERROR
+              - LOST
+              - ENABLE
+              - DISABLE
+            type: string
+        - name: packageCode
+          required: false
+          in: query
+          schema:
+            type: string
+        - name: productCategoryId
+          required: false
+          in: query
+          schema:
+            type: number
+        - name: masterProductCode
+          required: false
+          in: query
+          schema:
+            type: string
+        - name: multipleStatus
+          required: false
+          in: query
+          schema:
+            default: NEW,STORED
+            type: string
+        - name: startStorageDate
+          required: false
+          in: query
+          schema:
+            format: date-time
+            type: string
+        - name: endStorageDate
+          required: false
+          in: query
+          schema:
+            format: date-time
+            type: string
+        - name: startExpireDate
+          required: false
+          in: query
+          schema:
+            format: date-time
+            type: string
+        - name: endExpireDate
+          required: false
+          in: query
+          schema:
+            format: date-time
+            type: string
+        - name: group
+          required: false
+          in: query
+          schema:
+            type: string
+      responses:
+        '200':
+          description: ''
+      tags:
+        - products
+      security:
+        - bearer: []
+  /products/recommend:
+    get:
+      operationId: ProductController_recommend
+      parameters:
+        - name: page
+          required: false
+          in: query
+          schema:
+            type: number
+        - name: limit
+          required: false
+          in: query
+          schema:
+            type: number
+        - name: startDate
+          required: false
+          in: query
+          schema:
+            format: date-time
+            type: string
+        - name: endDate
+          required: false
+          in: query
+          schema:
+            format: date-time
+            type: string
+        - name: sortBy
+          required: false
+          in: query
+          schema:
+            default: id
+            type: string
+        - name: sortDirection
+          required: false
+          in: query
+          schema:
+            default: desc
+            type: string
+        - name: warehouseId
+          required: false
+          in: query
+          schema:
+            type: number
+        - name: masterProductId
+          required: true
+          in: query
+          schema:
+            type: number
+        - name: quantity
+          required: true
+          in: query
+          schema:
+            type: number
+      responses:
+        '200':
+          description: ''
+      tags:
+        - products
+      security:
+        - bearer: []
+  /products/get-one/{id}:
+    get:
+      operationId: ProductController_getOne
+      parameters:
+        - name: id
+          required: true
+          in: path
+          schema:
+            type: string
+      responses:
+        '200':
+          description: ''
+      tags:
+        - products
+      security:
+        - bearer: []
+  /products/update:
+    put:
+      operationId: ProductController_update
+      parameters: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateProduct'
+      responses:
+        '200':
+          description: ''
+      tags:
+        - products
+      security:
+        - bearer: []
+  /products/updates:
+    post:
+      operationId: ProductController_updates
+      parameters: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateProducts'
+      responses:
+        '201':
+          description: ''
+      tags:
+        - products
+      security:
+        - bearer: []
+  /products/delete/{id}:
+    delete:
+      operationId: ProductController_remove
+      parameters:
+        - name: id
+          required: true
+          in: path
+          schema:
+            type: string
+      responses:
+        '200':
+          description: ''
+      tags:
+        - products
+      security:
+        - bearer: []
+  /products/deletes:
+    post:
+      operationId: ProductController_removes
+      parameters: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/IdsDTO'
+      responses:
+        '201':
+          description: ''
+      tags:
+        - products
+      security:
+        - bearer: []
+  /zones/create:
+    post:
+      operationId: ZoneController_create
+      parameters: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateZone'
+      responses:
+        '201':
+          description: ''
+      tags:
+        - zones
+      security:
+        - bearer: []
+  /zones/get-all:
+    get:
+      operationId: ZoneController_getAll
+      parameters:
+        - name: page
+          required: false
+          in: query
+          schema:
+            type: number
+        - name: limit
+          required: false
+          in: query
+          schema:
+            type: number
+        - name: startDate
+          required: false
+          in: query
+          schema:
+            format: date-time
+            type: string
+        - name: endDate
+          required: false
+          in: query
+          schema:
+            format: date-time
+            type: string
+        - name: sortBy
+          required: false
+          in: query
+          schema:
+            default: id
+            type: string
+        - name: sortDirection
+          required: false
+          in: query
+          schema:
+            default: desc
+            type: string
+        - name: warehouseId
+          required: false
+          in: query
+          schema:
+            type: number
+        - name: zoneName
+          required: false
+          in: query
+          schema:
+            type: string
+      responses:
+        '200':
+          description: ''
+      tags:
+        - zones
+      security:
+        - bearer: []
+  /zones/get-one/{id}:
+    get:
+      operationId: ZoneController_getOne
+      parameters:
+        - name: id
+          required: true
+          in: path
+          schema:
+            type: string
+      responses:
+        '200':
+          description: ''
+      tags:
+        - zones
+      security:
+        - bearer: []
+  /zones/update:
+    put:
+      operationId: ZoneController_update
+      parameters: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateZone'
+      responses:
+        '200':
+          description: ''
+      tags:
+        - zones
+      security:
+        - bearer: []
+  /zones/delete/{id}:
+    delete:
+      operationId: ZoneController_remove
+      parameters:
+        - name: id
+          required: true
+          in: path
+          schema:
+            type: string
+      responses:
+        '200':
+          description: ''
+      tags:
+        - zones
+      security:
+        - bearer: []
+  /product-categorys/create:
+    post:
+      operationId: ProductCategorysController_create
+      parameters: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateProductCategory'
+      responses:
+        '201':
+          description: ''
+      tags:
+        - product-categorys
+      security:
+        - bearer: []
+  /product-categorys/create/excel/{warehouseId}:
+    post:
+      operationId: ProductCategorysController_createExcel
+      parameters:
+        - name: warehouseId
+          required: true
+          in: path
+          schema:
+            type: number
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                excel:
+                  type: string
+                  format: binary
+      responses:
+        '201':
+          description: ''
+      tags:
+        - product-categorys
+      security:
+        - bearer: []
+  /product-categorys/get-all:
+    get:
+      operationId: ProductCategorysController_getAll
+      parameters:
+        - name: page
+          required: false
+          in: query
+          schema:
+            type: number
+        - name: limit
+          required: false
+          in: query
+          schema:
+            type: number
+        - name: startDate
+          required: false
+          in: query
+          schema:
+            format: date-time
+            type: string
+        - name: endDate
+          required: false
+          in: query
+          schema:
+            format: date-time
+            type: string
+        - name: sortBy
+          required: false
+          in: query
+          schema:
+            default: id
+            type: string
+        - name: sortDirection
+          required: false
+          in: query
+          schema:
+            default: desc
+            type: string
+        - name: warehouseId
+          required: false
+          in: query
+          schema:
+            type: number
+        - name: productCategoryName
+          required: false
+          in: query
+          schema:
+            type: string
+        - name: status
+          required: false
+          in: query
+          schema:
+            enum:
+              - ENABLE
+              - DISABLE
+            type: string
+      responses:
+        '200':
+          description: ''
+      tags:
+        - product-categorys
+      security:
+        - bearer: []
+  /product-categorys/get-one/{id}:
+    get:
+      operationId: ProductCategorysController_getOne
+      parameters:
+        - name: id
+          required: true
+          in: path
+          schema:
+            type: string
+      responses:
+        '200':
+          description: ''
+      tags:
+        - product-categorys
+      security:
+        - bearer: []
+  /product-categorys/update:
+    put:
+      operationId: ProductCategorysController_update
+      parameters: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateProductCategory'
+      responses:
+        '200':
+          description: ''
+      tags:
+        - product-categorys
+      security:
+        - bearer: []
+  /product-categorys/delete/{id}:
+    delete:
+      operationId: ProductCategorysController_remove
+      parameters:
+        - name: id
+          required: true
+          in: path
+          schema:
+            type: string
+      responses:
+        '200':
+          description: ''
+      tags:
+        - product-categorys
+      security:
+        - bearer: []
+  /suppliers/create:
+    post:
+      operationId: SuppliersController_create
+      parameters: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateSupplier'
+      responses:
+        '201':
+          description: ''
+          content:
+            text/plain; charset=utf-8:
+              examples:
+                Create Suppliers success:
+                  value: |-
+                    {
+                        "id": 56,
+                        "code": "NCC00056",
+                        "name": "CarComfort Accessories",
+                        "email": "carcomfort@gmail.com",
+                        "phoneNumber": "8005678900",
+                        "address": "Dallas",
+                        "createDate": "2025-03-03T17:39:25.634Z",
+                        "updateDate": "2025-03-03T17:39:25.634Z",
+                        "cooperationDay": "2023-03-20T00:00:00.000Z",
+                        "status": "ENABLE",
+                        "warehouseId": 6,
+                        "isActive": false,
+                        "contractNumber": "CCA371015",
+                        "taxCode": "575196426",
+                        "productCategorys": [
+                            {
+                                "id": 37,
+                                "code": "150301",
+                                "name": "Baby Clothing",
+                                "exportStrategy": null,
+                                "createDate": "2025-03-03T03:01:17.615Z",
+                                "updateDate": "2025-03-03T03:01:17.616Z",
+                                "status": "ENABLE",
+                                "warehouseId": 4
+                            }
+                        ]
+                    }
+      tags:
+        - suppliers
+      security:
+        - bearer: []
+  /suppliers/create/excel/{warehouseId}:
+    post:
+      operationId: SuppliersController_createExcel
+      parameters:
+        - name: warehouseId
+          required: true
+          in: path
+          schema:
+            type: number
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                excel:
+                  type: string
+                  format: binary
+      responses:
+        '201':
+          description: ''
+      tags:
+        - suppliers
+      security:
+        - bearer: []
+  /suppliers/get-all:
+    get:
+      operationId: SuppliersController_getAll
+      parameters:
+        - name: page
+          required: false
+          in: query
+          schema:
+            type: number
+        - name: limit
+          required: false
+          in: query
+          schema:
+            type: number
+        - name: startDate
+          required: false
+          in: query
+          schema:
+            format: date-time
+            type: string
+        - name: endDate
+          required: false
+          in: query
+          schema:
+            format: date-time
+            type: string
+        - name: sortBy
+          required: false
+          in: query
+          schema:
+            default: id
+            type: string
+        - name: sortDirection
+          required: false
+          in: query
+          schema:
+            default: desc
+            type: string
+        - name: warehouseId
+          required: false
+          in: query
+          schema:
+            type: number
+        - name: supplierName
+          required: false
+          in: query
+          schema:
+            type: string
+        - name: status
+          required: false
+          in: query
+          schema:
+            enum:
+              - ENABLE
+              - DISABLE
+            type: string
+      responses:
+        '200':
+          description: ''
+      tags:
+        - suppliers
+      security:
+        - bearer: []
+  /suppliers/get-one/{id}:
+    get:
+      operationId: SuppliersController_getOne
+      parameters:
+        - name: id
+          required: true
+          in: path
+          schema:
+            type: string
+      responses:
+        '200':
+          description: ''
+      tags:
+        - suppliers
+      security:
+        - bearer: []
+  /suppliers/update:
+    put:
+      operationId: SuppliersController_update
+      parameters: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateSupplier'
+      responses:
+        '200':
+          description: ''
+      tags:
+        - suppliers
+      security:
+        - bearer: []
+  /suppliers/delete/{id}:
+    delete:
+      operationId: SuppliersController_remove
+      parameters:
+        - name: id
+          required: true
+          in: path
+          schema:
+            type: string
+      responses:
+        '200':
+          description: ''
+      tags:
+        - suppliers
+      security:
+        - bearer: []
+  /racks/create:
+    post:
+      operationId: RacksController_create
+      parameters: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateRack'
+      responses:
+        '201':
+          description: ''
+      tags:
+        - racks
+      security:
+        - bearer: []
+  /racks/get-all:
+    get:
+      operationId: RacksController_getAll
+      parameters:
+        - name: page
+          required: false
+          in: query
+          schema:
+            type: number
+        - name: limit
+          required: false
+          in: query
+          schema:
+            type: number
+        - name: startDate
+          required: false
+          in: query
+          schema:
+            format: date-time
+            type: string
+        - name: endDate
+          required: false
+          in: query
+          schema:
+            format: date-time
+            type: string
+        - name: sortBy
+          required: false
+          in: query
+          schema:
+            default: id
+            type: string
+        - name: sortDirection
+          required: false
+          in: query
+          schema:
+            default: desc
+            type: string
+        - name: warehouseId
+          required: false
+          in: query
+          schema:
+            type: number
+        - name: rackCode
+          required: false
+          in: query
+          schema:
+            type: string
+      responses:
+        '200':
+          description: ''
+      tags:
+        - racks
+      security:
+        - bearer: []
+  /racks/recommend:
+    get:
+      operationId: RacksController_recommendRack
+      parameters:
+        - name: totalCapacity
+          required: true
+          in: query
+          schema:
+            type: number
+        - name: parentProductCategoryId
+          required: true
+          in: query
+          schema:
+            type: number
+      responses:
+        '200':
+          description: ''
+      tags:
+        - racks
+      security:
+        - bearer: []
+  /racks/get-one/{id}:
+    get:
+      operationId: RacksController_getOne
+      parameters:
+        - name: id
+          required: true
+          in: path
+          schema:
+            type: string
+      responses:
+        '200':
+          description: ''
+      tags:
+        - racks
+      security:
+        - bearer: []
+  /racks/update:
+    put:
+      operationId: RacksController_update
+      parameters: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateRack'
+      responses:
+        '200':
+          description: ''
+      tags:
+        - racks
+      security:
+        - bearer: []
+  /racks/delete/{id}:
+    delete:
+      operationId: RacksController_remove
+      parameters:
+        - name: id
+          required: true
+          in: path
+          schema:
+            type: string
+      responses:
+        '200':
+          description: ''
+      tags:
+        - racks
+      security:
+        - bearer: []
+  /receipts/create:
+    post:
+      operationId: ReceiptsController_create
+      parameters: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateReceipt'
+      responses:
+        '201':
+          description: ''
+      tags:
+        - receipts
+      security:
+        - bearer: []
+  /receipts/get-all:
+    get:
+      operationId: ReceiptsController_getAll
+      parameters:
+        - name: page
+          required: false
+          in: query
+          schema:
+            type: number
+        - name: limit
+          required: false
+          in: query
+          schema:
+            type: number
+        - name: startDate
+          required: false
+          in: query
+          schema:
+            format: date-time
+            type: string
+        - name: endDate
+          required: false
+          in: query
+          schema:
+            format: date-time
+            type: string
+        - name: sortBy
+          required: false
+          in: query
+          schema:
+            default: id
+            type: string
+        - name: sortDirection
+          required: false
+          in: query
+          schema:
+            default: desc
+            type: string
+        - name: warehouseId
+          required: false
+          in: query
+          schema:
+            type: number
+        - name: keyword
+          required: false
+          in: query
+          schema:
+            type: string
+        - name: status
+          required: false
+          in: query
+          schema:
+            enum:
+              - ENABLE
+              - DISABLE
+              - NEW
+              - RECEIVE
+            type: string
+      responses:
+        '200':
+          description: ''
+      tags:
+        - receipts
+      security:
+        - bearer: []
+  /receipts/get-one/{id}:
+    get:
+      operationId: ReceiptsController_getOne
+      parameters:
+        - name: id
+          required: true
+          in: path
+          schema:
+            type: string
+      responses:
+        '200':
+          description: ''
+      tags:
+        - receipts
+      security:
+        - bearer: []
+  /receipts/update:
+    put:
+      operationId: ReceiptsController_update
+      parameters: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateReceipt'
+      responses:
+        '200':
+          description: ''
+      tags:
+        - receipts
+      security:
+        - bearer: []
+  /receipts/confirm:
+    put:
+      operationId: ReceiptsController_confirm
+      parameters: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ConfirmReceipt'
+      responses:
+        '200':
+          description: ''
+      tags:
+        - receipts
+      security:
+        - bearer: []
+  /receipts/delete/{id}:
+    delete:
+      operationId: ReceiptsController_remove
+      parameters:
+        - name: id
+          required: true
+          in: path
+          schema:
+            type: string
+      responses:
+        '200':
+          description: ''
+      tags:
+        - receipts
+      security:
+        - bearer: []
+  /receipts/deletes:
+    post:
+      operationId: ReceiptsController_removes
+      parameters: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/IdsDTO'
+      responses:
+        '201':
+          description: ''
+      tags:
+        - receipts
+      security:
+        - bearer: []
+  /product-historys/create:
+    post:
+      operationId: ProductHistoryController_create
+      parameters: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ProductHistoryDTO'
+      responses:
+        '201':
+          description: ''
+      tags:
+        - product-historys
+      security:
+        - bearer: []
+  /product-historys/get-all:
+    get:
+      operationId: ProductHistoryController_getAll
+      parameters: []
+      responses:
+        '200':
+          description: ''
+      tags:
+        - product-historys
+      security:
+        - bearer: []
+  /product-historys/get-one/{id}:
+    get:
+      operationId: ProductHistoryController_getOne
+      parameters:
+        - name: id
+          required: true
+          in: path
+          schema:
+            type: string
+      responses:
+        '200':
+          description: ''
+      tags:
+        - product-historys
+      security:
+        - bearer: []
+  /product-historys/update:
+    put:
+      operationId: ProductHistoryController_update
+      parameters: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ProductHistory'
+      responses:
+        '200':
+          description: ''
+      tags:
+        - product-historys
+      security:
+        - bearer: []
+  /product-historys/delete/{id}:
+    delete:
+      operationId: ProductHistoryController_remove
+      parameters:
+        - name: id
+          required: true
+          in: path
+          schema:
+            type: string
+      responses:
+        '200':
+          description: ''
+      tags:
+        - product-historys
+      security:
+        - bearer: []
+  /blocks/create:
+    post:
+      operationId: BlockController_create
+      parameters: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateBlock'
+      responses:
+        '201':
+          description: ''
+      tags:
+        - blocks
+      security:
+        - bearer: []
+  /blocks/get-all:
+    get:
+      operationId: BlockController_getAll
+      parameters:
+        - name: page
+          required: false
+          in: query
+          schema:
+            type: number
+        - name: limit
+          required: false
+          in: query
+          schema:
+            type: number
+        - name: startDate
+          required: false
+          in: query
+          schema:
+            format: date-time
+            type: string
+        - name: endDate
+          required: false
+          in: query
+          schema:
+            format: date-time
+            type: string
+        - name: sortBy
+          required: false
+          in: query
+          schema:
+            default: id
+            type: string
+        - name: sortDirection
+          required: false
+          in: query
+          schema:
+            default: desc
+            type: string
+        - name: warehouseId
+          required: false
+          in: query
+          schema:
+            type: number
+        - name: blockName
+          required: false
+          in: query
+          schema:
+            type: string
+      responses:
+        '200':
+          description: ''
+      tags:
+        - blocks
+      security:
+        - bearer: []
+  /blocks/get-one/{id}:
+    get:
+      operationId: BlockController_getOne
+      parameters:
+        - name: id
+          required: true
+          in: path
+          schema:
+            type: string
+      responses:
+        '200':
+          description: ''
+      tags:
+        - blocks
+      security:
+        - bearer: []
+  /blocks/update:
+    put:
+      operationId: BlockController_update
+      parameters: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateBlock'
+      responses:
+        '200':
+          description: ''
+      tags:
+        - blocks
+      security:
+        - bearer: []
+  /blocks/delete/{id}:
+    delete:
+      operationId: BlockController_remove
+      parameters:
+        - name: id
+          required: true
+          in: path
+          schema:
+            type: string
+      responses:
+        '200':
+          description: ''
+      tags:
+        - blocks
+      security:
+        - bearer: []
+  /shelves/create:
+    post:
+      operationId: ShelvesController_create
+      parameters: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateShelf'
+      responses:
+        '201':
+          description: ''
+      tags:
+        - shelves
+      security:
+        - bearer: []
+  /shelves/create/excel/{warehouseId}:
+    post:
+      operationId: ShelvesController_createExcel
+      parameters:
+        - name: warehouseId
+          required: true
+          in: path
+          schema:
+            type: number
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                excel:
+                  type: string
+                  format: binary
+      responses:
+        '201':
+          description: ''
+      tags:
+        - shelves
+      security:
+        - bearer: []
+  /shelves/get-all:
+    get:
+      operationId: ShelvesController_getAll
+      parameters: []
+      responses:
+        '200':
+          description: ''
+      tags:
+        - shelves
+      security:
+        - bearer: []
+  /shelves/get-one/{id}:
+    get:
+      operationId: ShelvesController_getOne
+      parameters:
+        - name: id
+          required: true
+          in: path
+          schema:
+            type: string
+      responses:
+        '200':
+          description: ''
+      tags:
+        - shelves
+      security:
+        - bearer: []
+  /shelves/update:
+    put:
+      operationId: ShelvesController_update
+      parameters: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateShelf'
+      responses:
+        '200':
+          description: ''
+      tags:
+        - shelves
+      security:
+        - bearer: []
+  /shelves/delete/{id}:
+    delete:
+      operationId: ShelvesController_remove
+      parameters:
+        - name: id
+          required: true
+          in: path
+          schema:
+            type: string
+      responses:
+        '200':
+          description: ''
+      tags:
+        - shelves
+      security:
+        - bearer: []
+  /replenishments/create:
+    post:
+      operationId: ReplenishmentsController_create
+      parameters: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateReplenishment'
+      responses:
+        '201':
+          description: ''
+      tags:
+        - replenishments
+      security:
+        - bearer: []
+  /replenishments/get-all:
+    get:
+      operationId: ReplenishmentsController_getAll
+      parameters:
+        - name: page
+          required: false
+          in: query
+          schema:
+            type: number
+        - name: limit
+          required: false
+          in: query
+          schema:
+            type: number
+        - name: startDate
+          required: false
+          in: query
+          schema:
+            format: date-time
+            type: string
+        - name: endDate
+          required: false
+          in: query
+          schema:
+            format: date-time
+            type: string
+        - name: sortBy
+          required: false
+          in: query
+          schema:
+            default: id
+            type: string
+        - name: sortDirection
+          required: false
+          in: query
+          schema:
+            default: desc
+            type: string
+        - name: warehouseId
+          required: false
+          in: query
+          schema:
+            type: number
+        - name: productCategoryId
+          required: false
+          in: query
+          schema:
+            type: number
+        - name: masterProductId
+          required: false
+          in: query
+          schema:
+            type: number
+        - name: productName
+          required: false
+          in: query
+          schema:
+            type: string
+        - name: status
+          required: false
+          in: query
+          schema:
+            enum:
+              - ENABLE
+              - DISABLE
+            type: string
+      responses:
+        '200':
+          description: ''
+      tags:
+        - replenishments
+      security:
+        - bearer: []
+  /replenishments/get-one/{id}:
+    get:
+      operationId: ReplenishmentsController_getOne
+      parameters:
+        - name: id
+          required: true
+          in: path
+          schema:
+            type: string
+      responses:
+        '200':
+          description: ''
+      tags:
+        - replenishments
+      security:
+        - bearer: []
+  /replenishments/update:
+    put:
+      operationId: ReplenishmentsController_update
+      parameters: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateReplenishment'
+      responses:
+        '200':
+          description: ''
+      tags:
+        - replenishments
+      security:
+        - bearer: []
+  /replenishments/delete/{id}:
+    delete:
+      operationId: ReplenishmentsController_remove
+      parameters:
+        - name: id
+          required: true
+          in: path
+          schema:
+            type: string
+      responses:
+        '200':
+          description: ''
+      tags:
+        - replenishments
+      security:
+        - bearer: []
+  /warehouses/create:
+    post:
+      operationId: WarehouseController_create
+      parameters: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateWarehouse'
+      responses:
+        '201':
+          description: ''
+      tags:
+        - warehouses
+      security:
+        - bearer: []
+  /warehouses/get-all:
+    get:
+      operationId: WarehouseController_getAll
+      parameters:
+        - name: page
+          required: false
+          in: query
+          schema:
+            type: number
+        - name: limit
+          required: false
+          in: query
+          schema:
+            type: number
+        - name: startDate
+          required: false
+          in: query
+          schema:
+            format: date-time
+            type: string
+        - name: endDate
+          required: false
+          in: query
+          schema:
+            format: date-time
+            type: string
+        - name: sortBy
+          required: false
+          in: query
+          schema:
+            default: id
+            type: string
+        - name: sortDirection
+          required: false
+          in: query
+          schema:
+            default: desc
+            type: string
+        - name: warehouseId
+          required: false
+          in: query
+          schema:
+            type: number
+        - name: userId
+          required: false
+          in: query
+          schema:
+            type: string
+        - name: keyword
+          required: false
+          in: query
+          schema:
+            type: string
+      responses:
+        '200':
+          description: ''
+      tags:
+        - warehouses
+      security:
+        - bearer: []
+  /warehouses/get-one/{id}:
+    get:
+      operationId: WarehouseController_getOne
+      parameters:
+        - name: id
+          required: true
+          in: path
+          schema:
+            type: string
+      responses:
+        '200':
+          description: ''
+      tags:
+        - warehouses
+      security:
+        - bearer: []
+  /warehouses/update:
+    put:
+      operationId: WarehouseController_update
+      parameters: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ResponseWarehouse'
+      responses:
+        '200':
+          description: ''
+      tags:
+        - warehouses
+      security:
+        - bearer: []
+  /warehouses/delete/{id}:
+    delete:
+      operationId: WarehouseController_remove
+      parameters:
+        - name: id
+          required: true
+          in: path
+          schema:
+            type: string
+      responses:
+        '200':
+          description: ''
+      tags:
+        - warehouses
+      security:
+        - bearer: []
+  /warehouses/deletes:
+    post:
+      operationId: WarehouseController_removes
+      parameters: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/IdsDTO'
+      responses:
+        '201':
+          description: ''
+      tags:
+        - warehouses
+      security:
+        - bearer: []
+  /warehouses/add-user:
+    post:
+      operationId: WarehouseController_addUser
+      parameters: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AddUserToWarehouse'
+      responses:
+        '201':
+          description: ''
+      tags:
+        - warehouses
+      security:
+        - bearer: []
+  /reports/get-all:
+    get:
+      operationId: ReportsController_getAll
+      parameters:
+        - name: page
+          required: false
+          in: query
+          schema:
+            type: number
+        - name: limit
+          required: false
+          in: query
+          schema:
+            type: number
+        - name: startDate
+          required: false
+          in: query
+          schema:
+            format: date-time
+            type: string
+        - name: endDate
+          required: false
+          in: query
+          schema:
+            format: date-time
+            type: string
+        - name: sortBy
+          required: false
+          in: query
+          schema:
+            default: id
+            type: string
+        - name: sortDirection
+          required: false
+          in: query
+          schema:
+            default: desc
+            type: string
+        - name: warehouseId
+          required: false
+          in: query
+          schema:
+            type: number
+        - name: productName
+          required: false
+          in: query
+          schema:
+            type: string
+        - name: masterProductId
+          required: false
+          in: query
+          schema:
+            type: number
+        - name: date
+          required: false
+          in: query
+          schema:
+            format: date-time
+            type: string
+        - name: type
+          required: false
+          in: query
+          schema:
+            enum:
+              - INVENTORY
+              - INBOUND
+              - PRODUCT
+            type: string
+      responses:
+        '200':
+          description: ''
+      tags:
+        - reports
+      security:
+        - bearer: []
+  /master-products/create:
+    post:
+      operationId: MasterProductsController_create
+      parameters: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateMasterProduct'
+      responses:
+        '201':
+          description: ''
+      tags:
+        - master-products
+      security:
+        - bearer: []
+  /master-products/create/excel/{warehouseId}:
+    post:
+      operationId: MasterProductsController_createExcel
+      parameters:
+        - name: warehouseId
+          required: true
+          in: path
+          schema:
+            type: number
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                excel:
+                  type: string
+                  format: binary
+      responses:
+        '201':
+          description: ''
+      tags:
+        - master-products
+      security:
+        - bearer: []
+  /master-products/get-all:
+    get:
+      operationId: MasterProductsController_getAll
+      parameters:
+        - name: page
+          required: false
+          in: query
+          schema:
+            type: number
+        - name: limit
+          required: false
+          in: query
+          schema:
+            type: number
+        - name: startDate
+          required: false
+          in: query
+          schema:
+            format: date-time
+            type: string
+        - name: endDate
+          required: false
+          in: query
+          schema:
+            format: date-time
+            type: string
+        - name: sortBy
+          required: false
+          in: query
+          schema:
+            default: id
+            type: string
+        - name: sortDirection
+          required: false
+          in: query
+          schema:
+            default: desc
+            type: string
+        - name: warehouseId
+          required: false
+          in: query
+          schema:
+            type: number
+        - name: masterProductName
+          required: false
+          in: query
+          schema:
+            type: string
+        - name: masterProductCode
+          required: false
+          in: query
+          schema:
+            type: string
+        - name: productCategoryId
+          required: false
+          in: query
+          schema:
+            type: number
+        - name: barCodes
+          required: false
+          in: query
+          schema:
+            default: 01,02
+            type: string
+        - name: barCode
+          required: false
+          in: query
+          schema:
+            type: string
+        - name: status
+          required: false
+          in: query
+          schema:
+            enum:
+              - ENABLE
+              - DISABLE
+            type: string
+        - name: isNoneReplenishment
+          required: false
+          in: query
+          schema:
+            type: boolean
+      responses:
+        '200':
+          description: ''
+      tags:
+        - master-products
+      security:
+        - bearer: []
+  /master-products/get-one/{id}:
+    get:
+      operationId: MasterProductsController_getOne
+      parameters:
+        - name: id
+          required: true
+          in: path
+          schema:
+            type: string
+      responses:
+        '200':
+          description: ''
+      tags:
+        - master-products
+      security:
+        - bearer: []
+  /master-products/update:
+    put:
+      operationId: MasterProductsController_update
+      parameters: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateMasterProduct'
+      responses:
+        '200':
+          description: ''
+      tags:
+        - master-products
+      security:
+        - bearer: []
+  /master-products/delete/{id}:
+    delete:
+      operationId: MasterProductsController_remove
+      parameters:
+        - name: id
+          required: true
+          in: path
+          schema:
+            type: string
+      responses:
+        '200':
+          description: ''
+      tags:
+        - master-products
+      security:
+        - bearer: []
+  /parent-product-categorys/create:
+    post:
+      operationId: ParentProductCategorysController_create
+      parameters: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateParentProductCategory'
+      responses:
+        '201':
+          description: ''
+      tags:
+        - parent-product-categorys
+      security:
+        - bearer: []
+  /parent-product-categorys/create/excel/{warehouseId}:
+    post:
+      operationId: ParentProductCategorysController_createExcel
+      parameters:
+        - name: warehouseId
+          required: true
+          in: path
+          schema:
+            type: number
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                excel:
+                  type: string
+                  format: binary
+      responses:
+        '201':
+          description: ''
+      tags:
+        - parent-product-categorys
+      security:
+        - bearer: []
+  /parent-product-categorys/get-all:
+    get:
+      operationId: ParentProductCategorysController_getAll
+      parameters:
+        - name: page
+          required: false
+          in: query
+          schema:
+            type: number
+        - name: limit
+          required: false
+          in: query
+          schema:
+            type: number
+        - name: startDate
+          required: false
+          in: query
+          schema:
+            format: date-time
+            type: string
+        - name: endDate
+          required: false
+          in: query
+          schema:
+            format: date-time
+            type: string
+        - name: sortBy
+          required: false
+          in: query
+          schema:
+            default: id
+            type: string
+        - name: sortDirection
+          required: false
+          in: query
+          schema:
+            default: desc
+            type: string
+        - name: warehouseId
+          required: false
+          in: query
+          schema:
+            type: number
+        - name: parentProductCategoryName
+          required: false
+          in: query
+          schema:
+            type: string
+        - name: status
+          required: false
+          in: query
+          schema:
+            enum:
+              - ENABLE
+              - DISABLE
+            type: string
+      responses:
+        '200':
+          description: ''
+      tags:
+        - parent-product-categorys
+      security:
+        - bearer: []
+  /parent-product-categorys/get-one/{id}:
+    get:
+      operationId: ParentProductCategorysController_getOne
+      parameters:
+        - name: id
+          required: true
+          in: path
+          schema:
+            type: string
+      responses:
+        '200':
+          description: ''
+      tags:
+        - parent-product-categorys
+      security:
+        - bearer: []
+  /parent-product-categorys/update:
+    put:
+      operationId: ParentProductCategorysController_update
+      parameters: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateParentProductCategory'
+      responses:
+        '200':
+          description: ''
+      tags:
+        - parent-product-categorys
+      security:
+        - bearer: []
+  /parent-product-categorys/delete/{id}:
+    delete:
+      operationId: ParentProductCategorysController_remove
+      parameters:
+        - name: id
+          required: true
+          in: path
+          schema:
+            type: string
+      responses:
+        '200':
+          description: ''
+      tags:
+        - parent-product-categorys
+      security:
+        - bearer: []
+  /divison/create:
+    post:
+      operationId: DivisonController_create
+      parameters: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateDivison'
+      responses:
+        '201':
+          description: ''
+      tags:
+        - divison
+      security:
+        - bearer: []
+  /divison/create/excel/{warehouseId}:
+    post:
+      operationId: DivisonController_createExcel
+      parameters:
+        - name: warehouseId
+          required: true
+          in: path
+          schema:
+            type: number
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                excel:
+                  type: string
+                  format: binary
+      responses:
+        '201':
+          description: ''
+      tags:
+        - divison
+      security:
+        - bearer: []
+  /divison/get-all:
+    get:
+      operationId: DivisonController_getAll
+      parameters:
+        - name: page
+          required: false
+          in: query
+          schema:
+            type: number
+        - name: limit
+          required: false
+          in: query
+          schema:
+            type: number
+        - name: startDate
+          required: false
+          in: query
+          schema:
+            format: date-time
+            type: string
+        - name: endDate
+          required: false
+          in: query
+          schema:
+            format: date-time
+            type: string
+        - name: sortBy
+          required: false
+          in: query
+          schema:
+            default: id
+            type: string
+        - name: sortDirection
+          required: false
+          in: query
+          schema:
+            default: desc
+            type: string
+        - name: warehouseId
+          required: false
+          in: query
+          schema:
+            type: number
+        - name: parentProductCategoryName
+          required: false
+          in: query
+          schema:
+            type: string
+        - name: status
+          required: false
+          in: query
+          schema:
+            enum:
+              - ENABLE
+              - DISABLE
+            type: string
+      responses:
+        '200':
+          description: ''
+      tags:
+        - divison
+      security:
+        - bearer: []
+  /divison/get-one/{id}:
+    get:
+      operationId: DivisonController_getOne
+      parameters:
+        - name: id
+          required: true
+          in: path
+          schema:
+            type: string
+      responses:
+        '200':
+          description: ''
+      tags:
+        - divison
+      security:
+        - bearer: []
+  /divison/update:
+    put:
+      operationId: DivisonController_update
+      parameters: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateDivison'
+      responses:
+        '200':
+          description: ''
+      tags:
+        - divison
+      security:
+        - bearer: []
+  /divison/delete/{id}:
+    delete:
+      operationId: DivisonController_remove
+      parameters:
+        - name: id
+          required: true
+          in: path
+          schema:
+            type: string
+      responses:
+        '200':
+          description: ''
+      tags:
+        - divison
+      security:
+        - bearer: []
+  /vans/create:
+    post:
+      operationId: VanController_create
+      parameters: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateVan'
+      responses:
+        '201':
+          description: ''
+      tags:
+        - vans
+      security:
+        - bearer: []
+  /vans/get-all:
+    get:
+      operationId: VanController_getAll
+      parameters: []
+      responses:
+        '200':
+          description: ''
+      tags:
+        - vans
+      security:
+        - bearer: []
+  /vans/get-one/{id}:
+    get:
+      operationId: VanController_getOne
+      parameters:
+        - name: id
+          required: true
+          in: path
+          schema:
+            type: string
+      responses:
+        '200':
+          description: ''
+      tags:
+        - vans
+      security:
+        - bearer: []
+  /vans/update:
+    put:
+      operationId: VanController_update
+      parameters: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateVan'
+      responses:
+        '200':
+          description: ''
+      tags:
+        - vans
+      security:
+        - bearer: []
+  /vans/delete/{id}:
+    delete:
+      operationId: VanController_remove
+      parameters:
+        - name: id
+          required: true
+          in: path
+          schema:
+            type: string
+      responses:
+        '200':
+          description: ''
+      tags:
+        - vans
+      security:
+        - bearer: []
+  /file-upload:
+    post:
+      operationId: FileUploadController_uploadOne
+      parameters: []
+      requestBody:
+        required: true
+        content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                image:
+                  type: string
+                  format: binary
+      responses:
+        '201':
+          description: ''
+      tags:
+        - file-upload
+      security:
+        - bearer: []
+  /auth/authenticate:
+    get:
+      operationId: AuthController_authenticate
+      parameters: []
+      responses:
+        '200':
+          description: ''
+      tags:
+        - auth
+      security:
+        - bearer: []
+  /auth/login:
+    post:
+      operationId: AuthController_login
+      parameters: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/LoginForm'
+      responses:
+        '201':
+          description: ''
+          content:
+            application/json:
+              examples:
+                Login success:
+                  value: |-
+                    {
+                        "access_token": "valid_token",
+                        "expires_in": 25200,
+                        "refresh_expires_in": 21600,
+                        "refresh_token": "valid_token",
+                        "token_type": "Bearer",
+                        "id_token": "valid_token",
+                        "not-before-policy": 0,
+                        "session_state": "ce2a1070-883b-489f-8d3c-e1d6b35a369b",
+                        "scope": "openid profile email"
+                    }
+        '401':
+          description: ''
+          content:
+            application/json:
+              examples:
+                Invalid user credentials:
+                  value: |-
+                    {
+                        "statusCode": 401,
+                        "timestamp": "2025-03-03T12:12:13.885Z",
+                        "path": "/auth/login",
+                        "message": "Invalid user credentials"
+                    }
+      tags:
+        - auth
+  /auth/get-users:
+    get:
+      operationId: AuthController_getUsers
+      parameters:
+        - name: username
+          required: false
+          in: query
+          schema:
+            type: string
+      responses:
+        '200':
+          description: ''
+      tags:
+        - auth
+      security:
+        - bearer: []
+  /auth/get-users/{id}:
+    get:
+      operationId: AuthController_getOneUsers
+      parameters:
+        - name: id
+          required: true
+          in: path
+          schema:
+            type: string
+      responses:
+        '200':
+          description: ''
+      tags:
+        - auth
+      security:
+        - bearer: []
+  /auth/update-users:
+    put:
+      operationId: AuthController_updateUsers
+      parameters: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateUser'
+      responses:
+        '200':
+          description: ''
+      tags:
+        - auth
+      security:
+        - bearer: []
+  /auth/create-user:
+    post:
+      operationId: AuthController_createUser
+      parameters: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateUser'
+      responses:
+        '201':
+          description: ''
+      tags:
+        - auth
+      security:
+        - bearer: []
+  /auth/change-password:
+    post:
+      operationId: AuthController_changePass
+      parameters: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ChangePass'
+      responses:
+        '201':
+          description: ''
+      tags:
+        - auth
+      security:
+        - bearer: []
+  /auth/delete-users/{id}:
+    delete:
+      operationId: AuthController_deleteUser
+      parameters:
+        - name: id
+          required: true
+          in: path
+          schema:
+            type: string
+      responses:
+        '200':
+          description: ''
+      tags:
+        - auth
+      security:
+        - bearer: []
+  /auth/roles:
+    get:
+      operationId: AuthController_getRoles
+      parameters: []
+      responses:
+        '200':
+          description: ''
+      tags:
+        - auth
+      security:
+        - bearer: []
+  /auth/logout:
+    post:
+      operationId: AuthController_logout
+      parameters: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TokenUser'
+      responses:
+        '201':
+          description: ''
+      tags:
+        - auth
+      security:
+        - bearer: []

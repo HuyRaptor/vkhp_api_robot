@@ -57,7 +57,7 @@ Generate Unique Division Data
     ${division_data}=   Create Dictionary
     ...                 name=${division_name}
     ...                 warehouseId=${WAREHOUSE_ID}
-    [Return]            ${division_data}
+    RETURN            ${division_data}
 
 Create Division
     [Documentation]     Create a new division and return its ID
@@ -93,7 +93,7 @@ Create Division
     
     # Return division ID and full response
     ${division_id}=     Convert To String    ${json}[id]
-    [Return]            ${division_id}    ${json}
+    RETURN            ${division_id}    ${json}
 
 Get Division By ID
     [Documentation]     Retrieve a specific division by ID
@@ -120,7 +120,7 @@ Get Division By ID
     Dictionary Should Contain Key        ${json}    id
     ...    msg=Get division response missing ID field
     
-    [Return]            ${json}
+    RETURN            ${json}
 
 Update Division
     [Documentation]     Update an existing division
@@ -160,7 +160,7 @@ Update Division
     Dictionary Should Contain Key        ${json}    id
     ...    msg=Update division response missing ID field
     
-    [Return]            ${json}
+    RETURN            ${json}
 
 Delete Division
     [Documentation]     Delete a division from the system
@@ -181,7 +181,7 @@ Delete Division
     ...                 expected_status=200
     
     # Return deletion status
-    [Return]            ${TRUE}
+    RETURN            ${TRUE}
 
 Get All Divisions
     [Documentation]     Retrieve all divisions with optional filtering
@@ -213,7 +213,7 @@ Get All Divisions
     Should Not Be Empty    ${json}
     ...    msg=Get all divisions response was empty
     
-    [Return]            ${json}
+    RETURN            ${json}
 
 Assert Division Details
     [Documentation]     Verify division details match expected values

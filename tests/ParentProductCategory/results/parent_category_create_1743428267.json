@@ -1,0 +1,10 @@
+{
+    "id": 42,
+    "code": "0107",
+    "name": "Test Parent Category 1743428267",
+    "createDate": "2025-03-31T13:37:47.689Z",
+    "updateDate": "2025-03-31T13:37:47.690Z",
+    "exportStrategy": "FIFO",
+    "status": "ENABLE",
+    "warehouseId": 6
+}

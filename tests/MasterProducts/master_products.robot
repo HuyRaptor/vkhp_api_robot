@@ -82,7 +82,7 @@ Generate Unique Master Product Data
     ...                 discount=0
     ...                 isResources=${FALSE}
     ...                 availableQuantity=50
-    [Return]            ${master_product_data}
+    RETURN            ${master_product_data}
 
 Create Master Product
     [Documentation]     Create a new master product and return its ID
@@ -124,7 +124,7 @@ Create Master Product
     
     # Return master product ID and full response
     ${master_product_id}=     Convert To String    ${json}[id]
-    [Return]            ${master_product_id}    ${json}
+    RETURN            ${master_product_id}    ${json}
 
 Get Master Product By ID
     [Documentation]     Retrieve a specific master product by ID
@@ -151,7 +151,7 @@ Get Master Product By ID
     Dictionary Should Contain Key        ${json}    id
     ...    msg=Get master product response missing ID field
     
-    [Return]            ${json}
+    RETURN            ${json}
 
 Update Master Product
     [Documentation]     Update an existing master product
@@ -189,7 +189,7 @@ Update Master Product
     Dictionary Should Contain Key        ${json}    id
     ...    msg=Update master product response missing ID field
     
-    [Return]            ${json}
+    RETURN            ${json}
 
 Delete Master Product
     [Documentation]     Delete a master product from the system
@@ -210,7 +210,7 @@ Delete Master Product
     ...                 expected_status=200
     
     # Return deletion status
-    [Return]            ${TRUE}
+    RETURN            ${TRUE}
 
 Get All Master Products
     [Documentation]     Retrieve all master products with optional filtering
@@ -242,7 +242,7 @@ Get All Master Products
     Should Not Be Empty    ${json}
     ...    msg=Get all master products response was empty
     
-    [Return]            ${json}
+    RETURN            ${json}
 
 Create Test Master Product
     [Documentation]     Creates a test master product if one doesn't exist
@@ -570,7 +570,7 @@ Create Test Master Product
     ...    Run Keyword And Ignore Error    Delete Master Product    ${TEST_MASTER_PRODUCT_ID}
     
     # Remove any temporary files
-    Run Keyword And Ignore Error    Remove Files    ${RESULTS_DIR}${/}master_product_create_*.json
-    Run Keyword And Ignore Error    Remove Files    ${RESULTS_DIR}${/}master_products_bulk.xlsx
+    # Run Keyword And Ignore Error    Remove Files    ${RESULTS_DIR}${/}master_product_create_*.json
+    # Run Keyword And Ignore Error    Remove Files    ${RESULTS_DIR}${/}master_products_bulk.xlsx
     
     Log                 Test environment cleaned up successfully
