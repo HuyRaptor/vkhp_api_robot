@@ -1,6 +1,6 @@
 *** Settings ***
-Documentation     End-to-End Test Suite for Order with Cancellation and Refund Processing in vKho API
-...               Covers order creation, cancellation, and simulated refund
+Documentation     End-to-End Test Suite for Order with Split Fulfillment Across Multiple Warehouses in vKho API
+...               Covers order creation, split fulfillment, and confirmation
 Library           RequestsLibrary
 Library           Collections
 Library           OperatingSystem
@@ -11,12 +11,15 @@ Library           DateTime
 ${BASE_URL}             https://api.vkho.net
 ${USERNAME}             huynh22.manager
 ${PASSWORD}             Snowfox1991
-${WAREHOUSE_ID}         6
+${WAREHOUSE_1_ID}       6
+${WAREHOUSE_2_ID}       7
 ${RESULTS_DIR}          ${CURDIR}${/}results
 ${TEST_ORDER_ID}        ${EMPTY}
 ${TEST_ORDER_CODE}      ${EMPTY}
 ${TEST_ORDER_DATA}      ${EMPTY}
-${TEST_PACKAGE_ID}      ${EMPTY}
+@{TEST_PACKAGE_IDS}     @{EMPTY}
+${SKU_1}                ${EMPTY}
+${SKU_2}                ${EMPTY}
 
 *** Keywords ***
 Setup API Session
@@ -42,28 +45,35 @@ Setup API Session
     Create Directory    ${RESULTS_DIR}
 
 Generate Unique Order Data
-    [Documentation]     Generate unique data for order tests
-    [Arguments]         ${custom_name}=Cancel Order
-    
+    [Documentation]     Generate unique data for order with multiple items
     ${timestamp}=       Evaluate         int(time.time())    time
-    ${order_code}=      Set Variable     CANC${timestamp}
+    ${order_code}=      Set Variable     SPLIT${timestamp}
     
-    ${product_order}=   Create Dictionary
-    ...                 total=12
+    ${sku1}=            Set Variable     SKU${timestamp}_1
+    ${sku2}=            Set Variable     SKU${timestamp}_2
+    ${product_order1}=  Create Dictionary
+    ...                 total=5
     ...                 boothCode=BOOTH${timestamp}
-    ...                 sku=SKU${timestamp}
-    ${product_orders}=  Create List      ${product_order}
+    ...                 sku=${sku1}
+    ${product_order2}=  Create Dictionary
+    ...                 total=3
+    ...                 boothCode=BOOTH${timestamp}
+    ...                 sku=${sku2}
+    ${product_orders}=  Create List      ${product_order1}    ${product_order2}
     
     ${order_data}=      Create Dictionary
-    ...                 nameCustomer=${custom_name} Customer
+    ...                 nameCustomer=Split Order Customer
     ...                 code=${order_code}
     ...                 boothCode=BOOTH${timestamp}
-    ...                 deliveryAdress=505 Cancel Rd
-    ...                 deliveryTime=2025-04-08T14:00:00.000Z
-    ...                 driverName=Jane Doe
-    ...                 warehouseId=${WAREHOUSE_ID}
+    ...                 deliveryAdress=808 Split Way
+    ...                 deliveryTime=2025-04-11T15:00:00.000Z
+    ...                 driverName=Split Driver
+    ...                 warehouseId=${WAREHOUSE_1_ID}
     ...                 productOrders=${product_orders}
-    RETURN            ${order_data}
+    
+    Set Global Variable  ${SKU_1}    ${sku1}
+    Set Global Variable  ${SKU_2}    ${sku2}
+    [Return]            ${order_data}
 
 Create Order
     [Documentation]     Create a new order and return its ID
@@ -89,7 +99,7 @@ Create Order
     Dictionary Should Contain Key        ${json}    id
     
     ${order_id}=        Convert To String    ${json}[id]
-    RETURN            ${order_id}    ${json}
+    [Return]            ${order_id}    ${json}
 
 Get Order By ID
     [Documentation]     Retrieve a specific order by ID
@@ -109,7 +119,32 @@ Get Order By ID
     Should Not Be Empty    ${json}
     Dictionary Should Contain Key        ${json}    id
     
-    RETURN            ${json}
+    [Return]            ${json}
+
+Check Inventory Availability
+    [Documentation]     Check inventory availability for order products
+    [Arguments]         ${warehouse_id}    ${order_data}
+    
+    ${products}=        Create List
+    FOR    ${product}    IN    @{order_data}[productOrders]
+        ${item}=        Create Dictionary    sku=${product}[sku]    quantity=${product}[total]
+        Append To List  ${products}    ${item}
+    END
+    
+    ${check_data}=      Create Dictionary    warehouseId=${warehouse_id}    products=${products}
+    ${headers}=         Create Dictionary    Content-Type=application/json    Authorization=${AUTH_TOKEN}
+    
+    ${response}=        POST On Session
+    ...                 vkho
+    ...                 /inventories/check-available
+    ...                 json=${check_data}
+    ...                 headers=${headers}
+    ...                 expected_status=200
+    
+    ${json}=            Evaluate         json.loads('''${response.text}''')    json
+    Should Not Be Empty    ${json}
+    
+    [Return]            ${json}
 
 Update Order
     [Documentation]     Update an existing order
@@ -136,17 +171,17 @@ Update Order
     Should Not Be Empty    ${json}
     Dictionary Should Contain Key        ${json}    id
     
-    RETURN            ${json}
+    [Return]            ${json}
 
 Create Package
     [Documentation]     Create a package for the order
-    [Arguments]         ${order_id}
+    [Arguments]         ${order_id}    ${warehouse_id}
     
     Should Not Be Empty    ${order_id}
     
     ${package_data}=    Create Dictionary
     ...                 orderId=${order_id}
-    ...                 warehouseId=${WAREHOUSE_ID}
+    ...                 warehouseId=${warehouse_id}
     ...                 zoneId=1
     ${headers}=         Create Dictionary    Content-Type=application/json    Authorization=${AUTH_TOKEN}
     
@@ -161,38 +196,32 @@ Create Package
     Dictionary Should Contain Key        ${json}    id
     
     ${package_id}=      Convert To String    ${json}[id]
-    RETURN            ${package_id}    ${json}
+    [Return]            ${package_id}    ${json}
 
-Get Package By ID
-    [Documentation]     Retrieve a specific package by ID
-    [Arguments]         ${package_id}
-    
-    Should Not Be Empty    ${package_id}
-    
+Get All Packages
+    [Documentation]     Retrieve all packages
     ${headers}=         Create Dictionary    Content-Type=application/json    Authorization=${AUTH_TOKEN}
     
     ${response}=        GET On Session
     ...                 vkho
-    ...                 /packages/get-one/${package_id}
+    ...                 /packages/get-all
     ...                 headers=${headers}
     ...                 expected_status=200
     
     ${json}=            Evaluate         json.loads('''${response.text}''')    json
     Should Not Be Empty    ${json}
-    Dictionary Should Contain Key        ${json}    id
     
-    RETURN            ${json}
+    [Return]            ${json}
 
-Simulate Refund
-    [Documentation]     Simulate refund processing for a canceled order (placeholder)
+Confirm Order
+    [Documentation]     Confirm the order as completed
     [Arguments]         ${order_id}
     
     Should Not Be Empty    ${order_id}
     
-    ${confirm_data}=    Create Dictionary    id=${order_id}    refund_status=processed    # Simulated field
+    ${confirm_data}=    Create Dictionary    id=${order_id}
     ${headers}=         Create Dictionary    Content-Type=application/json    Authorization=${AUTH_TOKEN}
     
-    # Using /orders/confirm as a placeholder since no refund endpoint exists
     ${response}=        POST On Session
     ...                 vkho
     ...                 /orders/confirm
@@ -200,8 +229,7 @@ Simulate Refund
     ...                 headers=${headers}
     ...                 expected_status=201
     
-    Log                 Simulated refund processed for order: ${order_id}
-    RETURN            ${TRUE}
+    [Return]            ${TRUE}
 
 Delete Order
     [Documentation]     Delete an order from the system
@@ -217,7 +245,7 @@ Delete Order
     ...                 headers=${headers}
     ...                 expected_status=200
     
-    RETURN            ${TRUE}
+    [Return]            ${TRUE}
 
 Delete Package
     [Documentation]     Delete a package from the system
@@ -233,7 +261,7 @@ Delete Package
     ...                 headers=${headers}
     ...                 expected_status=200
     
-    RETURN            ${TRUE}
+    [Return]            ${TRUE}
 
 Assert Order Details
     [Documentation]     Verify order details match expected values
@@ -259,8 +287,8 @@ Create Test Order
     Setup API Session
     Log                 Successfully authenticated with token: ${AUTH_TOKEN}
 
-02 - Create Order Test
-    [Documentation]     Test creating a new order
+02 - Create Order with Multiple Items Test
+    [Documentation]     Test creating a new order with multiple items
     [Tags]              create    positive
     
     ${order_data}=      Generate Unique Order Data
@@ -268,12 +296,13 @@ Create Test Order
     
     Should Not Be Empty    ${order_id}
     Should Be Equal     ${response}[code]    ${order_data}[code]
+    Should Be Equal As Integers    ${response}[warehouseId]    ${WAREHOUSE_1_ID}
     
     Set Global Variable  ${TEST_ORDER_ID}      ${order_id}
     Set Global Variable  ${TEST_ORDER_CODE}    ${response}[code]
     Set Global Variable  ${TEST_ORDER_DATA}    ${order_data}
     
-    Log                 Successfully created order: ${TEST_ORDER_CODE} with ID: ${TEST_ORDER_ID}
+    Log                 Successfully created order with multiple items: ${TEST_ORDER_CODE} with ID: ${TEST_ORDER_ID}
 
 03 - Get Order Test
     [Documentation]     Test retrieving the created order
@@ -286,8 +315,19 @@ Create Test Order
     
     Log                 Successfully retrieved order: ${order}[code]
 
-04 - Update Order to Picking Test
-    [Documentation]     Test updating order to PICKING status
+04 - Check Inventory in Initial Warehouse Test
+    [Documentation]     Test checking inventory in Warehouse 1
+    [Tags]              inventory    positive
+    
+    Run Keyword If      "${TEST_ORDER_ID}" == "${EMPTY}"    Create Test Order
+    
+    ${availability}=    Check Inventory Availability    ${WAREHOUSE_1_ID}    ${TEST_ORDER_DATA}
+    Should Not Be Empty    ${availability}
+    
+    Log                 Successfully checked inventory availability in Warehouse ${WAREHOUSE_1_ID} for order: ${TEST_ORDER_ID}
+
+05 - Update Order to Picking in Warehouse 1 Test
+    [Documentation]     Test updating order to PICKING for available items in Warehouse 1
     [Tags]              update    positive
     
     Run Keyword If      "${TEST_ORDER_ID}" == "${EMPTY}"    Create Test Order
@@ -299,28 +339,96 @@ Create Test Order
     ...                 deliveryTime=${TEST_ORDER_DATA}[deliveryTime]
     ...                 driverName=${TEST_ORDER_DATA}[driverName]
     ...                 status=PICKING
-    ...                 updateProductOrder=${[ ${{"id": 1, "pickingQuantity": 12}} ]}
+    ...                 warehouseId=${WAREHOUSE_1_ID}
+    ...                 updateProductOrder=${[ ${{"id": 1, "pickingQuantity": 5}} ]}  # Partial picking for SKU_1
     
     ${updated_order}=   Update Order    ${TEST_ORDER_ID}    ${update_data}
     Should Be Equal     ${updated_order}[status]    PICKING
     
-    Log                 Successfully updated order to PICKING: ${TEST_ORDER_ID}
+    Log                 Successfully updated order to PICKING in Warehouse ${WAREHOUSE_1_ID}: ${TEST_ORDER_ID}
 
-05 - Create Package Test
-    [Documentation]     Test creating a package for the order
+06 - Create Package in Warehouse 1 Test
+    [Documentation]     Test creating a package in Warehouse 1
     [Tags]              package    positive
     
     Run Keyword If      "${TEST_ORDER_ID}" == "${EMPTY}"    Create Test Order
     
-    ${package_id}       ${response}=    Create Package    ${TEST_ORDER_ID}
+    ${package_id}       ${response}=    Create Package    ${TEST_ORDER_ID}    ${WAREHOUSE_1_ID}
     Should Not Be Empty    ${package_id}
+    Should Be Equal As Integers    ${response}[warehouseId]    ${WAREHOUSE_1_ID}
     
-    Set Global Variable  ${TEST_PACKAGE_ID}    ${package_id}
+    Append To List      ${TEST_PACKAGE_IDS}    ${package_id}
     
-    Log                 Successfully created package: ${package_id} for order: ${TEST_ORDER_ID}
+    Log                 Successfully created package ${package_id} in Warehouse ${WAREHOUSE_1_ID} for order: ${TEST_ORDER_ID}
 
-06 - Update Order to Packaged Test
-    [Documentation]     Test updating order to PACKAGED status
+07 - Update Order to Split Status Test
+    [Documentation]     Test updating order to SPLIT status for remaining items
+    [Tags]              update    positive
+    
+    Run Keyword If      "${TEST_ORDER_ID}" == "${EMPTY}"    Create Test Order
+    
+    ${update_data}=     Create Dictionary
+    ...                 id=${TEST_ORDER_ID}
+    ...                 boothCode=${TEST_ORDER_DATA}[boothCode]
+    ...                 deliveryAdress=${TEST_ORDER_DATA}[deliveryAdress]
+    ...                 deliveryTime=${TEST_ORDER_DATA}[deliveryTime]
+    ...                 driverName=${TEST_ORDER_DATA}[driverName]
+    ...                 status=SPLIT    # Simulated status; adjust if not supported
+    ...                 warehouseId=${WAREHOUSE_2_ID}
+    
+    ${updated_order}=   Update Order    ${TEST_ORDER_ID}    ${update_data}
+    Should Be Equal     ${updated_order}[status]    SPLIT
+    
+    Log                 Successfully updated order to SPLIT status for Warehouse ${WAREHOUSE_2_ID}: ${TEST_ORDER_ID}
+
+08 - Check Inventory in Second Warehouse Test
+    [Documentation]     Test checking inventory in Warehouse 2
+    [Tags]              inventory    positive
+    
+    Run Keyword If      "${TEST_ORDER_ID}" == "${EMPTY}"    Create Test Order
+    
+    ${availability}=    Check Inventory Availability    ${WAREHOUSE_2_ID}    ${TEST_ORDER_DATA}
+    Should Not Be Empty    ${availability}
+    
+    Log                 Successfully checked inventory availability in Warehouse ${WAREHOUSE_2_ID} for order: ${TEST_ORDER_ID}
+
+09 - Update Order to Picking in Warehouse 2 Test
+    [Documentation]     Test updating order to PICKING for remaining items in Warehouse 2
+    [Tags]              update    positive
+    
+    Run Keyword If      "${TEST_ORDER_ID}" == "${EMPTY}"    Create Test Order
+    
+    ${update_data}=     Create Dictionary
+    ...                 id=${TEST_ORDER_ID}
+    ...                 boothCode=${TEST_ORDER_DATA}[boothCode]
+    ...                 deliveryAdress=${TEST_ORDER_DATA}[deliveryAdress]
+    ...                 deliveryTime=${TEST_ORDER_DATA}[deliveryTime]
+    ...                 driverName=${TEST_ORDER_DATA}[driverName]
+    ...                 status=PICKING
+    ...                 warehouseId=${WAREHOUSE_2_ID}
+    ...                 updateProductOrder=${[ ${{"id": 2, "pickingQuantity": 3}} ]}  # Picking for SKU_2
+    
+    ${updated_order}=   Update Order    ${TEST_ORDER_ID}    ${update_data}
+    Should Be Equal     ${updated_order}[status]    PICKING
+    
+    Log                 Successfully updated order to PICKING in Warehouse ${WAREHOUSE_2_ID}: ${TEST_ORDER_ID}
+
+10 - Create Package in Warehouse 2 Test
+    [Documentation]     Test creating a package in Warehouse 2
+    [Tags]              package    positive
+    
+    Run Keyword If      "${TEST_ORDER_ID}" == "${EMPTY}"    Create Test Order
+    
+    ${package_id}       ${response}=    Create Package    ${TEST_ORDER_ID}    ${WAREHOUSE_2_ID}
+    Should Not Be Empty    ${package_id}
+    Should Be Equal As Integers    ${response}[warehouseId]    ${WAREHOUSE_2_ID}
+    
+    Append To List      ${TEST_PACKAGE_IDS}    ${package_id}
+    
+    Log                 Successfully created package ${package_id} in Warehouse ${WAREHOUSE_2_ID} for order: ${TEST_ORDER_ID}
+
+11 - Update Order to Packaged Test
+    [Documentation]     Test updating order to PACKAGED after split fulfillment
     [Tags]              update    positive
     
     Run Keyword If      "${TEST_ORDER_ID}" == "${EMPTY}"    Create Test Order
@@ -332,65 +440,65 @@ Create Test Order
     ...                 deliveryTime=${TEST_ORDER_DATA}[deliveryTime]
     ...                 driverName=${TEST_ORDER_DATA}[driverName]
     ...                 status=PACKAGED
-    ...                 updateProductOrder=${[ ${{"id": 1, "pickingQuantity": 12}} ]}
+    ...                 updateProductOrder=${[ ${{"id": 1, "pickingQuantity": 5}}, ${{"id": 2, "pickingQuantity": 3}} ]}
     
     ${updated_order}=   Update Order    ${TEST_ORDER_ID}    ${update_data}
     Should Be Equal     ${updated_order}[status]    PACKAGED
     
-    Log                 Successfully updated order to PACKAGED: ${TEST_ORDER_ID}
+    Log                 Successfully updated order to PACKAGED after split fulfillment: ${TEST_ORDER_ID}
 
-07 - Cancel Order Test
-    [Documentation]     Test canceling the order
-    [Tags]              update    positive
+12 - Confirm Order Test
+    [Documentation]     Test confirming the split order as delivered
+    [Tags]              confirm    positive
     
     Run Keyword If      "${TEST_ORDER_ID}" == "${EMPTY}"    Create Test Order
     
-    ${update_data}=     Create Dictionary
-    ...                 id=${TEST_ORDER_ID}
-    ...                 boothCode=${TEST_ORDER_DATA}[boothCode]
-    ...                 deliveryAdress=${TEST_ORDER_DATA}[deliveryAdress]
-    ...                 deliveryTime=${TEST_ORDER_DATA}[deliveryTime]
-    ...                 driverName=${TEST_ORDER_DATA}[driverName]
-    ...                 status=CANCELLED
-    
-    ${updated_order}=   Update Order    ${TEST_ORDER_ID}    ${update_data}
-    Should Be Equal     ${updated_order}[status]    CANCELLED
-    
-    Log                 Successfully canceled order: ${TEST_ORDER_ID}
-
-08 - Simulate Refund Processing Test
-    [Documentation]     Test simulating refund processing for canceled order
-    [Tags]              refund    positive
-    
-    Run Keyword If      "${TEST_ORDER_ID}" == "${EMPTY}"    Create Test Order
-    
-    ${result}=          Simulate Refund    ${TEST_ORDER_ID}
+    ${result}=          Confirm Order    ${TEST_ORDER_ID}
     Should Be True      ${result}
     
-    Log                 Successfully simulated refund for canceled order: ${TEST_ORDER_ID}
+    ${order}=           Get Order By ID    ${TEST_ORDER_ID}
+    Should Be Equal     ${order}[status]    DELIVERED
+    
+    Log                 Successfully confirmed split order as DELIVERED: ${TEST_ORDER_ID}
 
-09 - Verify Final Order and Package Test
-    [Documentation]     Test retrieving order and package after cancellation
+13 - Verify Final Order and Packages Test
+    [Documentation]     Test retrieving order and packages after split fulfillment
     [Tags]              retrieve    positive
     
     Run Keyword If      "${TEST_ORDER_ID}" == "${EMPTY}"    Create Test Order
-    Run Keyword If      "${TEST_PACKAGE_ID}" == "${EMPTY}"    Create Package    ${TEST_ORDER_ID}
+    Run Keyword If      "${TEST_PACKAGE_IDS.__len__()}" < "2"    Create Package in Warehouse 1 Test
+    Run Keyword If      "${TEST_PACKAGE_IDS.__len__()}" < "2"    Create Package in Warehouse 2 Test
     
     ${order}=           Get Order By ID    ${TEST_ORDER_ID}
-    ${package}=         Get Package By ID    ${TEST_PACKAGE_ID}
+    ${packages}=        Get All Packages
     
-    Should Be Equal     ${order}[status]    CANCELLED
-    Should Not Be Empty    ${package}[orderId]
+    Should Be Equal     ${order}[status]    DELIVERED
+    ${package_count}=   Get Length    ${packages}
+    Should Be True      ${package_count} >= 2
     
-    Log                 Successfully verified canceled order ${TEST_ORDER_ID} and package ${TEST_PACKAGE_ID}
+    ${warehouse_1_found}=  Set Variable    ${FALSE}
+    ${warehouse_2_found}=  Set Variable    ${FALSE}
+    FOR    ${package}    IN    @{packages}
+        ${package_id}=  Convert To String    ${package}[id]
+        Run Keyword If  "${package_id}" in ${TEST_PACKAGE_IDS} and ${package}[warehouseId] == ${WAREHOUSE_1_ID}
+        ...             Set Variable    ${warehouse_1_found}    ${TRUE}
+        Run Keyword If  "${package_id}" in ${TEST_PACKAGE_IDS} and ${package}[warehouseId] == ${WAREHOUSE_2_ID}
+        ...             Set Variable    ${warehouse_2_found}    ${TRUE}
+    END
+    Should Be True      ${warehouse_1_found} and ${warehouse_2_found}
+    
+    Log                 Successfully verified delivered order ${TEST_ORDER_ID} with packages from Warehouses ${WAREHOUSE_1_ID} and ${WAREHOUSE_2_ID}
 
-10 - Cleanup Test Environment
-    [Documentation]     Clean up test order and package
+14 - Cleanup Test Environment
+    [Documentation]     Clean up test order and packages
     [Tags]              cleanup
     
-    Run Keyword If      "${TEST_PACKAGE_ID}" != "${EMPTY}"
-    ...                 Delete Package    ${TEST_PACKAGE_ID}
+    FOR    ${package_id}    IN    @{TEST_PACKAGE_IDS}
+        Delete Package    ${package_id}
+    END
+    
     Run Keyword If      "${TEST_ORDER_ID}" != "${EMPTY}"
     ...                 Delete Order    ${TEST_ORDER_ID}
     
+    Set Global Variable  ${TEST_PACKAGE_IDS}   @{EMPTY}
     Log                 Test environment cleaned up successfully

@@ -1,1 +1,9 @@
-{"id":28,"code":"28","name":"Test Division 1743427787","createDate":"2025-03-31T13:29:47.800Z","updateDate":"2025-03-31T13:29:47.800Z","status":"ENABLE","warehouseId":6}
+{
+    "id": 28,
+    "code": "28",
+    "name": "Test Division 1743427787",
+    "createDate": "2025-03-31T13:29:47.800Z",
+    "updateDate": "2025-03-31T13:29:47.800Z",
+    "status": "ENABLE",
+    "warehouseId": 6
+}
