@@ -60,7 +60,7 @@ Generate Unique Package Data
     ...                 packageCode=${package_code}
     ...                 warehouseId=${WAREHOUSE_ID}
     ...                 status=CREATED
-    [Return]            ${package_data}
+    RETURN            ${package_data}
 
 Create Package
     [Documentation]     Create a new package and return its ID
@@ -94,7 +94,7 @@ Create Package
     
     # Return package ID and full response
     ${package_id}=      Convert To String    ${json}[id]
-    [Return]            ${package_id}    ${json}
+    RETURN            ${package_id}    ${json}
 
 Get Package By ID
     [Documentation]     Retrieve a specific package by ID
@@ -121,7 +121,7 @@ Get Package By ID
     Dictionary Should Contain Key        ${json}    id
     ...    msg=Get package response missing ID field
     
-    [Return]            ${json}
+    RETURN            ${json}
 
 Update Package
     [Documentation]     Update an existing package
@@ -161,7 +161,7 @@ Update Package
     Dictionary Should Contain Key        ${json}    id
     ...    msg=Update package response missing ID field
     
-    [Return]            ${json}
+    RETURN            ${json}
 
 Delete Package
     [Documentation]     Delete a package from the system
@@ -182,7 +182,7 @@ Delete Package
     ...                 expected_status=200
     
     # Return deletion status
-    [Return]            ${TRUE}
+    RETURN            ${TRUE}
 
 Get All Packages
     [Documentation]     Retrieve all packages with optional filtering
@@ -208,7 +208,7 @@ Get All Packages
     Should Not Be Empty    ${json}
     ...    msg=Get all packages response was empty
     
-    [Return]            ${json}
+    RETURN            ${json}
 
 Create Order With Package
     [Documentation]     Create an order linked to a package
@@ -242,7 +242,7 @@ Create Order With Package
     
     ${json}=            Evaluate         json.loads('''${response.text}''')    json
     ${order_id}=        Convert To String    ${json}[id]
-    [Return]            ${order_id}
+    RETURN            ${order_id}
 
 Bulk Create Packages
     [Documentation]     Create multiple packages in bulk
@@ -254,7 +254,7 @@ Bulk Create Packages
         ${package_id}    ${response}=    Create Package    ${package_data}
         Append To List      ${package_ids}    ${package_id}
     END
-    [Return]            ${package_ids}
+    RETURN            ${package_ids}
 
 Assert Package Details
     [Documentation]     Verify package details match expected values
@@ -469,4 +469,4 @@ Create Test Package
     ...                 Delete Package    ${TEST_PACKAGE_ID}
     ...                 AND    Set Global Variable    ${TEST_PACKAGE_ID}    ${EMPTY}
     
-    Log                 Test environment cleaned up successfully
+    Log                 Test environment cleaned up successfully  

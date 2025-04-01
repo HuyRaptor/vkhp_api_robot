@@ -71,7 +71,7 @@ Generate Unique Product Data
     # Add optional supplier dependency
     Run Keyword If      "${supplier_id}" != "${EMPTY}"    Set To Dictionary    ${product_data}    supplierId=${supplier_id}
     
-    [Return]            ${product_data}
+    RETURN            ${product_data}
 
 Create Product
     [Documentation]     Create a new product and return its ID
@@ -107,7 +107,7 @@ Create Product
     
     # Return product ID and full response
     ${product_id}=      Convert To String    ${json}[id]
-    [Return]            ${product_id}    ${json}
+    RETURN            ${product_id}    ${json}
 
 Get Product By ID
     [Documentation]     Retrieve a specific product by ID
@@ -134,7 +134,7 @@ Get Product By ID
     Dictionary Should Contain Key        ${json}    id
     ...    msg=Get product response missing ID field
     
-    [Return]            ${json}
+    RETURN            ${json}
 
 Update Product
     [Documentation]     Update an existing product
@@ -176,7 +176,7 @@ Update Product
     Dictionary Should Contain Key        ${json}    id
     ...    msg=Update product response missing ID field
     
-    [Return]            ${json}
+    RETURN            ${json}
 
 Delete Product
     [Documentation]     Delete a product from the system
@@ -197,7 +197,7 @@ Delete Product
     ...                 expected_status=200
     
     # Return deletion status
-    [Return]            ${TRUE}
+    RETURN            ${TRUE}
 
 Get All Products
     [Documentation]     Retrieve all products with filtering, pagination, and sorting
@@ -226,7 +226,7 @@ Get All Products
     Should Not Be Empty    ${json}
     ...    msg=Get all products response was empty
     
-    [Return]            ${json}
+    RETURN            ${json}
 
 Create Supplier
     [Documentation]     Create a supplier for product dependency
@@ -248,7 +248,7 @@ Create Supplier
     
     ${json}=            Evaluate         json.loads('''${response.text}''')    json
     ${supplier_id}=     Convert To String    ${json}[id]
-    [Return]            ${supplier_id}
+    RETURN            ${supplier_id}
 
 Bulk Create Products
     [Documentation]     Create multiple products in bulk with validation
@@ -260,7 +260,7 @@ Bulk Create Products
         ${product_id}    ${response}=    Create Product    ${product_data}
         Append To List      ${product_ids}    ${product_id}
     END
-    [Return]            ${product_ids}
+    RETURN            ${product_ids}
 
 Assert Product Details
     [Documentation]     Verify product details match expected values

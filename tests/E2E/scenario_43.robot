@@ -64,7 +64,7 @@ Generate Unique Supplier Data
     ...                 phoneNumber=800555${timestamp}
     ...                 email=supplier_${timestamp}@example.com
     ...                 address=123 Supplier Street
-    [Return]            ${supplier_data}
+    RETURN            ${supplier_data}
 
 Create Supplier
     [Documentation]     Create a new supplier and return its ID
@@ -98,7 +98,7 @@ Create Supplier
     
     # Return supplier ID and full response
     ${supplier_id}=     Convert To String    ${json}[id]
-    [Return]            ${supplier_id}    ${json}
+    RETURN            ${supplier_id}    ${json}
 
 Get Supplier By ID
     [Documentation]     Retrieve a specific supplier by ID
@@ -125,7 +125,7 @@ Get Supplier By ID
     Dictionary Should Contain Key        ${json}    id
     ...    msg=Get supplier response missing ID field
     
-    [Return]            ${json}
+    RETURN            ${json}
 
 Update Supplier
     [Documentation]     Update an existing supplier
@@ -165,7 +165,7 @@ Update Supplier
     Dictionary Should Contain Key        ${json}    id
     ...    msg=Update supplier response missing ID field
     
-    [Return]            ${json}
+    RETURN            ${json}
 
 Delete Supplier
     [Documentation]     Delete a supplier from the system
@@ -186,7 +186,7 @@ Delete Supplier
     ...                 expected_status=200
     
     # Return deletion status
-    [Return]            ${TRUE}
+    RETURN            ${TRUE}
 
 Get All Suppliers
     [Documentation]     Retrieve all suppliers with optional filtering and pagination
@@ -214,7 +214,7 @@ Get All Suppliers
     Should Not Be Empty    ${json}
     ...    msg=Get all suppliers response was empty
     
-    [Return]            ${json}
+    RETURN            ${json}
 
 Create Product With Supplier
     [Documentation]     Create a product linked to a supplier
@@ -242,7 +242,7 @@ Create Product With Supplier
     
     ${json}=            Evaluate         json.loads('''${response.text}''')    json
     ${product_id}=      Convert To String    ${json}[id]
-    [Return]            ${product_id}
+    RETURN            ${product_id}
 
 Bulk Create Suppliers
     [Documentation]     Create multiple suppliers in bulk with validation
@@ -254,7 +254,7 @@ Bulk Create Suppliers
         ${supplier_id}    ${response}=    Create Supplier    ${supplier_data}
         Append To List      ${supplier_ids}    ${supplier_id}
     END
-    [Return]            ${supplier_ids}
+    RETURN            ${supplier_ids}
 
 Assert Supplier Details
     [Documentation]     Verify supplier details match expected values

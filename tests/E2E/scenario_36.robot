@@ -88,7 +88,7 @@ Generate Unique Warehouse Data
     ...                 name=${warehouse_name}
     ...                 address=456 Inventory Lane
     ...                 acreage=1000
-    [Return]            ${warehouse_data}
+    RETURN            ${warehouse_data}
 
 Generate Unique Product Data
     [Documentation]     Generate unique data for product tests
@@ -110,7 +110,7 @@ Generate Unique Product Data
     ...                 productCategoryId=1
     ...                 rackId=1
     ...                 barCode=BAR${timestamp}
-    [Return]            ${product_data}
+    RETURN            ${product_data}
 
 Generate Inventory Data
     [Documentation]     Generate data for inventory creation
@@ -123,7 +123,7 @@ Generate Inventory Data
     ...                 lastUpdated=2025-04-01T00:00:00.000Z
     ...                 status=ACTIVE
     ...                 note=Initial inventory ${timestamp}
-    [Return]            ${inventory_data}
+    RETURN            ${inventory_data}
 
 Generate Adjustment Data
     [Documentation]     Generate data for stock adjustment
@@ -135,24 +135,25 @@ Generate Adjustment Data
     ...                 reason=${reason}
     ...                 adjustmentDate=2025-04-01T00:00:00.000Z
     ...                 note=Adjustment ${timestamp}
-    [Return]            ${adjustment_data}
+    RETURN            ${adjustment_data}
 
 Create Warehouse With Retry
     [Documentation]     Create a new warehouse with retry logic
     [Arguments]         ${warehouse_data}
     ${headers}=         Create Dictionary    Content-Type=application/json    Authorization=${AUTH_TOKEN}
     ${attempt}=         Set Variable    1
-    :FOR    ${attempt}    IN RANGE    1    ${MAX_RETRIES + 1}
+    FOR    ${attempt}    IN RANGE    1    ${MAX_RETRIES + 1}
     \    ${response}=    Run Keyword And Ignore Error
     \    ...             POST On Session    vkho    /warehouses/create    json=${warehouse_data}    headers=${headers}    expected_status=anything
     \    ${status}=      Set Variable If    "${response[0]}" == "PASS"    ${response[1].status_code}    500
     \    Exit For Loop If    ${status} == 201
     \    Sleep           ${RETRY_DELAY}
     \    Run Keyword If  ${attempt} == ${MAX_RETRIES}    Fail    Failed to create warehouse after ${MAX_RETRIES} attempts
+    END
     ${json}=            Evaluate         json.loads('''${response[1].text}''')    json
     ${warehouse_id}=    Convert To String    ${json}[id]
     Increment Operation Count
-    [Return]            ${warehouse_id}    ${response[1]}
+    RETURN            ${warehouse_id}    ${response[1]}
 
 Create Product
     [Documentation]     Create a new product and return its ID
@@ -167,7 +168,7 @@ Create Product
     ${json}=            Evaluate         json.loads('''${response.text}''')    json
     ${product_id}=      Convert To String    ${json}[id]
     Increment Operation Count
-    [Return]            ${product_id}    ${response}
+    RETURN            ${product_id}    ${response}
 
 Create Inventory
     [Documentation]     Create a new inventory record
@@ -182,7 +183,7 @@ Create Inventory
     ${json}=            Evaluate         json.loads('''${response.text}''')    json
     ${inventory_id}=    Convert To String    ${json}[id]
     Increment Operation Count
-    [Return]            ${inventory_id}    ${response}
+    RETURN            ${inventory_id}    ${response}
 
 Adjust Inventory
     [Documentation]     Adjust stock levels in an inventory record
@@ -197,7 +198,7 @@ Adjust Inventory
     ${json}=            Evaluate         json.loads('''${response.text}''')    json
     ${adjustment_id}=   Convert To String    ${json}[id]
     Increment Operation Count
-    [Return]            ${adjustment_id}    ${response}
+    RETURN            ${adjustment_id}    ${response}
 
 Get Inventory By ID
     [Documentation]     Retrieve an inventory record by ID
@@ -210,7 +211,7 @@ Get Inventory By ID
     ...                 expected_status=200
     ${json}=            Evaluate         json.loads('''${response.text}''')    json
     Increment Operation Count
-    [Return]            ${response}
+    RETURN            ${response}
 
 Get Adjustment History
     [Documentation]     Retrieve adjustment history for an inventory record
@@ -225,7 +226,7 @@ Get Adjustment History
     ...                 expected_status=200
     ${json}=            Evaluate         json.loads('''${response.text}''')    json
     Increment Operation Count
-    [Return]            ${response}
+    RETURN            ${response}
 
 Delete Warehouse
     [Documentation]     Delete a warehouse from the system
@@ -237,7 +238,7 @@ Delete Warehouse
     ...                 headers=${headers}
     ...                 expected_status=200
     Increment Operation Count
-    [Return]            ${TRUE}
+    RETURN            ${TRUE}
 
 Delete Product
     [Documentation]     Delete a product from the system
@@ -249,7 +250,7 @@ Delete Product
     ...                 headers=${headers}
     ...                 expected_status=200
     Increment Operation Count
-    [Return]            ${TRUE}
+    RETURN            ${TRUE}
 
 Delete Inventory
     [Documentation]     Delete an inventory record from the system
@@ -261,7 +262,7 @@ Delete Inventory
     ...                 headers=${headers}
     ...                 expected_status=200
     Increment Operation Count
-    [Return]            ${TRUE}
+    RETURN            ${TRUE}
 
 Delete Adjustment
     [Documentation]     Delete an adjustment record (if supported)
@@ -273,7 +274,7 @@ Delete Adjustment
     ...                 headers=${headers}
     ...                 expected_status=anything
     Increment Operation Count
-    [Return]            ${response.status_code} == 200
+    RETURN            ${response.status_code} == 200
 
 Assert Inventory Details
     [Documentation]     Verify inventory details match expected values
@@ -317,16 +318,18 @@ Simulate Concurrent Adjustments
     [Documentation]     Simulate concurrent adjustments to an inventory record
     [Arguments]         ${inventory_id}    ${adjustment_template}    ${thread_count}=${CONCURRENT_THREADS}
     ${processes}=       Create List
-    :FOR    ${index}    IN RANGE    ${thread_count}
+    FOR    ${index}    IN RANGE    ${thread_count}
     \    ${adjustment_data}=    Copy Dictionary    ${adjustment_template}
     \    Set To Dictionary  ${adjustment_data}    note=Adjustment by Thread ${index}
     \    ${process}=        Start Process    robot    -c    Adjust Inventory    ${adjustment_data}    shell=True
     \    Append To List    ${processes}    ${process}
-    :FOR    ${process}    IN    @{processes}
+    END
+    FOR    ${process}    IN    @{processes}
     \    ${result}=        Wait For Process    ${process}
     \    Should Be Equal As Integers    ${result.rc}    0    msg=Concurrent adjustment process failed
+    END
     ${final_inventory}= Get Inventory By ID    ${inventory_id}
-    [Return]            ${final_inventory}
+    RETURN            ${final_inventory}
 
 *** Test Cases ***
 01 - Create Inventory Record Test

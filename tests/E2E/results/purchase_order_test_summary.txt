@@ -2,6 +2,15 @@ Purchase Order Test Summary Report
 ==================
 Test Name	Duration (s)
 
-Total Duration: 0.0263669490814209s
+Total Duration: 0.04807686805725098s
 Total Operations: 9
-Average Time per Operation: 0.0029296610090467664s
+Average Time per Operation: 0.005341874228583442s
+Total Duration: 0.021785974502563477s
+Total Operations: 9
+Average Time per Operation: 0.002420663833618164s
+Total Duration: 0.06049323081970215s
+Total Operations: 9
+Average Time per Operation: 0.006721470091078017s
+Total Duration: 0.04511284828186035s
+Total Operations: 9
+Average Time per Operation: 0.005012538697984483s

@@ -73,7 +73,7 @@ Generate Unique Warehouse Data
     ...                 name=${warehouse_name}
     ...                 address=123 Test Street
     ...                 acreage=${acreage}
-    [Return]            ${warehouse_data}
+    RETURN            ${warehouse_data}
 
 Generate Unique Supplier Data
     [Documentation]     Generate unique data for supplier tests
@@ -91,7 +91,7 @@ Generate Unique Supplier Data
     ...                 cooperationDay=2023-03-20T00:00:00.000Z
     ...                 warehouseId=${warehouse_id}
     ...                 productCategoryIds=${EMPTY}
-    [Return]            ${supplier_data}
+    RETURN            ${supplier_data}
 
 Generate Unique Product Data
     [Documentation]     Generate unique data for product tests
@@ -124,7 +124,7 @@ Generate Unique Product Data
     ...                 masterProductId=1
     ...                 note=Test product note
     ...                 barCode=BAR${timestamp}
-    [Return]            ${product_data}
+    RETURN            ${product_data}
 
 Generate Unique Order Data
     [Documentation]     Generate unique data for order tests
@@ -146,14 +146,14 @@ Generate Unique Order Data
     ...                 driverName=John Doe
     ...                 warehouseId=${warehouse_id}
     ...                 productOrders=${product_orders}
-    [Return]            ${order_data}
+    RETURN            ${order_data}
 
 Create Warehouse With Retry
     [Documentation]     Create a new warehouse with retry logic
     [Arguments]         ${warehouse_data}
     ${headers}=         Create Dictionary    Content-Type=application/json    Authorization=${AUTH_TOKEN}
     ${attempt}=         Set Variable    1
-    :FOR    ${attempt}    IN RANGE    1    ${MAX_RETRIES + 1}
+    FOR    ${attempt}    IN RANGE    1    ${MAX_RETRIES + 1}
     \    ${response}=    Run Keyword And Ignore Error
     \    ...             POST On Session    vkho    /warehouses/create    json=${warehouse_data}    headers=${headers}    expected_status=anything
     \    ${status}=      Set Variable If    "${response[0]}" == "PASS"    ${response[1].status_code}    500
@@ -161,11 +161,12 @@ Create Warehouse With Retry
     \    Log             Attempt ${attempt} failed with status ${status}, retrying in ${RETRY_DELAY} seconds...
     \    Sleep           ${RETRY_DELAY}
     \    Run Keyword If  ${attempt} == ${MAX_RETRIES}    Fail    Failed to create warehouse after ${MAX_RETRIES} attempts
+    END
     ${json}=            Evaluate         json.loads('''${response[1].text}''')    json
     Dictionary Should Contain Key        ${json}    id
     ${warehouse_id}=    Convert To String    ${json}[id]
     Increment Operation Count
-    [Return]            ${warehouse_id}    ${response[1]}
+    RETURN            ${warehouse_id}    ${response[1]}
 
 Create Supplier
     [Documentation]     Create a new supplier and return its ID
@@ -181,7 +182,7 @@ Create Supplier
     Dictionary Should Contain Key        ${json}    id
     ${supplier_id}=     Convert To String    ${json}[id]
     Increment Operation Count
-    [Return]            ${supplier_id}    ${response}
+    RETURN            ${supplier_id}    ${response}
 
 Create Product
     [Documentation]     Create a new product and return its ID
@@ -197,7 +198,7 @@ Create Product
     Dictionary Should Contain Key        ${json}    id
     ${product_id}=      Convert To String    ${json}[id]
     Increment Operation Count
-    [Return]            ${product_id}    ${response}
+    RETURN            ${product_id}    ${response}
 
 Create Order
     [Documentation]     Create a new order and return its ID
@@ -213,7 +214,7 @@ Create Order
     Dictionary Should Contain Key        ${json}    id
     ${order_id}=        Convert To String    ${json}[id]
     Increment Operation Count
-    [Return]            ${order_id}    ${response}
+    RETURN            ${order_id}    ${response}
 
 Update Warehouse
     [Documentation]     Update an existing warehouse
@@ -227,7 +228,7 @@ Update Warehouse
     ...                 expected_status=200
     ${json}=            Evaluate         json.loads('''${response.text}''')    json
     Increment Operation Count
-    [Return]            ${response}
+    RETURN            ${response}
 
 Update Supplier
     [Documentation]     Update an existing supplier
@@ -241,7 +242,7 @@ Update Supplier
     ...                 expected_status=200
     ${json}=            Evaluate         json.loads('''${response.text}''')    json
     Increment Operation Count
-    [Return]            ${response}
+    RETURN            ${response}
 
 Update Product
     [Documentation]     Update an existing product
@@ -255,7 +256,7 @@ Update Product
     ...                 expected_status=200
     ${json}=            Evaluate         json.loads('''${response.text}''')    json
     Increment Operation Count
-    [Return]            ${response}
+    RETURN            ${response}
 
 Update Order
     [Documentation]     Update an existing order
@@ -269,7 +270,7 @@ Update Order
     ...                 expected_status=200
     ${json}=            Evaluate         json.loads('''${response.text}''')    json
     Increment Operation Count
-    [Return]            ${response}
+    RETURN            ${response}
 
 Get Warehouse By ID
     [Documentation]     Retrieve a specific warehouse by ID
@@ -282,7 +283,7 @@ Get Warehouse By ID
     ...                 expected_status=200
     ${json}=            Evaluate         json.loads('''${response.text}''')    json
     Increment Operation Count
-    [Return]            ${response}
+    RETURN            ${response}
 
 Get Supplier By ID
     [Documentation]     Retrieve a specific supplier by ID
@@ -295,7 +296,7 @@ Get Supplier By ID
     ...                 expected_status=200
     ${json}=            Evaluate         json.loads('''${response.text}''')    json
     Increment Operation Count
-    [Return]            ${response}
+    RETURN            ${response}
 
 Get Product By ID
     [Documentation]     Retrieve a specific product by ID
@@ -308,7 +309,7 @@ Get Product By ID
     ...                 expected_status=200
     ${json}=            Evaluate         json.loads('''${response.text}''')    json
     Increment Operation Count
-    [Return]            ${response}
+    RETURN            ${response}
 
 Get Order By ID
     [Documentation]     Retrieve a specific order by ID
@@ -321,7 +322,7 @@ Get Order By ID
     ...                 expected_status=200
     ${json}=            Evaluate         json.loads('''${response.text}''')    json
     Increment Operation Count
-    [Return]            ${response}
+    RETURN            ${response}
 
 Delete Warehouse
     [Documentation]     Delete a warehouse from the system
@@ -333,7 +334,7 @@ Delete Warehouse
     ...                 headers=${headers}
     ...                 expected_status=200
     Increment Operation Count
-    [Return]            ${TRUE}
+    RETURN            ${TRUE}
 
 Delete Supplier
     [Documentation]     Delete a supplier from the system
@@ -345,7 +346,7 @@ Delete Supplier
     ...                 headers=${headers}
     ...                 expected_status=200
     Increment Operation Count
-    [Return]            ${TRUE}
+    RETURN            ${TRUE}
 
 Delete Product
     [Documentation]     Delete a product from the system
@@ -357,7 +358,7 @@ Delete Product
     ...                 headers=${headers}
     ...                 expected_status=200
     Increment Operation Count
-    [Return]            ${TRUE}
+    RETURN            ${TRUE}
 
 Delete Order
     [Documentation]     Delete an order from the system
@@ -369,7 +370,7 @@ Delete Order
     ...                 headers=${headers}
     ...                 expected_status=200
     Increment Operation Count
-    [Return]            ${TRUE}
+    RETURN            ${TRUE}
 
 Assert Entity Details
     [Documentation]     Verify entity details match expected values
@@ -945,14 +946,16 @@ Increment Operation Count
     [Documentation]     Test creating multiple products to simulate high load
     [Tags]              create    positive    stress
     ${product_ids}=     Create List
-    :FOR    ${index}    IN RANGE    5
+    FOR    ${index}    IN RANGE    5
     \    ${product_data}=    Generate Unique Product Data    ${TEST_WAREHOUSE_ID}    ${TEST_SUPPLIER_ID}
     \    ${product_id}    ${response}=    Create Product    ${product_data}
     \    Should Not Be Empty    ${product_id}
     \    Append To List    ${product_ids}    ${product_id}
     \    Log Response Details  ${response}    Product Creation ${index}
-    :FOR    ${product_id}    IN    @{product_ids}
+    END
+    FOR    ${product_id}    IN    @{product_ids}
     \    Delete Product    ${product_id}
+    END
     Log                 Successfully created and deleted 5 products under stress conditions
 
 37 - Test Idempotent Warehouse Update

@@ -118,35 +118,6 @@ Create Rack
     ${rack_id}=         Convert To String    ${json}[id]
     RETURN            ${rack_id}
 
-Generate Unique Product Data
-    [Documentation]     Generate unique product data with location details
-    [Arguments]         ${custom_name}=Test Product    ${quantity}=100
-    
-    ${timestamp}=       Evaluate         int(time.time())    time
-    ${product_name}=    Set Variable     ${custom_name} ${timestamp}
-    ${product_code}=    Set Variable     PRD${timestamp}
-    
-    ${product_data}=    Create Dictionary
-    ...                 name=${product_name}
-    ...                 totalQuantity=${quantity}
-    ...                 expectedQuantity=${quantity}
-    ...                 importDate=2025-03-31T00:00:00.000Z
-    ...                 cost=50.00
-    ...                 salePrice=75.00
-    ...                 warehouseId=${WAREHOUSE_ID}
-    ...                 inboundKind=NEW
-    ...                 expireDate=2026-03-31T00:00:00.000Z
-    ...                 productCode=${product_code}
-    ...                 supplierId=${SUPPLIER_ID}
-    ...                 productCategoryId=${PRODUCT_CATEGORY_ID}
-    ...                 blockId=${BLOCK_ID}
-    ...                 shelfId=${SHELF_ID}
-    ...                 rackId=${RACK_ID}
-    ...                 positionId=${POSITION_ID}
-    ...                 note=Test product with location
-    
-    RETURN            ${product_data}
-
 Create Product
     [Documentation]     Create a product with location assignment
     [Arguments]         ${product_data}

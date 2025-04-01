@@ -71,7 +71,7 @@ Create Zone
     
     ${json}=            Evaluate         json.loads('''${response.text}''')    json
     ${zone_id}=         Convert To String    ${json}[id]
-    [Return]            ${zone_id}
+    RETURN            ${zone_id}
 
 Create Block
     [Documentation]     Create a new block within a zone
@@ -95,7 +95,7 @@ Create Block
     
     ${json}=            Evaluate         json.loads('''${response.text}''')    json
     ${block_id}=        Convert To String    ${json}[id]
-    [Return]            ${block_id}
+    RETURN            ${block_id}
 
 Create Shelf
     [Documentation]     Create a new shelf within a block
@@ -118,7 +118,7 @@ Create Shelf
     
     ${json}=            Evaluate         json.loads('''${response.text}''')    json
     ${shelf_id}=        Convert To String    ${json}[id]
-    [Return]            ${shelf_id}
+    RETURN            ${shelf_id}
 
 Move Shelf To Block
     [Documentation]     Move a shelf to a different block
@@ -139,7 +139,7 @@ Move Shelf To Block
     
     ${json}=            Evaluate         json.loads('''${response.text}''')    json
     Should Be Equal As Integers    ${json}[blockId]    ${new_block_id}
-    [Return]            ${json}
+    RETURN            ${json}
 
 Create Rack
     [Documentation]     Create a new rack within a shelf
@@ -162,7 +162,7 @@ Create Rack
     
     ${json}=            Evaluate         json.loads('''${response.text}''')    json
     ${rack_id}=         Convert To String    ${json}[id]
-    [Return]            ${rack_id}
+    RETURN            ${rack_id}
 
 Move Rack To Shelf
     [Documentation]     Move a rack to a different shelf
@@ -183,7 +183,7 @@ Move Rack To Shelf
     
     ${json}=            Evaluate         json.loads('''${response.text}''')    json
     Should Be Equal As Integers    ${json}[shelfId]    ${new_shelf_id}
-    [Return]            ${json}
+    RETURN            ${json}
 
 Create Position
     [Documentation]     Create a new position within a rack
@@ -205,7 +205,7 @@ Create Position
     
     ${json}=            Evaluate         json.loads('''${response.text}''')    json
     ${position_id}=     Convert To String    ${json}[id]
-    [Return]            ${position_id}
+    RETURN            ${position_id}
 
 Move Position To Rack
     [Documentation]     Move a position to a different rack
@@ -226,7 +226,7 @@ Move Position To Rack
     
     ${json}=            Evaluate         json.loads('''${response.text}''')    json
     Should Be Equal As Integers    ${json}[rackId]    ${new_rack_id}
-    [Return]            ${json}
+    RETURN            ${json}
 
 Create Bin
     [Documentation]     Create a new bin within a position
@@ -249,7 +249,7 @@ Create Bin
     
     ${json}=            Evaluate         json.loads('''${response.text}''')    json
     ${bin_id}=          Convert To String    ${json}[id]
-    [Return]            ${bin_id}
+    RETURN            ${bin_id}
 
 Generate Unique Product Data
     [Documentation]     Generate unique product data with bin assignment
@@ -278,7 +278,7 @@ Generate Unique Product Data
     ...                 positionId=${position_id}
     ...                 binId=${bin_id}
     
-    [Return]            ${product_data}
+    RETURN            ${product_data}
 
 Create Product
     [Documentation]     Create a product with position and bin assignment
@@ -302,7 +302,7 @@ Create Product
     
     ${json}=            Evaluate         json.loads('''${response.text}''')    json
     ${product_id}=      Convert To String    ${json}[id]
-    [Return]            ${product_id}    ${json}
+    RETURN            ${product_id}    ${json}
 
 Get Product By ID
     [Documentation]     Retrieve a product by ID
@@ -319,7 +319,7 @@ Get Product By ID
     ...                 expected_status=200
     
     ${json}=            Evaluate         json.loads('''${response.text}''')    json
-    [Return]            ${json}
+    RETURN            ${json}
 
 Assert Product Location
     [Documentation]     Verify a product’s location details including bin

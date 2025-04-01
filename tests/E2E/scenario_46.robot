@@ -64,7 +64,7 @@ Generate Unique User Data
     ...                 fullName=Test User ${timestamp}
     ...                 role=${role}
     
-    [Return]            ${user_data}
+    RETURN            ${user_data}
 
 Create User
     [Documentation]     Create a new user and return its ID
@@ -98,7 +98,7 @@ Create User
     
     # Return user ID and full response
     ${user_id}=         Convert To String    ${json}[id]
-    [Return]            ${user_id}    ${json}
+    RETURN            ${user_id}    ${json}
 
 Get User By ID
     [Documentation]     Retrieve a specific user by ID
@@ -125,7 +125,7 @@ Get User By ID
     Dictionary Should Contain Key        ${json}    id
     ...    msg=Get user response missing ID field
     
-    [Return]            ${json}
+    RETURN            ${json}
 
 Update User
     [Documentation]     Update an existing user
@@ -163,7 +163,7 @@ Update User
     Dictionary Should Contain Key        ${json}    id
     ...    msg=Update user response missing ID field
     
-    [Return]            ${json}
+    RETURN            ${json}
 
 Delete User
     [Documentation]     Delete a user from the system
@@ -184,7 +184,7 @@ Delete User
     ...                 expected_status=200
     
     # Return deletion status
-    [Return]            ${TRUE}
+    RETURN            ${TRUE}
 
 Get All Users
     [Documentation]     Retrieve all users with filtering, pagination, and sorting
@@ -213,7 +213,7 @@ Get All Users
     Should Not Be Empty    ${json}
     ...    msg=Get all users response was empty
     
-    [Return]            ${json}
+    RETURN            ${json}
 
 Authenticate User
     [Documentation]     Authenticate a user and return their token
@@ -231,7 +231,7 @@ Authenticate User
     
     ${json}=            Evaluate         json.loads('''${response.text}''')    json
     ${token}=           Set Variable     Bearer ${json}[access_token]
-    [Return]            ${token}
+    RETURN            ${token}
 
 Bulk Create Users
     [Documentation]     Create multiple users in bulk with validation
@@ -244,7 +244,7 @@ Bulk Create Users
         ${user_id}    ${response}=    Create User    ${user_data}
         Append To List  ${user_ids}    ${user_id}
     END
-    [Return]            ${user_ids}
+    RETURN            ${user_ids}
 
 Assert User Details
     [Documentation]     Verify user details match expected values

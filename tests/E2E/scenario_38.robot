@@ -72,7 +72,7 @@ Generate Unique Order Data
     ...                 driverName=John Doe
     ...                 warehouseId=${WAREHOUSE_ID}
     ...                 productOrders=${product_orders}
-    [Return]            ${order_data}
+    RETURN            ${order_data}
 
 Create Order
     [Documentation]     Create a new order and return its ID
@@ -114,7 +114,7 @@ Create Order
     
     # Return order ID and full response
     ${order_id}=        Convert To String    ${json}[id]
-    [Return]            ${order_id}    ${json}
+    RETURN            ${order_id}    ${json}
 
 Get Order By ID
     [Documentation]     Retrieve a specific order by ID
@@ -141,7 +141,7 @@ Get Order By ID
     Dictionary Should Contain Key        ${json}    id
     ...    msg=Get order response missing ID field
     
-    [Return]            ${json}
+    RETURN            ${json}
 
 Update Order
     [Documentation]     Update an existing order
@@ -181,7 +181,7 @@ Update Order
     Dictionary Should Contain Key        ${json}    id
     ...    msg=Update order response missing ID field
     
-    [Return]            ${json}
+    RETURN            ${json}
 
 Delete Order
     [Documentation]     Delete an order from the system
@@ -202,7 +202,7 @@ Delete Order
     ...                 expected_status=200
     
     # Return deletion status
-    [Return]            ${TRUE}
+    RETURN            ${TRUE}
 
 Get All Orders
     [Documentation]     Retrieve all orders with optional filtering
@@ -234,7 +234,7 @@ Get All Orders
     Should Not Be Empty    ${json}
     ...    msg=Get all orders response was empty
     
-    [Return]            ${json}
+    RETURN            ${json}
 
 Assert Order Details
     [Documentation]     Verify order details match expected values
@@ -266,7 +266,7 @@ Verify Response Indicates Deletion
     ${is_deleted}=      Run Keyword If    ${has_status}    Check Deletion Status    ${json}[status]
     ...    ELSE         Set Variable    ${FALSE}
     
-    [Return]            ${is_deleted}
+    RETURN            ${is_deleted}
 
 Check Deletion Status
     [Documentation]     Check if status field indicates deletion
@@ -283,7 +283,7 @@ Check Deletion Status
         ${is_deleted}=  Set Variable    ${TRUE}
     END
     
-    [Return]            ${is_deleted}
+    RETURN            ${is_deleted}
 
 *** Test Cases ***
 01 - Setup Test Environment

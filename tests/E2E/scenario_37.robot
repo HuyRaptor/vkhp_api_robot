@@ -87,7 +87,7 @@ Generate Unique Warehouse Data
     ...                 name=${warehouse_name}
     ...                 address=789 PO Street
     ...                 acreage=1500
-    [Return]            ${warehouse_data}
+    RETURN            ${warehouse_data}
 
 Generate Unique Supplier Data
     [Documentation]     Generate unique data for supplier tests
@@ -104,7 +104,7 @@ Generate Unique Supplier Data
     ...                 taxCode=12345${timestamp}
     ...                 cooperationDay=2023-04-01T00:00:00.000Z
     ...                 warehouseId=${warehouse_id}
-    [Return]            ${supplier_data}
+    RETURN            ${supplier_data}
 
 Generate Purchase Order Data
     [Documentation]     Generate data for purchase order creation
@@ -128,24 +128,25 @@ Generate Purchase Order Data
     ...                 items=${items}
     ...                 totalAmount=${total_quantity * 10}
     ...                 note=Test PO ${timestamp}
-    [Return]            ${po_data}
+    RETURN            ${po_data}
 
 Create Warehouse With Retry
     [Documentation]     Create a new warehouse with retry logic
     [Arguments]         ${warehouse_data}
     ${headers}=         Create Dictionary    Content-Type=application/json    Authorization=${AUTH_TOKEN}
     ${attempt}=         Set Variable    1
-    :FOR    ${attempt}    IN RANGE    1    ${MAX_RETRIES + 1}
+    FOR    ${attempt}    IN RANGE    1    ${MAX_RETRIES + 1}
     \    ${response}=    Run Keyword And Ignore Error
     \    ...             POST On Session    vkho    /warehouses/create    json=${warehouse_data}    headers=${headers}    expected_status=anything
     \    ${status}=      Set Variable If    "${response[0]}" == "PASS"    ${response[1].status_code}    500
     \    Exit For Loop If    ${status} == 201
     \    Sleep           ${RETRY_DELAY}
     \    Run Keyword If  ${attempt} == ${MAX_RETRIES}    Fail    Failed to create warehouse after ${MAX_RETRIES} attempts
+    END
     ${json}=            Evaluate         json.loads('''${response[1].text}''')    json
     ${warehouse_id}=    Convert To String    ${json}[id]
     Increment Operation Count
-    [Return]            ${warehouse_id}    ${response[1]}
+    RETURN            ${warehouse_id}    ${response[1]}
 
 Create Supplier
     [Documentation]     Create a new supplier and return its ID
@@ -160,7 +161,7 @@ Create Supplier
     ${json}=            Evaluate         json.loads('''${response.text}''')    json
     ${supplier_id}=     Convert To String    ${json}[id]
     Increment Operation Count
-    [Return]            ${supplier_id}    ${response}
+    RETURN            ${supplier_id}    ${response}
 
 Create Purchase Order
     [Documentation]     Create a new purchase order
@@ -175,7 +176,7 @@ Create Purchase Order
     ${json}=            Evaluate         json.loads('''${response.text}''')    json
     ${po_id}=           Convert To String    ${json}[id]
     Increment Operation Count
-    [Return]            ${po_id}    ${response}
+    RETURN            ${po_id}    ${response}
 
 Update Purchase Order
     [Documentation]     Update an existing purchase order
@@ -189,7 +190,7 @@ Update Purchase Order
     ...                 expected_status=200
     ${json}=            Evaluate         json.loads('''${response.text}''')    json
     Increment Operation Count
-    [Return]            ${response}
+    RETURN            ${response}
 
 Get Purchase Order By ID
     [Documentation]     Retrieve a purchase order by ID
@@ -202,7 +203,7 @@ Get Purchase Order By ID
     ...                 expected_status=200
     ${json}=            Evaluate         json.loads('''${response.text}''')    json
     Increment Operation Count
-    [Return]            ${response}
+    RETURN            ${response}
 
 Get Purchase Orders Paginated
     [Documentation]     Retrieve purchase orders with pagination
@@ -217,7 +218,7 @@ Get Purchase Orders Paginated
     ...                 expected_status=200
     ${json}=            Evaluate         json.loads('''${response.text}''')    json
     Increment Operation Count
-    [Return]            ${response}
+    RETURN            ${response}
 
 Delete Purchase Order
     [Documentation]     Delete a purchase order from the system
@@ -229,7 +230,7 @@ Delete Purchase Order
     ...                 headers=${headers}
     ...                 expected_status=200
     Increment Operation Count
-    [Return]            ${TRUE}
+    RETURN            ${TRUE}
 
 Delete Supplier
     [Documentation]     Delete a supplier from the system
@@ -241,7 +242,7 @@ Delete Supplier
     ...                 headers=${headers}
     ...                 expected_status=200
     Increment Operation Count
-    [Return]            ${TRUE}
+    RETURN            ${TRUE}
 
 Delete Warehouse
     [Documentation]     Delete a warehouse from the system
@@ -253,7 +254,7 @@ Delete Warehouse
     ...                 headers=${headers}
     ...                 expected_status=200
     Increment Operation Count
-    [Return]            ${TRUE}
+    RETURN            ${TRUE}
 
 Assert PO Details
     [Documentation]     Verify purchase order details match expected values
@@ -297,16 +298,18 @@ Simulate Concurrent Updates
     [Documentation]     Simulate concurrent updates to a purchase order
     [Arguments]         ${po_id}    ${update_template}    ${thread_count}=${CONCURRENT_THREADS}
     ${processes}=       Create List
-    :FOR    ${index}    IN RANGE    ${thread_count}
+    FOR    ${index}    IN RANGE    ${thread_count}
     \    ${update_data}=    Copy Dictionary    ${update_template}
     \    Set To Dictionary  ${update_data}    note=Updated by Thread ${index}
     \    ${process}=        Start Process    robot    -c    Update Purchase Order    ${po_id}    ${update_data}    shell=True
     \    Append To List    ${processes}    ${process}
-    :FOR    ${process}    IN    @{processes}
+    END
+    FOR    ${process}    IN    @{processes}
     \    ${result}=        Wait For Process    ${process}
     \    Should Be Equal As Integers    ${result.rc}    0    msg=Concurrent update process failed
+    END
     ${final_po}=        Get Purchase Order By ID    ${po_id}
-    [Return]            ${final_po}
+    RETURN            ${final_po}
 
 *** Test Cases ***
 01 - Create Purchase Order Test

@@ -59,7 +59,7 @@ Generate Unique Warehouse Data
     ...                 name=${warehouse_name}
     ...                 address=123 Test Street
     ...                 acreage=1000
-    [Return]            ${warehouse_data}
+    RETURN            ${warehouse_data}
 
 Generate Unique Supplier Data
     [Documentation]     Generate unique data for supplier tests
@@ -77,7 +77,7 @@ Generate Unique Supplier Data
     ...                 cooperationDay=2023-03-20T00:00:00.000Z
     ...                 warehouseId=${warehouse_id}
     ...                 productCategoryIds=${EMPTY}  # Will be set later if needed
-    [Return]            ${supplier_data}
+    RETURN            ${supplier_data}
 
 Generate Unique Product Data
     [Documentation]     Generate unique data for product tests
@@ -110,7 +110,7 @@ Generate Unique Product Data
     ...                 masterProductId=1
     ...                 note=Test product note
     ...                 barCode=BAR${timestamp}
-    [Return]            ${product_data}
+    RETURN            ${product_data}
 
 Generate Unique Order Data
     [Documentation]     Generate unique data for order tests
@@ -131,7 +131,7 @@ Generate Unique Order Data
     ...                 driverName=John Doe
     ...                 warehouseId=${warehouse_id}
     ...                 productOrders=${product_orders}
-    [Return]            ${order_data}
+    RETURN            ${order_data}
 
 Create Warehouse
     [Documentation]     Create a new warehouse and return its ID
@@ -146,7 +146,7 @@ Create Warehouse
     ${json}=            Evaluate         json.loads('''${response.text}''')    json
     Dictionary Should Contain Key        ${json}    id
     ${warehouse_id}=    Convert To String    ${json}[id]
-    [Return]            ${warehouse_id}    ${json}
+    RETURN            ${warehouse_id}    ${json}
 
 Create Supplier
     [Documentation]     Create a new supplier and return its ID
@@ -161,7 +161,7 @@ Create Supplier
     ${json}=            Evaluate         json.loads('''${response.text}''')    json
     Dictionary Should Contain Key        ${json}    id
     ${supplier_id}=     Convert To String    ${json}[id]
-    [Return]            ${supplier_id}    ${json}
+    RETURN            ${supplier_id}    ${json}
 
 Create Product
     [Documentation]     Create a new product and return its ID
@@ -176,7 +176,7 @@ Create Product
     ${json}=            Evaluate         json.loads('''${response.text}''')    json
     Dictionary Should Contain Key        ${json}    id
     ${product_id}=      Convert To String    ${json}[id]
-    [Return]            ${product_id}    ${json}
+    RETURN            ${product_id}    ${json}
 
 Create Order
     [Documentation]     Create a new order and return its ID
@@ -191,7 +191,7 @@ Create Order
     ${json}=            Evaluate         json.loads('''${response.text}''')    json
     Dictionary Should Contain Key        ${json}    id
     ${order_id}=        Convert To String    ${json}[id]
-    [Return]            ${order_id}    ${json}
+    RETURN            ${order_id}    ${json}
 
 Get Warehouse By ID
     [Documentation]     Retrieve a specific warehouse by ID
@@ -203,7 +203,7 @@ Get Warehouse By ID
     ...                 headers=${headers}
     ...                 expected_status=200
     ${json}=            Evaluate         json.loads('''${response.text}''')    json
-    [Return]            ${json}
+    RETURN            ${json}
 
 Get Supplier By ID
     [Documentation]     Retrieve a specific supplier by ID
@@ -215,7 +215,7 @@ Get Supplier By ID
     ...                 headers=${headers}
     ...                 expected_status=200
     ${json}=            Evaluate         json.loads('''${response.text}''')    json
-    [Return]            ${json}
+    RETURN            ${json}
 
 Get Product By ID
     [Documentation]     Retrieve a specific product by ID
@@ -227,7 +227,7 @@ Get Product By ID
     ...                 headers=${headers}
     ...                 expected_status=200
     ${json}=            Evaluate         json.loads('''${response.text}''')    json
-    [Return]            ${json}
+    RETURN            ${json}
 
 Get Order By ID
     [Documentation]     Retrieve a specific order by ID
@@ -239,7 +239,7 @@ Get Order By ID
     ...                 headers=${headers}
     ...                 expected_status=200
     ${json}=            Evaluate         json.loads('''${response.text}''')    json
-    [Return]            ${json}
+    RETURN            ${json}
 
 Delete Warehouse
     [Documentation]     Delete a warehouse from the system
@@ -250,7 +250,7 @@ Delete Warehouse
     ...                 /warehouses/delete/${warehouse_id}
     ...                 headers=${headers}
     ...                 expected_status=200
-    [Return]            ${TRUE}
+    RETURN            ${TRUE}
 
 Delete Supplier
     [Documentation]     Delete a supplier from the system
@@ -261,7 +261,7 @@ Delete Supplier
     ...                 /suppliers/delete/${supplier_id}
     ...                 headers=${headers}
     ...                 expected_status=200
-    [Return]            ${TRUE}
+    RETURN            ${TRUE}
 
 Delete Product
     [Documentation]     Delete a product from the system
@@ -272,7 +272,7 @@ Delete Product
     ...                 /products/delete/${product_id}
     ...                 headers=${headers}
     ...                 expected_status=200
-    [Return]            ${TRUE}
+    RETURN            ${TRUE}
 
 Delete Order
     [Documentation]     Delete an order from the system
@@ -283,7 +283,7 @@ Delete Order
     ...                 /orders/delete/${order_id}
     ...                 headers=${headers}
     ...                 expected_status=200
-    [Return]            ${TRUE}
+    RETURN            ${TRUE}
 
 Assert Entity Details
     [Documentation]     Verify entity details match expected values

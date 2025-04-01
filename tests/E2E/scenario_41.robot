@@ -63,7 +63,7 @@ Generate Unique Warehouse Data
     ...                 address=456 Warehouse Lane
     ...                 phoneNumber=800555${timestamp}
     ...                 email=warehouse_${timestamp}@example.com
-    [Return]            ${warehouse_data}
+    RETURN            ${warehouse_data}
 
 Create Warehouse
     [Documentation]     Create a new warehouse and return its ID
@@ -97,7 +97,7 @@ Create Warehouse
     
     # Return warehouse ID and full response
     ${warehouse_id}=    Convert To String    ${json}[id]
-    [Return]            ${warehouse_id}    ${json}
+    RETURN            ${warehouse_id}    ${json}
 
 Get Warehouse By ID
     [Documentation]     Retrieve a specific warehouse by ID
@@ -124,7 +124,7 @@ Get Warehouse By ID
     Dictionary Should Contain Key        ${json}    id
     ...    msg=Get warehouse response missing ID field
     
-    [Return]            ${json}
+    RETURN            ${json}
 
 Update Warehouse
     [Documentation]     Update an existing warehouse
@@ -164,7 +164,7 @@ Update Warehouse
     Dictionary Should Contain Key        ${json}    id
     ...    msg=Update warehouse response missing ID field
     
-    [Return]            ${json}
+    RETURN            ${json}
 
 Delete Warehouse
     [Documentation]     Delete a warehouse from the system
@@ -185,7 +185,7 @@ Delete Warehouse
     ...                 expected_status=200
     
     # Return deletion status
-    [Return]            ${TRUE}
+    RETURN            ${TRUE}
 
 Get All Warehouses
     [Documentation]     Retrieve all warehouses with optional filtering
@@ -211,7 +211,7 @@ Get All Warehouses
     Should Not Be Empty    ${json}
     ...    msg=Get all warehouses response was empty
     
-    [Return]            ${json}
+    RETURN            ${json}
 
 Create Product In Warehouse
     [Documentation]     Create a product linked to a warehouse
@@ -238,7 +238,7 @@ Create Product In Warehouse
     
     ${json}=            Evaluate         json.loads('''${response.text}''')    json
     ${product_id}=      Convert To String    ${json}[id]
-    [Return]            ${product_id}
+    RETURN            ${product_id}
 
 Bulk Create Warehouses
     [Documentation]     Create multiple warehouses in bulk
@@ -250,7 +250,7 @@ Bulk Create Warehouses
         ${warehouse_id}    ${response}=    Create Warehouse    ${warehouse_data}
         Append To List      ${warehouse_ids}    ${warehouse_id}
     END
-    [Return]            ${warehouse_ids}
+    RETURN            ${warehouse_ids}
 
 Assert Warehouse Details
     [Documentation]     Verify warehouse details match expected values
