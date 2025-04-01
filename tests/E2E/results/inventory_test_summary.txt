@@ -1,0 +1,7 @@
+Inventory Test Summary Report
+==================
+Test Name	Duration (s)
+
+Total Duration: 0.02376699447631836s
+Total Operations: 8
+Average Time per Operation: 0.002970874309539795s
