@@ -73,7 +73,7 @@ Generate Unique Product Data
     ...                 positionId=${POSITION_ID}
     ...                 note=Test product with location
     
-    [Return]            ${product_data}
+    RETURN            ${product_data}
 
 Create Product
     [Documentation]     Create a product with location assignment
@@ -102,7 +102,7 @@ Create Product
     Dictionary Should Contain Key        ${json}    id
     
     ${product_id}=      Convert To String    ${json}[id]
-    [Return]            ${product_id}    ${json}
+    RETURN            ${product_id}    ${json}
 
 Get Product By ID
     [Documentation]     Retrieve a product by ID
@@ -123,7 +123,7 @@ Get Product By ID
     Should Not Be Empty    ${json}
     ...    msg=Get product response was empty
     
-    [Return]            ${json}
+    RETURN            ${json}
 
 Update Product Location
     [Documentation]     Update a product's location (block, shelf, rack, position)
@@ -156,7 +156,7 @@ Update Product Location
     Should Be Equal As Integers    ${json}[positionId]    ${new_position_id}
     ...    msg=Position ID update failed
     
-    [Return]            ${json}
+    RETURN            ${json}
 
 Get Products By Location
     [Documentation]     Retrieve products by block, shelf, rack, and position
@@ -182,7 +182,7 @@ Get Products By Location
     Should Not Be Empty    ${json}
     ...    msg=Get products by location response was empty
     
-    [Return]            ${json}
+    RETURN            ${json}
 
 Assert Product Location
     [Documentation]     Verify a product’s location details

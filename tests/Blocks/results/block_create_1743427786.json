@@ -1,1 +1,11 @@
-{"id":30,"code":"BLOC30","name":"Test Block 1743427786","createDate":"2025-03-31T13:29:46.678Z","totalShelf":5,"position":1743427786,"status":"ENABLE","warehouseId":6,"userIds":null}
+{
+    "id": 30,
+    "code": "BLOC30",
+    "name": "Test Block 1743427786",
+    "createDate": "2025-03-31T13:29:46.678Z",
+    "totalShelf": 5,
+    "position": 1743427786,
+    "status": "ENABLE",
+    "warehouseId": 6,
+    "userIds": null
+}

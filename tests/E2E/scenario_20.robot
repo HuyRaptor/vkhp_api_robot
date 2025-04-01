@@ -70,7 +70,7 @@ Create Block
     
     ${json}=            Evaluate         json.loads('''${response.text}''')    json
     ${block_id}=        Convert To String    ${json}[id]
-    [Return]            ${block_id}
+    RETURN            ${block_id}
 
 Create Shelf
     [Documentation]     Create a new shelf within a block
@@ -93,7 +93,7 @@ Create Shelf
     
     ${json}=            Evaluate         json.loads('''${response.text}''')    json
     ${shelf_id}=        Convert To String    ${json}[id]
-    [Return]            ${shelf_id}
+    RETURN            ${shelf_id}
 
 Create Rack
     [Documentation]     Create a new rack within a shelf
@@ -116,7 +116,7 @@ Create Rack
     
     ${json}=            Evaluate         json.loads('''${response.text}''')    json
     ${rack_id}=         Convert To String    ${json}[id]
-    [Return]            ${rack_id}
+    RETURN            ${rack_id}
 
 Generate Unique Product Data
     [Documentation]     Generate unique product data with location details
@@ -145,7 +145,7 @@ Generate Unique Product Data
     ...                 positionId=${POSITION_ID}
     ...                 note=Test product with location
     
-    [Return]            ${product_data}
+    RETURN            ${product_data}
 
 Create Product
     [Documentation]     Create a product with location assignment
@@ -172,7 +172,7 @@ Create Product
     Should Not Be Empty    ${json}
     
     ${product_id}=      Convert To String    ${json}[id]
-    [Return]            ${product_id}    ${json}
+    RETURN            ${product_id}    ${json}
 
 Get Product By ID
     [Documentation]     Retrieve a product by ID
@@ -191,7 +191,7 @@ Get Product By ID
     ${json}=            Evaluate         json.loads('''${response.text}''')    json
     Should Not Be Empty    ${json}
     
-    [Return]            ${json}
+    RETURN            ${json}
 
 Update Product Location
     [Documentation]     Update a product's location
@@ -215,31 +215,7 @@ Update Product Location
     ...                 expected_status=200
     
     ${json}=            Evaluate         json.loads('''${response.text}''')    json
-    [Return]            ${json}
-
-
-Create Block
-    [Documentation]     Create a new block in the warehouse
-    [Arguments]         ${block_name}=TestBlock    ${capacity}=${BLOCK_CAPACITY}
-    
-    ${timestamp}=       Evaluate         int(time.time())    time
-    ${block_data}=      Create Dictionary
-    ...                 name=${block_name} ${timestamp}
-    ...                 warehouseId=${WAREHOUSE_ID}
-    ...                 capacity=${capacity}
-    
-    ${headers}=         Create Dictionary    Content-Type=application/json    Authorization=${AUTH_TOKEN}
-    
-    ${response}=        POST On Session
-    ...                 vkho
-    ...                 /blocks/create
-    ...                 json=${block_data}
-    ...                 headers=${headers}
-    ...                 expected_status=201
-    
-    ${json}=            Evaluate         json.loads('''${response.text}''')    json
-    ${block_id}=        Convert To String    ${json}[id]
-    [Return]            ${block_id}
+    RETURN            ${json}
 
 Update Block
     [Documentation]     Update an existing block’s details
@@ -263,7 +239,7 @@ Update Block
     ${json}=            Evaluate         json.loads('''${response.text}''')    json
     Should Be Equal     ${json}[name]    ${new_name}
     Should Be Equal As Integers    ${json}[capacity]    ${new_capacity}
-    [Return]            ${json}
+    RETURN            ${json}
 
 Delete Block
     [Documentation]     Delete a block from the warehouse
@@ -277,30 +253,7 @@ Delete Block
     ...                 headers=${headers}
     ...                 expected_status=200
     
-    [Return]            ${TRUE}
-
-Create Shelf
-    [Documentation]     Create a new shelf within a block
-    [Arguments]         ${block_id}    ${shelf_name}=TestShelf
-    
-    ${timestamp}=       Evaluate         int(time.time())    time
-    ${shelf_data}=      Create Dictionary
-    ...                 name=${shelf_name} ${timestamp}
-    ...                 blockId=${block_id}
-    ...                 capacity=${SHELF_CAPACITY}
-    
-    ${headers}=         Create Dictionary    Content-Type=application/json    Authorization=${AUTH_TOKEN}
-    
-    ${response}=        POST On Session
-    ...                 vkho
-    ...                 /shelves/create
-    ...                 json=${shelf_data}
-    ...                 headers=${headers}
-    ...                 expected_status=201
-    
-    ${json}=            Evaluate         json.loads('''${response.text}''')    json
-    ${shelf_id}=        Convert To String    ${json}[id]
-    [Return]            ${shelf_id}
+    RETURN            ${TRUE}
 
 Delete Shelf
     [Documentation]     Delete a shelf from the block
@@ -314,30 +267,7 @@ Delete Shelf
     ...                 headers=${headers}
     ...                 expected_status=200
     
-    [Return]            ${TRUE}
-
-Create Rack
-    [Documentation]     Create a new rack within a shelf
-    [Arguments]         ${shelf_id}    ${rack_name}=TestRack
-    
-    ${timestamp}=       Evaluate         int(time.time())    time
-    ${rack_data}=       Create Dictionary
-    ...                 name=${rack_name} ${timestamp}
-    ...                 shelfId=${shelf_id}
-    ...                 capacity=${RACK_CAPACITY}
-    
-    ${headers}=         Create Dictionary    Content-Type=application/json    Authorization=${AUTH_TOKEN}
-    
-    ${response}=        POST On Session
-    ...                 vkho
-    ...                 /racks/create
-    ...                 json=${rack_data}
-    ...                 headers=${headers}
-    ...                 expected_status=201
-    
-    ${json}=            Evaluate         json.loads('''${response.text}''')    json
-    ${rack_id}=         Convert To String    ${json}[id]
-    [Return]            ${rack_id}
+    RETURN            ${TRUE}
 
 Delete Rack
     [Documentation]     Delete a rack from the shelf
@@ -351,7 +281,7 @@ Delete Rack
     ...                 headers=${headers}
     ...                 expected_status=200
     
-    [Return]            ${TRUE}
+    RETURN            ${TRUE}
 
 Generate Unique Product Data
     [Documentation]     Generate unique product data with location details
@@ -380,7 +310,7 @@ Generate Unique Product Data
     ...                 positionId=${POSITION_ID}
     ...                 note=Test product with location
     
-    [Return]            ${product_data}
+    RETURN            ${product_data}
 
 
 Create Order With Product
@@ -418,7 +348,7 @@ Create Order With Product
     
     ${json}=            Evaluate         json.loads('''${response.text}''')    json
     ${order_id}=        Convert To String    ${json}[id]
-    [Return]            ${order_id}    ${json}
+    RETURN            ${order_id}    ${json}
 
 Pick Order With Relocation
     [Documentation]     Pick an order and relocate the product to a new location
@@ -450,7 +380,7 @@ Pick Order With Relocation
     
     ${json}=            Evaluate         json.loads('''${response.text}''')    json
     Should Contain Any    ${json}[status]    PICKING    PICKED
-    [Return]            ${json}
+    RETURN            ${json}
 
 Assert Product Location
     [Documentation]     Verify a product’s location details

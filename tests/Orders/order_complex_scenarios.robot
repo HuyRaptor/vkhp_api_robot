@@ -73,7 +73,7 @@ Generate Unique Order Data
     ...                 status=NEW
     ...                 note=Test order note
     
-    [Return]            ${order_data}
+    RETURN            ${order_data}
 
 Create Test Product
     [Documentation]     Create a test product for order tests
@@ -137,7 +137,7 @@ Create Order
     ...    msg=Create order response missing ID field
     
     ${order_id}=        Convert To String    ${json}[id]
-    [Return]            ${order_id}    ${json}
+    RETURN            ${order_id}    ${json}
 
 Get Order By ID
     [Documentation]     Retrieve a specific order by ID
@@ -158,7 +158,7 @@ Get Order By ID
     Should Not Be Empty    ${json}
     ...    msg=Get order response was empty
     
-    [Return]            ${json}
+    RETURN            ${json}
 
 Update Order Status
     [Documentation]     Update the status of an order
@@ -181,7 +181,7 @@ Update Order Status
     Should Be Equal     ${json}[status]    ${new_status}
     ...    msg=Order status update failed
     
-    [Return]            ${json}
+    RETURN            ${json}
 
 Pick Order
     [Documentation]     Simulate picking an order
@@ -205,7 +205,7 @@ Pick Order
     Should Contain Any    ${json}[status]    PICKING    PICKED
     ...    msg=Order picking failed
     
-    [Return]            ${json}
+    RETURN            ${json}
 
 Cancel Order
     [Documentation]     Cancel an existing order
@@ -227,7 +227,7 @@ Cancel Order
     Should Be Equal     ${json}[status]    CANCELLED
     ...    msg=Order cancellation failed
     
-    [Return]            ${json}
+    RETURN            ${json}
 
 Assert Order Details
     [Documentation]     Verify order details match expected values

@@ -64,7 +64,7 @@ Generate Unique Order Data
     ...                 driverName=Driver ${index}
     ...                 warehouseId=${WAREHOUSE_ID}
     ...                 productOrders=${product_orders}
-    [Return]            ${order_data}
+    RETURN            ${order_data}
 
 Create Order
     [Documentation]     Create a new order and return its ID
@@ -90,7 +90,7 @@ Create Order
     Dictionary Should Contain Key        ${json}    id
     
     ${order_id}=        Convert To String    ${json}[id]
-    [Return]            ${order_id}    ${json}
+    RETURN            ${order_id}    ${json}
 
 Get All Orders
     [Documentation]     Retrieve all orders
@@ -105,7 +105,7 @@ Get All Orders
     ${json}=            Evaluate         json.loads('''${response.text}''')    json
     Should Not Be Empty    ${json}
     
-    [Return]            ${json}
+    RETURN            ${json}
 
 Update Order
     [Documentation]     Update an existing order
@@ -132,7 +132,7 @@ Update Order
     Should Not Be Empty    ${json}
     Dictionary Should Contain Key        ${json}    id
     
-    [Return]            ${json}
+    RETURN            ${json}
 
 Create Package
     [Documentation]     Create a package for the order
@@ -157,7 +157,7 @@ Create Package
     Dictionary Should Contain Key        ${json}    id
     
     ${package_id}=      Convert To String    ${json}[id]
-    [Return]            ${package_id}    ${json}
+    RETURN            ${package_id}    ${json}
 
 Get All Packages
     [Documentation]     Retrieve all packages
@@ -172,7 +172,7 @@ Get All Packages
     ${json}=            Evaluate         json.loads('''${response.text}''')    json
     Should Not Be Empty    ${json}
     
-    [Return]            ${json}
+    RETURN            ${json}
 
 Confirm Order
     [Documentation]     Confirm an order as completed
@@ -190,7 +190,7 @@ Confirm Order
     ...                 headers=${headers}
     ...                 expected_status=201
     
-    [Return]            ${TRUE}
+    RETURN            ${TRUE}
 
 Delete Order
     [Documentation]     Delete an order from the system
@@ -206,7 +206,7 @@ Delete Order
     ...                 headers=${headers}
     ...                 expected_status=200
     
-    [Return]            ${TRUE}
+    RETURN            ${TRUE}
 
 Delete Package
     [Documentation]     Delete a package from the system
@@ -222,7 +222,7 @@ Delete Package
     ...                 headers=${headers}
     ...                 expected_status=200
     
-    [Return]            ${TRUE}
+    RETURN            ${TRUE}
 
 Assert Order Details
     [Documentation]     Verify order details match expected values

@@ -67,7 +67,7 @@ Generate Unique Order Data
     ...                 productOrders=${product_orders}
     
     Set Global Variable  ${TEST_SKU}    ${sku}
-    [Return]            ${order_data}
+    RETURN            ${order_data}
 
 Create Order
     [Documentation]     Create a new order and return its ID
@@ -93,7 +93,7 @@ Create Order
     Dictionary Should Contain Key        ${json}    id
     
     ${order_id}=        Convert To String    ${json}[id]
-    [Return]            ${order_id}    ${json}
+    RETURN            ${order_id}    ${json}
 
 Get Order By ID
     [Documentation]     Retrieve a specific order by ID
@@ -113,7 +113,7 @@ Get Order By ID
     Should Not Be Empty    ${json}
     Dictionary Should Contain Key        ${json}    id
     
-    [Return]            ${json}
+    RETURN            ${json}
 
 Check Inventory Availability
     [Documentation]     Check inventory availability for order products
@@ -138,7 +138,7 @@ Check Inventory Availability
     ${json}=            Evaluate         json.loads('''${response.text}''')    json
     Should Not Be Empty    ${json}
     
-    [Return]            ${json}
+    RETURN            ${json}
 
 Update Order
     [Documentation]     Update an existing order
@@ -165,7 +165,7 @@ Update Order
     Should Not Be Empty    ${json}
     Dictionary Should Contain Key        ${json}    id
     
-    [Return]            ${json}
+    RETURN            ${json}
 
 Update Inventory
     [Documentation]     Update inventory to reconcile stock after cancellation
@@ -191,7 +191,7 @@ Update Inventory
     Should Not Be Empty    ${json}
     Dictionary Should Contain Key        ${json}    id
     
-    [Return]            ${json}
+    RETURN            ${json}
 
 Get Inventory By ID
     [Documentation]     Retrieve a specific inventory record by ID
@@ -211,7 +211,7 @@ Get Inventory By ID
     Should Not Be Empty    ${json}
     Dictionary Should Contain Key        ${json}    id
     
-    [Return]            ${json}
+    RETURN            ${json}
 
 Delete Order
     [Documentation]     Delete an order from the system
@@ -227,7 +227,7 @@ Delete Order
     ...                 headers=${headers}
     ...                 expected_status=200
     
-    [Return]            ${TRUE}
+    RETURN            ${TRUE}
 
 Assert Order Details
     [Documentation]     Verify order details match expected values
