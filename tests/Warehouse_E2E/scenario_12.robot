@@ -10,8 +10,8 @@ Library           DateTime
 
 *** Variables ***
 ${BASE_URL}             https://api.vkho.net
-${ADMIN_USERNAME}       admin
-${ADMIN_PASSWORD}       admin
+${ADMIN_USERNAME}       huynh22
+${ADMIN_PASSWORD}       Snowfox1991
 ${MANAGER_USERNAME}     huynh22.manager
 ${MANAGER_PASSWORD}     Snowfox1991
 ${RESULTS_DIR}          ${CURDIR}${/}results

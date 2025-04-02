@@ -14,3 +14,15 @@ Average Time per Operation: 0.006721470091078017s
 Total Duration: 0.04511284828186035s
 Total Operations: 9
 Average Time per Operation: 0.005012538697984483s
+Total Duration: 0.030464887619018555s
+Total Operations: 9
+Average Time per Operation: 0.0033849875132242837s
+Total Duration: 0.025239944458007812s
+Total Operations: 9
+Average Time per Operation: 0.002804438273111979s
+Total Duration: Nones
+Total Operations: 0
+Average Time per Operation: 0s
+Total Duration: 0.027137041091918945s
+Total Operations: 9
+Average Time per Operation: 0.003015226787990994s
