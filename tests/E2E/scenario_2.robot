@@ -20,6 +20,34 @@ ${TEST_PACKAGE_ID}      ${EMPTY}
 ${INITIAL_DRIVER}       Placeholder Driver
 ${ASSIGNED_DRIVER}      Priority Driver 001
 
+# Order Status Constants from OpenAPI
+${STATUS_NEW}           NEW
+${STATUS_PICKING}       PICKING
+${STATUS_PACKAGED}      PACKAGED
+${STATUS_READY}         READY
+${STATUS_DISABLE}       DISABLE
+${STATUS_MOVING}        MOVING
+${STATUS_SUCCESS}       SUCCESS
+${STATUS_WAITING}       WAITING
+${STATUS_INITIAL}       INITIAL
+${STATUS_WAIT_PAYMENT}  WAIT_PAYMENT
+${STATUS_SUBMITTED}     SUBMITTED
+${STATUS_AWAIT_PICKUP}  AWAITING_PICKUP
+${STATUS_DELIVERING}    DELIVERING
+${STATUS_DELIVERED}     DELIVERED
+${STATUS_CANCELLED}     CANCELLED
+${STATUS_PAYMENT_FAIL}  PAYMENT_FAILED
+${STATUS_RETURN}        RETURN
+
+# Package Status Constants from OpenAPI
+${PACKAGE_STATUS_ENABLE}    ENABLE
+${PACKAGE_STATUS_DISABLE}   DISABLE
+${PACKAGE_STATUS_NEW}       NEW
+${PACKAGE_STATUS_WAITING}   WAITING
+${PACKAGE_STATUS_SHIPPING}  SHIPPING
+${PACKAGE_STATUS_LOST}      LOST
+${PACKAGE_STATUS_ERROR}     ERROR
+
 *** Keywords ***
 Setup API Session
     [Documentation]     Create API session and authenticate
@@ -37,6 +65,7 @@ Setup API Session
     
     ${json}=            Evaluate         json.loads('''${response.text}''')    json
     Dictionary Should Contain Key        ${json}    access_token
+    ...    msg=Authentication failed: Response did not contain access_token
     
     ${token}=           Set Variable     Bearer ${json}[access_token]
     Set Global Variable  ${AUTH_TOKEN}    ${token}
@@ -45,13 +74,13 @@ Setup API Session
 
 Generate Expedited Order Data
     [Documentation]     Generate unique data for an expedited order
-    ${timestamp}=       Evaluate         int(time.time())    time
-    ${order_code}=      Set Variable     EXP${timestamp}
+    ${timestamp}=       Get Time    epoch
+    ${order_code}=      Set Variable    EXP${timestamp}
     
     ${current_time}=    Get Current Date    result_format=%Y-%m-%dT%H:%M:%S.000Z
     ${delivery_time}=   Add Time To Date    ${current_time}    2 hours    result_format=%Y-%m-%dT%H:%M:%S.000Z
     
-    ${sku}=             Set Variable     SKU${timestamp}
+    ${sku}=             Set Variable    SKU${timestamp}
     ${product_order}=   Create Dictionary
     ...                 total=3
     ...                 boothCode=BOOTH${timestamp}
@@ -68,14 +97,18 @@ Generate Expedited Order Data
     ...                 warehouseId=${WAREHOUSE_ID}
     ...                 productOrders=${product_orders}
     
-    RETURN            ${order_data}
+    RETURN           ${order_data}
 
 Create Order
-    [Documentation]     Create a new order and return its ID
+    [Documentation]     Create a new order with validation
     [Arguments]         ${order_data}
     
-    Dictionary Should Contain Key    ${order_data}    code
-    Dictionary Should Contain Key    ${order_data}    warehouseId
+    # Validate required fields from OpenAPI schema
+    @{required_fields}=    Create List    nameCustomer    code    boothCode    deliveryAdress    deliveryTime    driverName    warehouseId    productOrders
+    FOR    ${field}    IN    @{required_fields}
+        Dictionary Should Contain Key    ${order_data}    ${field}
+        ...    msg=Missing required field: ${field}
+    END
     
     ${headers}=         Create Dictionary    Content-Type=application/json    Authorization=${AUTH_TOKEN}
     
@@ -86,21 +119,20 @@ Create Order
     ...                 headers=${headers}
     ...                 expected_status=201
     
-    ${timestamp}=       Evaluate         int(time.time())    time
+    ${timestamp}=       Get Time    epoch
     Create File         ${RESULTS_DIR}${/}order_create_${timestamp}.json    ${response.text}
     
     ${json}=            Evaluate         json.loads('''${response.text}''')    json
-    Should Not Be Empty    ${json}
-    Dictionary Should Contain Key        ${json}    id
+    Dictionary Should Contain Key    ${json}    id
+    ...    msg=Response missing ID field
     
-    ${order_id}=        Convert To String    ${json}[id]
-    RETURN            ${order_id}    ${json}
+    RETURN           ${json}[id]    ${json}
 
 Get Order By ID
     [Documentation]     Retrieve a specific order by ID
     [Arguments]         ${order_id}
     
-    Should Not Be Empty    ${order_id}
+    Should Not Be Empty    ${order_id}    msg=Order ID cannot be empty
     
     ${headers}=         Create Dictionary    Content-Type=application/json    Authorization=${AUTH_TOKEN}
     
@@ -111,10 +143,11 @@ Get Order By ID
     ...                 expected_status=200
     
     ${json}=            Evaluate         json.loads('''${response.text}''')    json
-    Should Not Be Empty    ${json}
+    Should Not Be Empty    ${json}    msg=Get order response was empty
     Dictionary Should Contain Key        ${json}    id
+    ...    msg=Get order response missing ID field
     
-    RETURN            ${json}
+    RETURN           ${json}
 
 Check Inventory Availability
     [Documentation]     Check inventory availability for order products
@@ -139,19 +172,33 @@ Check Inventory Availability
     ${json}=            Evaluate         json.loads('''${response.text}''')    json
     Should Not Be Empty    ${json}
     
-    RETURN            ${json}
+    RETURN           ${json}
 
 Update Order
     [Documentation]     Update an existing order
     [Arguments]         ${order_id}    ${update_data}
     
+    # Validate parameters
     Should Not Be Empty    ${order_id}
+    ...    msg=Order ID cannot be empty
     Dictionary Should Contain Key    ${update_data}    id
+    ...    msg=Update data must contain id field
     Should Be Equal     ${update_data}[id]    ${order_id}
+    ...    msg=Update data ID must match order_id parameter
     
+    # Ensure minimum required fields are present
     Dictionary Should Contain Key    ${update_data}    boothCode
+    ...    msg=Update data missing required field: boothCode
     Dictionary Should Contain Key    ${update_data}    deliveryAdress
+    ...    msg=Update data missing required field: deliveryAdress
+    Dictionary Should Contain Key    ${update_data}    deliveryTime
+    ...    msg=Update data missing required field: deliveryTime
+    Dictionary Should Contain Key    ${update_data}    driverName
+    ...    msg=Update data missing required field: driverName
     Dictionary Should Contain Key    ${update_data}    status
+    ...    msg=Update data missing required field: status
+    Dictionary Should Contain Key    ${update_data}    updateProductOrder
+    ...    msg=Update data missing required field: updateProductOrder
     
     ${headers}=         Create Dictionary    Content-Type=application/json    Authorization=${AUTH_TOKEN}
     
@@ -164,9 +211,11 @@ Update Order
     
     ${json}=            Evaluate         json.loads('''${response.text}''')    json
     Should Not Be Empty    ${json}
+    ...    msg=Update order response was empty
     Dictionary Should Contain Key        ${json}    id
+    ...    msg=Update order response missing ID field
     
-    RETURN            ${json}
+    RETURN           ${json}
 
 Create Package
     [Documentation]     Create a package for the expedited order
@@ -178,6 +227,7 @@ Create Package
     ...                 orderId=${order_id}
     ...                 warehouseId=${WAREHOUSE_ID}
     ...                 zoneId=1
+    
     ${headers}=         Create Dictionary    Content-Type=application/json    Authorization=${AUTH_TOKEN}
     
     ${response}=        POST On Session
@@ -191,7 +241,7 @@ Create Package
     Dictionary Should Contain Key        ${json}    id
     
     ${package_id}=      Convert To String    ${json}[id]
-    RETURN            ${package_id}    ${json}
+    RETURN           ${package_id}    ${json}
 
 Get Package By ID
     [Documentation]     Retrieve a specific package by ID
@@ -211,7 +261,7 @@ Get Package By ID
     Should Not Be Empty    ${json}
     Dictionary Should Contain Key        ${json}    id
     
-    RETURN            ${json}
+    RETURN           ${json}
 
 Confirm Order
     [Documentation]     Confirm the order as delivered
@@ -229,13 +279,14 @@ Confirm Order
     ...                 headers=${headers}
     ...                 expected_status=201
     
-    RETURN            ${TRUE}
+    RETURN           ${TRUE}
 
 Delete Order
     [Documentation]     Delete an order from the system
     [Arguments]         ${order_id}
     
     Should Not Be Empty    ${order_id}
+    ...    msg=Order ID cannot be empty
     
     ${headers}=         Create Dictionary    Content-Type=application/json    Authorization=${AUTH_TOKEN}
     
@@ -245,13 +296,14 @@ Delete Order
     ...                 headers=${headers}
     ...                 expected_status=200
     
-    RETURN            ${TRUE}
+    RETURN           ${TRUE}
 
 Delete Package
     [Documentation]     Delete a package from the system
     [Arguments]         ${package_id}
     
     Should Not Be Empty    ${package_id}
+    ...    msg=Package ID cannot be empty
     
     ${headers}=         Create Dictionary    Content-Type=application/json    Authorization=${AUTH_TOKEN}
     
@@ -261,7 +313,7 @@ Delete Package
     ...                 headers=${headers}
     ...                 expected_status=200
     
-    RETURN            ${TRUE}
+    RETURN           ${TRUE}
 
 Assert Order Details
     [Documentation]     Verify order details match expected values
@@ -337,11 +389,11 @@ Create Test Order
     ...                 deliveryAdress=${TEST_ORDER_DATA}[deliveryAdress]
     ...                 deliveryTime=${TEST_ORDER_DATA}[deliveryTime]
     ...                 driverName=${INITIAL_DRIVER}
-    ...                 status=PICKING
+    ...                 status=${STATUS_PICKING}
     ...                 updateProductOrder=${[ ${{"id": 1, "pickingQuantity": 3}} ]}
     
     ${updated_order}=   Update Order    ${TEST_ORDER_ID}    ${update_data}
-    Should Be Equal     ${updated_order}[status]    PICKING
+    Should Be Equal     ${updated_order}[status]    ${STATUS_PICKING}
     
     Log                 Successfully updated expedited order to PICKING: ${TEST_ORDER_ID}
 
@@ -370,11 +422,11 @@ Create Test Order
     ...                 deliveryAdress=${TEST_ORDER_DATA}[deliveryAdress]
     ...                 deliveryTime=${TEST_ORDER_DATA}[deliveryTime]
     ...                 driverName=${INITIAL_DRIVER}
-    ...                 status=PACKAGED
+    ...                 status=${STATUS_PACKAGED}
     ...                 updateProductOrder=${[ ${{"id": 1, "pickingQuantity": 3}} ]}
     
     ${updated_order}=   Update Order    ${TEST_ORDER_ID}    ${update_data}
-    Should Be Equal     ${updated_order}[status]    PACKAGED
+    Should Be Equal     ${updated_order}[status]    ${STATUS_PACKAGED}
     
     Log                 Successfully updated expedited order to PACKAGED: ${TEST_ORDER_ID}
 
@@ -390,11 +442,12 @@ Create Test Order
     ...                 deliveryAdress=${TEST_ORDER_DATA}[deliveryAdress]
     ...                 deliveryTime=${TEST_ORDER_DATA}[deliveryTime]
     ...                 driverName=${ASSIGNED_DRIVER}
-    ...                 status=PACKAGED
+    ...                 status=${STATUS_PACKAGED}
+    ...                 updateProductOrder=${[ ${{"id": 1, "pickingQuantity": 3}} ]}
     
     ${updated_order}=   Update Order    ${TEST_ORDER_ID}    ${update_data}
     Should Be Equal     ${updated_order}[driverName]    ${ASSIGNED_DRIVER}
-    Should Be Equal     ${updated_order}[status]        PACKAGED
+    Should Be Equal     ${updated_order}[status]        ${STATUS_PACKAGED}
     
     Log                 Successfully assigned driver ${ASSIGNED_DRIVER} to expedited order: ${TEST_ORDER_ID}
 
@@ -410,10 +463,11 @@ Create Test Order
     ...                 deliveryAdress=${TEST_ORDER_DATA}[deliveryAdress]
     ...                 deliveryTime=${TEST_ORDER_DATA}[deliveryTime]
     ...                 driverName=${ASSIGNED_DRIVER}
-    ...                 status=IN_TRANSIT
+    ...                 status=${STATUS_DELIVERING}
+    ...                 updateProductOrder=${[ ${{"id": 1, "pickingQuantity": 3}} ]}
     
     ${updated_order}=   Update Order    ${TEST_ORDER_ID}    ${update_data}
-    Should Be Equal     ${updated_order}[status]    IN_TRANSIT
+    Should Be Equal     ${updated_order}[status]    ${STATUS_DELIVERING}
     
     Log                 Successfully updated expedited order to IN_TRANSIT with tracking: ${TEST_ORDER_ID}
 
@@ -427,7 +481,7 @@ Create Test Order
     Should Be True      ${result}
     
     ${order}=           Get Order By ID    ${TEST_ORDER_ID}
-    Should Be Equal     ${order}[status]    DELIVERED
+    Should Be Equal     ${order}[status]    ${STATUS_DELIVERED}
     
     Log                 Successfully confirmed expedited order as DELIVERED: ${TEST_ORDER_ID}
 
@@ -441,7 +495,7 @@ Create Test Order
     ${order}=           Get Order By ID    ${TEST_ORDER_ID}
     ${package}=         Get Package By ID    ${TEST_PACKAGE_ID}
     
-    Should Be Equal     ${order}[status]       DELIVERED
+    Should Be Equal     ${order}[status]       ${STATUS_DELIVERED}
     Should Be Equal     ${order}[driverName]   ${ASSIGNED_DRIVER}
     Should Not Be Empty    ${package}[orderId]
     

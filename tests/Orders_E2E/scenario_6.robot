@@ -169,7 +169,7 @@ Create Order With Validation
     
     ${json}=            Evaluate         json.loads('''${response.text}''')    json
     Validate Order Response    ${json}    validation_type=${validation_type}
-    [Return]           ${json}[id]    ${json}
+    RETURN           ${json}[id]    ${json}
 
 Get Order By ID
     [Documentation]     Retrieve a specific order by ID
