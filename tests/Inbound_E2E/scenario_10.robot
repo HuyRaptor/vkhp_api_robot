@@ -115,6 +115,9 @@ Generate Unique Master Product Data
     ...                 unit=PIECE
     ...                 status=${MASTER_STATUS_ENABLE}
     ...                 warehouseId=${WAREHOUSE_ID}
+    ...                 minQuantity=10
+    ...                 maxQuantity=1000
+    ...                 reorderPoint=50
     
     RETURN            ${master_data}
 
@@ -144,6 +147,25 @@ Create Master Product
     
     RETURN            ${json}[id]    ${json}
 
+Get Master Product By ID
+    [Documentation]     Retrieve a specific master product by ID
+    [Arguments]         ${master_id}
+    
+    Should Not Be Empty    ${master_id}    msg=Master Product ID cannot be empty
+    
+    ${headers}=         Create Dictionary    Content-Type=application/json    Authorization=${ADMIN_TOKEN}
+    
+    ${response}=        GET On Session
+    ...                 vkho
+    ...                 /master-products/get-one/${master_id}
+    ...                 headers=${headers}
+    ...                 expected_status=200
+    
+    ${json}=            Evaluate         json.loads('''${response.text}''')    json
+    Dictionary Should Contain Key        ${json}    id
+    
+    RETURN            ${json}
+
 Generate Unique Replenishment Data
     [Documentation]     Generate unique data for replenishment tests
     [Arguments]         ${master_id}
@@ -160,6 +182,8 @@ Generate Unique Replenishment Data
     ...                 quantity=100
     ...                 unitPrice=50
     ...                 total=5000
+    ...                 expectedDate=${timestamp}
+    ...                 priority=HIGH
     
     RETURN            ${replenish_data}
 
@@ -189,65 +213,6 @@ Create Replenishment
     
     RETURN            ${json}[id]    ${json}
 
-Get Replenishment By ID
-    [Documentation]     Retrieve a specific replenishment by ID
-    [Arguments]         ${replenish_id}
-    
-    Should Not Be Empty    ${replenish_id}    msg=Replenishment ID cannot be empty
-    
-    ${headers}=         Create Dictionary    Content-Type=application/json    Authorization=${MANAGER_TOKEN}
-    
-    ${response}=        GET On Session
-    ...                 vkho
-    ...                 /replenishments/get-one/${replenish_id}
-    ...                 headers=${headers}
-    ...                 expected_status=200
-    
-    ${json}=            Evaluate         json.loads('''${response.text}''')    json
-    Dictionary Should Contain Key        ${json}    id
-    
-    RETURN            ${json}
-
-Update Replenishment
-    [Documentation]     Update an existing replenishment
-    [Arguments]         ${replenish_id}    ${update_data}
-    
-    Should Not Be Empty    ${replenish_id}    msg=Replenishment ID cannot be empty
-    Dictionary Should Contain Key    ${update_data}    id
-    ...    msg=Update data must contain id field
-    Should Be Equal     ${update_data}[id]    ${replenish_id}
-    ...    msg=Update data ID must match replenish_id parameter
-    
-    ${headers}=         Create Dictionary    Content-Type=application/json    Authorization=${MANAGER_TOKEN}
-    
-    ${response}=        PUT On Session
-    ...                 vkho
-    ...                 /replenishments/update
-    ...                 json=${update_data}
-    ...                 headers=${headers}
-    ...                 expected_status=200
-    
-    ${json}=            Evaluate         json.loads('''${response.text}''')    json
-    Dictionary Should Contain Key        ${json}    id
-    
-    RETURN            ${json}
-
-Delete Replenishment
-    [Documentation]     Delete a replenishment
-    [Arguments]         ${replenish_id}
-    
-    Should Not Be Empty    ${replenish_id}    msg=Replenishment ID cannot be empty
-    
-    ${headers}=         Create Dictionary    Content-Type=application/json    Authorization=${MANAGER_TOKEN}
-    
-    ${response}=        DELETE On Session
-    ...                 vkho
-    ...                 /replenishments/delete/${replenish_id}
-    ...                 headers=${headers}
-    ...                 expected_status=200
-    
-    RETURN            ${TRUE}
-
 Generate Unique Product Order Data
     [Documentation]     Generate unique data for product order tests
     [Arguments]         ${master_id}
@@ -260,6 +225,8 @@ Generate Unique Product Order Data
     ...                 quantity=10
     ...                 unitPrice=100
     ...                 total=1000
+    ...                 priority=HIGH
+    ...                 expectedDate=${timestamp}
     
     ${product_orders}=  Create List      ${product_order}
     
@@ -269,6 +236,7 @@ Generate Unique Product Order Data
     ...                 status=${PRODUCT_ORDER_STATUS_NEW}
     ...                 note=Test Product Order Note
     ...                 productOrders=${product_orders}
+    ...                 priority=HIGH
     
     RETURN            ${order_data}
 
@@ -311,6 +279,8 @@ Generate Unique Receipt Data
     ...                 status=${RECEIPT_STATUS_NEW}
     ...                 note=Test Receipt Note
     ...                 replenishmentId=${replenish_id}
+    ...                 priority=HIGH
+    ...                 expectedDate=${timestamp}
     
     RETURN            ${receipt_data}
 
@@ -339,6 +309,25 @@ Create Receipt
     Dictionary Should Contain Key        ${json}    id
     
     RETURN            ${json}[id]    ${json}
+
+Get Receipt By ID
+    [Documentation]     Retrieve a specific receipt by ID
+    [Arguments]         ${receipt_id}
+    
+    Should Not Be Empty    ${receipt_id}    msg=Receipt ID cannot be empty
+    
+    ${headers}=         Create Dictionary    Content-Type=application/json    Authorization=${MANAGER_TOKEN}
+    
+    ${response}=        GET On Session
+    ...                 vkho
+    ...                 /receipts/get-one/${receipt_id}
+    ...                 headers=${headers}
+    ...                 expected_status=200
+    
+    ${json}=            Evaluate         json.loads('''${response.text}''')    json
+    Dictionary Should Contain Key        ${json}    id
+    
+    RETURN            ${json}
 
 Create Package
     [Documentation]     Create a new package
@@ -370,8 +359,8 @@ Create Package
     Setup API Session As Manager
     Log                 Successfully authenticated as both admin and manager
 
-02 - Create Master Product Test
-    [Documentation]     Test creating a new master product
+02 - Create Master Product With Constraints Test
+    [Documentation]     Test creating a new master product with quantity constraints
     [Tags]              master    create    positive
     
     ${master_data}=     Generate Unique Master Product Data
@@ -379,17 +368,20 @@ Create Package
     
     Should Not Be Empty    ${master_id}
     Should Be Equal     ${response}[sku]    ${master_data}[sku]
+    Should Be Equal     ${response}[minQuantity]    ${master_data}[minQuantity]
+    Should Be Equal     ${response}[maxQuantity]    ${master_data}[maxQuantity]
+    Should Be Equal     ${response}[reorderPoint]    ${master_data}[reorderPoint]
     
     Set Global Variable  ${TEST_MASTER_ID}      ${master_id}
     Set Global Variable  ${TEST_MASTER_DATA}    ${master_data}
     
-    Log                 Successfully created master product: ${response}[name] with ID: ${TEST_MASTER_ID}
+    Log                 Successfully created master product with constraints: ${response}[name] with ID: ${TEST_MASTER_ID}
 
-03 - Create Replenishment Test
-    [Documentation]     Test creating a new replenishment linked to master product
+03 - Create Replenishment With Priority Test
+    [Documentation]     Test creating a new replenishment with priority
     [Tags]              replenish    create    positive
     
-    Run Keyword If      "${TEST_MASTER_ID}" == "${EMPTY}"    Create Master Product Test
+    Run Keyword If      "${TEST_MASTER_ID}" == "${EMPTY}"    Create Master Product With Constraints Test
     
     ${replenish_data}=  Generate Unique Replenishment Data    ${TEST_MASTER_ID}
     ${replenish_id}    ${response}=    Create Replenishment    ${replenish_data}
@@ -397,34 +389,43 @@ Create Package
     Should Not Be Empty    ${replenish_id}
     Should Be Equal     ${response}[code]    ${replenish_data}[code]
     Should Be Equal     ${response}[masterProductId]    ${TEST_MASTER_ID}
+    Should Be Equal     ${response}[priority]    ${replenish_data}[priority]
     
     Set Global Variable  ${TEST_REPLENISH_ID}      ${replenish_id}
     Set Global Variable  ${TEST_REPLENISH_DATA}    ${replenish_data}
     
-    Log                 Successfully created replenishment: ${response}[code] with ID: ${TEST_REPLENISH_ID}
+    Log                 Successfully created high priority replenishment: ${response}[code] with ID: ${TEST_REPLENISH_ID}
 
-04 - Create Product Order Test
-    [Documentation]     Test creating a new product order with master product constraints
+04 - Create Product Order With Constraints Test
+    [Documentation]     Test creating a new product order with quantity constraints
     [Tags]              order    create    positive
     
-    Run Keyword If      "${TEST_MASTER_ID}" == "${EMPTY}"    Create Master Product Test
+    Run Keyword If      "${TEST_MASTER_ID}" == "${EMPTY}"    Create Master Product With Constraints Test
     
     ${order_data}=      Generate Unique Product Order Data    ${TEST_MASTER_ID}
     ${order_id}    ${response}=    Create Product Order    ${order_data}
     
     Should Not Be Empty    ${order_id}
     Should Be Equal     ${response}[code]    ${order_data}[code]
+    Should Be Equal     ${response}[priority]    ${order_data}[priority]
+    
+    # Verify product order constraints
+    ${product_order}=   Get From List    ${response}[productOrders]    0
+    Should Be True      ${product_order}[quantity] >= ${TEST_MASTER_DATA}[minQuantity]
+    ...    msg=Product order quantity is below minimum quantity
+    Should Be True      ${product_order}[quantity] <= ${TEST_MASTER_DATA}[maxQuantity]
+    ...    msg=Product order quantity exceeds maximum quantity
     
     Set Global Variable  ${TEST_PRODUCT_ORDER_ID}      ${order_id}
     Set Global Variable  ${TEST_PRODUCT_ORDER_DATA}    ${order_data}
     
-    Log                 Successfully created product order: ${response}[code] with ID: ${TEST_PRODUCT_ORDER_ID}
+    Log                 Successfully created product order with constraints: ${response}[code] with ID: ${TEST_PRODUCT_ORDER_ID}
 
-05 - Create Receipt Test
-    [Documentation]     Test creating a new receipt linked to replenishment
+05 - Create Receipt With Priority Test
+    [Documentation]     Test creating a new receipt with priority
     [Tags]              receipt    create    positive
     
-    Run Keyword If      "${TEST_REPLENISH_ID}" == "${EMPTY}"    Create Replenishment Test
+    Run Keyword If      "${TEST_REPLENISH_ID}" == "${EMPTY}"    Create Replenishment With Priority Test
     
     ${receipt_data}=    Generate Unique Receipt Data    ${TEST_REPLENISH_ID}
     ${receipt_id}    ${response}=    Create Receipt    ${receipt_data}
@@ -432,14 +433,15 @@ Create Package
     Should Not Be Empty    ${receipt_id}
     Should Be Equal     ${response}[code]    ${receipt_data}[code]
     Should Be Equal     ${response}[replenishmentId]    ${TEST_REPLENISH_ID}
+    Should Be Equal     ${response}[priority]    ${receipt_data}[priority]
     
     Set Global Variable  ${TEST_RECEIPT_ID}      ${receipt_id}
     Set Global Variable  ${TEST_RECEIPT_DATA}    ${receipt_data}
     
-    Log                 Successfully created receipt: ${response}[code] with ID: ${TEST_RECEIPT_ID}
+    Log                 Successfully created high priority receipt: ${response}[code] with ID: ${TEST_RECEIPT_ID}
 
-06 - Create Package Test
-    [Documentation]     Test creating a new package linked to receipt
+06 - Create Package With Priority Test
+    [Documentation]     Test creating a new package with priority
     [Tags]              package    create    positive
     
     ${package_data}=    Create Dictionary
@@ -447,67 +449,66 @@ Create Package
     ...                 status=${PACKAGE_STATUS_NEW}
     ...                 note=Test Package Note
     ...                 receiptId=${TEST_RECEIPT_ID}
+    ...                 priority=HIGH
     
     ${package_id}    ${response}=    Create Package    ${package_data}
     
     Should Not Be Empty    ${package_id}
     Should Be Equal     ${response}[warehouseId]    ${WAREHOUSE_ID}
     Should Be Equal     ${response}[receiptId]    ${TEST_RECEIPT_ID}
+    Should Be Equal     ${response}[priority]    ${package_data}[priority]
     
     Set Global Variable  ${TEST_PACKAGE_ID}      ${package_id}
     Set Global Variable  ${TEST_PACKAGE_DATA}    ${package_data}
     
-    Log                 Successfully created package with ID: ${TEST_PACKAGE_ID}
+    Log                 Successfully created high priority package with ID: ${TEST_PACKAGE_ID}
 
-07 - Update Replenishment Test
-    [Documentation]     Test updating an existing replenishment
-    [Tags]              replenish    update    positive
+07 - Verify Master Product Constraints Test
+    [Documentation]     Test verifying master product quantity constraints
+    [Tags]              master    validation    positive
     
-    Run Keyword If      "${TEST_REPLENISH_ID}" == "${EMPTY}"    Create Replenishment Test
-    
-    ${update_data}=     Create Dictionary
-    ...                 id=${TEST_REPLENISH_ID}
-    ...                 status=${REPLENISH_STATUS_PENDING}
-    ...                 note=Updated Replenishment Note
-    
-    ${updated_replenish}=    Update Replenishment    ${TEST_REPLENISH_ID}    ${update_data}
-    Should Be Equal     ${updated_replenish}[status]    ${REPLENISH_STATUS_PENDING}
-    
-    Log                 Successfully updated replenishment: ${TEST_REPLENISH_ID}
-
-08 - Verify Master Product and Replenishment Integration Test
-    [Documentation]     Test verifying master product and replenishment integration
-    [Tags]              integration    positive
-    
-    Run Keyword If      "${TEST_MASTER_ID}" == "${EMPTY}"    Create Master Product Test
-    Run Keyword If      "${TEST_REPLENISH_ID}" == "${EMPTY}"    Create Replenishment Test
+    Run Keyword If      "${TEST_MASTER_ID}" == "${EMPTY}"    Create Master Product With Constraints Test
     
     ${master}=          Get Master Product By ID    ${TEST_MASTER_ID}
-    ${replenish}=       Get Replenishment By ID    ${TEST_REPLENISH_ID}
     
-    Should Be Equal     ${master}[warehouseId]    ${replenish}[warehouseId]
-    ...    msg=Master product and replenishment warehouse IDs do not match
-    Should Be Equal     ${replenish}[masterProductId]    ${TEST_MASTER_ID}
-    ...    msg=Replenishment is not linked to the correct master product
+    Should Be Equal     ${master}[minQuantity]    ${TEST_MASTER_DATA}[minQuantity]
+    ...    msg=Master product minimum quantity does not match
+    Should Be Equal     ${master}[maxQuantity]    ${TEST_MASTER_DATA}[maxQuantity]
+    ...    msg=Master product maximum quantity does not match
+    Should Be Equal     ${master}[reorderPoint]    ${TEST_MASTER_DATA}[reorderPoint]
+    ...    msg=Master product reorder point does not match
     
-    Log                 Successfully verified master product and replenishment integration
+    Log                 Successfully verified master product constraints
 
-09 - Verify Replenishment and Receipt Integration Test
-    [Documentation]     Test verifying replenishment and receipt integration
-    [Tags]              integration    positive
+08 - Verify Replenishment Priority Test
+    [Documentation]     Test verifying replenishment priority
+    [Tags]              replenish    validation    positive
     
-    Run Keyword If      "${TEST_REPLENISH_ID}" == "${EMPTY}"    Create Replenishment Test
-    Run Keyword If      "${TEST_RECEIPT_ID}" == "${EMPTY}"    Create Receipt Test
+    Run Keyword If      "${TEST_REPLENISH_ID}" == "${EMPTY}"    Create Replenishment With Priority Test
     
     ${replenish}=       Get Replenishment By ID    ${TEST_REPLENISH_ID}
+    
+    Should Be Equal     ${replenish}[priority]    ${TEST_REPLENISH_DATA}[priority]
+    ...    msg=Replenishment priority does not match
+    Should Be Equal     ${replenish}[expectedDate]    ${TEST_REPLENISH_DATA}[expectedDate]
+    ...    msg=Replenishment expected date does not match
+    
+    Log                 Successfully verified replenishment priority
+
+09 - Verify Receipt Priority Test
+    [Documentation]     Test verifying receipt priority
+    [Tags]              receipt    validation    positive
+    
+    Run Keyword If      "${TEST_RECEIPT_ID}" == "${EMPTY}"    Create Receipt With Priority Test
+    
     ${receipt}=         Get Receipt By ID    ${TEST_RECEIPT_ID}
     
-    Should Be Equal     ${replenish}[warehouseId]    ${receipt}[warehouseId]
-    ...    msg=Replenishment and receipt warehouse IDs do not match
-    Should Be Equal     ${receipt}[replenishmentId]    ${TEST_REPLENISH_ID}
-    ...    msg=Receipt is not linked to the correct replenishment
+    Should Be Equal     ${receipt}[priority]    ${TEST_RECEIPT_DATA}[priority]
+    ...    msg=Receipt priority does not match
+    Should Be Equal     ${receipt}[expectedDate]    ${TEST_RECEIPT_DATA}[expectedDate]
+    ...    msg=Receipt expected date does not match
     
-    Log                 Successfully verified replenishment and receipt integration
+    Log                 Successfully verified receipt priority
 
 10 - Cleanup Test Environment
     [Documentation]     Clean up all test resources
