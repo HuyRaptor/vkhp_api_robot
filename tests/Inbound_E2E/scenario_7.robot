@@ -1,0 +1,728 @@
+*** Settings ***
+Documentation     Comprehensive Test Suite for Receipt Operations in vKho API
+...               Includes product management, master products, replenishments, and package handling
+Library           RequestsLibrary
+Library           Collections
+Library           OperatingSystem
+Library           String
+Library           DateTime
+
+*** Variables ***
+${BASE_URL}             https://api.vkho.net
+${ADMIN_USERNAME}       huynh22.admin
+${ADMIN_PASSWORD}       Snowfox1991
+${MANAGER_USERNAME}     huynh22.manager
+${MANAGER_PASSWORD}     Snowfox1991
+${WAREHOUSE_ID}         6
+${RESULTS_DIR}          ${CURDIR}${/}results
+
+# Test Data Variables
+${TEST_RECEIPT_ID}      ${EMPTY}
+${TEST_RECEIPT_DATA}    ${EMPTY}
+${TEST_PRODUCT_ID}      ${EMPTY}
+${TEST_PRODUCT_DATA}    ${EMPTY}
+${TEST_MASTER_ID}       ${EMPTY}
+${TEST_MASTER_DATA}     ${EMPTY}
+${TEST_REPLENISH_ID}    ${EMPTY}
+${TEST_REPLENISH_DATA}  ${EMPTY}
+${TEST_PACKAGE_ID}      ${EMPTY}
+${TEST_PACKAGE_DATA}    ${EMPTY}
+
+# Status Constants from OpenAPI
+${RECEIPT_STATUS_NEW}           NEW
+${RECEIPT_STATUS_PENDING}       PENDING
+${RECEIPT_STATUS_COMPLETED}     COMPLETED
+${RECEIPT_STATUS_CANCELLED}     CANCELLED
+
+${PRODUCT_STATUS_ENABLE}        ENABLE
+${PRODUCT_STATUS_DISABLE}       DISABLE
+
+${MASTER_STATUS_ENABLE}         ENABLE
+${MASTER_STATUS_DISABLE}        DISABLE
+
+${REPLENISH_STATUS_NEW}         NEW
+${REPLENISH_STATUS_PENDING}     PENDING
+${REPLENISH_STATUS_COMPLETED}   COMPLETED
+${REPLENISH_STATUS_CANCELLED}   CANCELLED
+
+${PACKAGE_STATUS_NEW}           NEW
+${PACKAGE_STATUS_PENDING}       PENDING
+${PACKAGE_STATUS_COMPLETED}     COMPLETED
+${PACKAGE_STATUS_CANCELLED}     CANCELLED
+
+*** Keywords ***
+Setup API Session As Admin
+    [Documentation]     Create API session and authenticate as admin
+    Create Session      vkho             ${BASE_URL}      verify=True    disable_warnings=True
+    
+    ${headers}=         Create Dictionary    Content-Type=application/json
+    ${body}=            Create Dictionary    username=${ADMIN_USERNAME}    password=${ADMIN_PASSWORD}
+    
+    ${response}=        POST On Session
+    ...                 vkho
+    ...                 /auth/login
+    ...                 json=${body}
+    ...                 headers=${headers}
+    ...                 expected_status=201
+    
+    ${json}=            Evaluate         json.loads('''${response.text}''')    json
+    Dictionary Should Contain Key        ${json}    access_token
+    ...    msg=Authentication failed: Response did not contain access_token
+    
+    ${token}=           Set Variable     Bearer ${json}[access_token]
+    Set Global Variable  ${ADMIN_TOKEN}    ${token}
+    
+    Create Directory    ${RESULTS_DIR}
+
+Setup API Session As Manager
+    [Documentation]     Create API session and authenticate as manager
+    Create Session      vkho             ${BASE_URL}      verify=True    disable_warnings=True
+    
+    ${headers}=         Create Dictionary    Content-Type=application/json
+    ${body}=            Create Dictionary    username=${MANAGER_USERNAME}    password=${MANAGER_PASSWORD}
+    
+    ${response}=        POST On Session
+    ...                 vkho
+    ...                 /auth/login
+    ...                 json=${body}
+    ...                 headers=${headers}
+    ...                 expected_status=201
+    
+    ${json}=            Evaluate         json.loads('''${response.text}''')    json
+    Dictionary Should Contain Key        ${json}    access_token
+    ...    msg=Authentication failed: Response did not contain access_token
+    
+    ${token}=           Set Variable     Bearer ${json}[access_token]
+    Set Global Variable  ${MANAGER_TOKEN}    ${token}
+
+Generate Unique Product Data
+    [Documentation]     Generate unique data for product tests
+    ${timestamp}=       Get Time    epoch
+    ${sku}=             Set Variable    SKU${timestamp}
+    ${name}=            Set Variable    Test Product ${timestamp}
+    
+    ${product_data}=    Create Dictionary
+    ...                 sku=${sku}
+    ...                 name=${name}
+    ...                 description=Test Product Description
+    ...                 unit=PIECE
+    ...                 status=${PRODUCT_STATUS_ENABLE}
+    ...                 warehouseId=${WAREHOUSE_ID}
+    
+    RETURN            ${product_data}
+
+Create Product
+    [Documentation]     Create a new product
+    [Arguments]         ${product_data}
+    
+    # Validate required fields
+    Dictionary Should Contain Key    ${product_data}    sku
+    ...    msg=Missing required field: sku
+    Dictionary Should Contain Key    ${product_data}    name
+    ...    msg=Missing required field: name
+    Dictionary Should Contain Key    ${product_data}    warehouseId
+    ...    msg=Missing required field: warehouseId
+    
+    ${headers}=         Create Dictionary    Content-Type=application/json    Authorization=${ADMIN_TOKEN}
+    
+    ${response}=        POST On Session
+    ...                 vkho
+    ...                 /products/create
+    ...                 json=${product_data}
+    ...                 headers=${headers}
+    ...                 expected_status=201
+    
+    ${json}=            Evaluate         json.loads('''${response.text}''')    json
+    Dictionary Should Contain Key        ${json}    id
+    
+    RETURN            ${json}[id]    ${json}
+
+Generate Unique Master Product Data
+    [Documentation]     Generate unique data for master product tests
+    ${timestamp}=       Get Time    epoch
+    ${sku}=             Set Variable    MSKU${timestamp}
+    ${name}=            Set Variable    Test Master Product ${timestamp}
+    
+    ${master_data}=     Create Dictionary
+    ...                 sku=${sku}
+    ...                 name=${name}
+    ...                 description=Test Master Product Description
+    ...                 unit=PIECE
+    ...                 status=${MASTER_STATUS_ENABLE}
+    ...                 warehouseId=${WAREHOUSE_ID}
+    
+    RETURN            ${master_data}
+
+Create Master Product
+    [Documentation]     Create a new master product
+    [Arguments]         ${master_data}
+    
+    # Validate required fields
+    Dictionary Should Contain Key    ${master_data}    sku
+    ...    msg=Missing required field: sku
+    Dictionary Should Contain Key    ${master_data}    name
+    ...    msg=Missing required field: name
+    Dictionary Should Contain Key    ${master_data}    warehouseId
+    ...    msg=Missing required field: warehouseId
+    
+    ${headers}=         Create Dictionary    Content-Type=application/json    Authorization=${ADMIN_TOKEN}
+    
+    ${response}=        POST On Session
+    ...                 vkho
+    ...                 /master-products/create
+    ...                 json=${master_data}
+    ...                 headers=${headers}
+    ...                 expected_status=201
+    
+    ${json}=            Evaluate         json.loads('''${response.text}''')    json
+    Dictionary Should Contain Key        ${json}    id
+    
+    RETURN            ${json}[id]    ${json}
+
+Generate Unique Receipt Data
+    [Documentation]     Generate unique data for receipt tests
+    ${timestamp}=       Get Time    epoch
+    ${receipt_code}=    Set Variable    RCP${timestamp}
+    
+    ${receipt_data}=    Create Dictionary
+    ...                 code=${receipt_code}
+    ...                 warehouseId=${WAREHOUSE_ID}
+    ...                 status=${RECEIPT_STATUS_NEW}
+    ...                 note=Test Receipt Note
+    
+    RETURN            ${receipt_data}
+
+Create Receipt
+    [Documentation]     Create a new receipt
+    [Arguments]         ${receipt_data}
+    
+    # Validate required fields
+    Dictionary Should Contain Key    ${receipt_data}    code
+    ...    msg=Missing required field: code
+    Dictionary Should Contain Key    ${receipt_data}    warehouseId
+    ...    msg=Missing required field: warehouseId
+    
+    ${headers}=         Create Dictionary    Content-Type=application/json    Authorization=${MANAGER_TOKEN}
+    
+    ${response}=        POST On Session
+    ...                 vkho
+    ...                 /receipts/create
+    ...                 json=${receipt_data}
+    ...                 headers=${headers}
+    ...                 expected_status=201
+    
+    ${json}=            Evaluate         json.loads('''${response.text}''')    json
+    Dictionary Should Contain Key        ${json}    id
+    
+    RETURN            ${json}[id]    ${json}
+
+Generate Unique Replenishment Data
+    [Documentation]     Generate unique data for replenishment tests
+    ${timestamp}=       Get Time    epoch
+    ${replenish_code}=  Set Variable    REP${timestamp}
+    
+    ${replenish_data}=  Create Dictionary
+    ...                 code=${replenish_code}
+    ...                 warehouseId=${WAREHOUSE_ID}
+    ...                 status=${REPLENISH_STATUS_NEW}
+    ...                 note=Test Replenishment Note
+    
+    RETURN            ${replenish_data}
+
+Create Replenishment
+    [Documentation]     Create a new replenishment
+    [Arguments]         ${replenish_data}
+    
+    # Validate required fields
+    Dictionary Should Contain Key    ${replenish_data}    code
+    ...    msg=Missing required field: code
+    Dictionary Should Contain Key    ${replenish_data}    warehouseId
+    ...    msg=Missing required field: warehouseId
+    
+    ${headers}=         Create Dictionary    Content-Type=application/json    Authorization=${MANAGER_TOKEN}
+    
+    ${response}=        POST On Session
+    ...                 vkho
+    ...                 /replenishments/create
+    ...                 json=${replenish_data}
+    ...                 headers=${headers}
+    ...                 expected_status=201
+    
+    ${json}=            Evaluate         json.loads('''${response.text}''')    json
+    Dictionary Should Contain Key        ${json}    id
+    
+    RETURN            ${json}[id]    ${json}
+
+Create Package
+    [Documentation]     Create a new package
+    [Arguments]         ${package_data}
+    
+    # Validate required fields
+    Dictionary Should Contain Key    ${package_data}    warehouseId
+    ...    msg=Missing required field: warehouseId
+    
+    ${headers}=         Create Dictionary    Content-Type=application/json    Authorization=${MANAGER_TOKEN}
+    
+    ${response}=        POST On Session
+    ...                 vkho
+    ...                 /packages/create
+    ...                 json=${package_data}
+    ...                 headers=${headers}
+    ...                 expected_status=201
+    
+    ${json}=            Evaluate         json.loads('''${response.text}''')    json
+    Dictionary Should Contain Key        ${json}    id
+    
+    RETURN            ${json}[id]    ${json}
+
+Get Product By ID
+    [Documentation]     Retrieve a specific product by ID
+    [Arguments]         ${product_id}
+    
+    Should Not Be Empty    ${product_id}    msg=Product ID cannot be empty
+    
+    ${headers}=         Create Dictionary    Content-Type=application/json    Authorization=${ADMIN_TOKEN}
+    
+    ${response}=        GET On Session
+    ...                 vkho
+    ...                 /products/get-one/${product_id}
+    ...                 headers=${headers}
+    ...                 expected_status=200
+    
+    ${json}=            Evaluate         json.loads('''${response.text}''')    json
+    Dictionary Should Contain Key        ${json}    id
+    
+    RETURN            ${json}
+
+Get Master Product By ID
+    [Documentation]     Retrieve a specific master product by ID
+    [Arguments]         ${master_id}
+    
+    Should Not Be Empty    ${master_id}    msg=Master Product ID cannot be empty
+    
+    ${headers}=         Create Dictionary    Content-Type=application/json    Authorization=${ADMIN_TOKEN}
+    
+    ${response}=        GET On Session
+    ...                 vkho
+    ...                 /master-products/get-one/${master_id}
+    ...                 headers=${headers}
+    ...                 expected_status=200
+    
+    ${json}=            Evaluate         json.loads('''${response.text}''')    json
+    Dictionary Should Contain Key        ${json}    id
+    
+    RETURN            ${json}
+
+Get Receipt By ID
+    [Documentation]     Retrieve a specific receipt by ID
+    [Arguments]         ${receipt_id}
+    
+    Should Not Be Empty    ${receipt_id}    msg=Receipt ID cannot be empty
+    
+    ${headers}=         Create Dictionary    Content-Type=application/json    Authorization=${MANAGER_TOKEN}
+    
+    ${response}=        GET On Session
+    ...                 vkho
+    ...                 /receipts/get-one/${receipt_id}
+    ...                 headers=${headers}
+    ...                 expected_status=200
+    
+    ${json}=            Evaluate         json.loads('''${response.text}''')    json
+    Dictionary Should Contain Key        ${json}    id
+    
+    RETURN            ${json}
+
+Get Replenishment By ID
+    [Documentation]     Retrieve a specific replenishment by ID
+    [Arguments]         ${replenish_id}
+    
+    Should Not Be Empty    ${replenish_id}    msg=Replenishment ID cannot be empty
+    
+    ${headers}=         Create Dictionary    Content-Type=application/json    Authorization=${MANAGER_TOKEN}
+    
+    ${response}=        GET On Session
+    ...                 vkho
+    ...                 /replenishments/get-one/${replenish_id}
+    ...                 headers=${headers}
+    ...                 expected_status=200
+    
+    ${json}=            Evaluate         json.loads('''${response.text}''')    json
+    Dictionary Should Contain Key        ${json}    id
+    
+    RETURN            ${json}
+
+Get Package By ID
+    [Documentation]     Retrieve a specific package by ID
+    [Arguments]         ${package_id}
+    
+    Should Not Be Empty    ${package_id}    msg=Package ID cannot be empty
+    
+    ${headers}=         Create Dictionary    Content-Type=application/json    Authorization=${MANAGER_TOKEN}
+    
+    ${response}=        GET On Session
+    ...                 vkho
+    ...                 /packages/get-one/${package_id}
+    ...                 headers=${headers}
+    ...                 expected_status=200
+    
+    ${json}=            Evaluate         json.loads('''${response.text}''')    json
+    Dictionary Should Contain Key        ${json}    id
+    
+    RETURN            ${json}
+
+Update Product
+    [Documentation]     Update an existing product
+    [Arguments]         ${product_id}    ${update_data}
+    
+    Should Not Be Empty    ${product_id}    msg=Product ID cannot be empty
+    Dictionary Should Contain Key    ${update_data}    id
+    ...    msg=Update data must contain id field
+    Should Be Equal     ${update_data}[id]    ${product_id}
+    ...    msg=Update data ID must match product_id parameter
+    
+    ${headers}=         Create Dictionary    Content-Type=application/json    Authorization=${ADMIN_TOKEN}
+    
+    ${response}=        PUT On Session
+    ...                 vkho
+    ...                 /products/update
+    ...                 json=${update_data}
+    ...                 headers=${headers}
+    ...                 expected_status=200
+    
+    ${json}=            Evaluate         json.loads('''${response.text}''')    json
+    Dictionary Should Contain Key        ${json}    id
+    
+    RETURN            ${json}
+
+Update Receipt
+    [Documentation]     Update an existing receipt
+    [Arguments]         ${receipt_id}    ${update_data}
+    
+    Should Not Be Empty    ${receipt_id}    msg=Receipt ID cannot be empty
+    Dictionary Should Contain Key    ${update_data}    id
+    ...    msg=Update data must contain id field
+    Should Be Equal     ${update_data}[id]    ${receipt_id}
+    ...    msg=Update data ID must match receipt_id parameter
+    
+    ${headers}=         Create Dictionary    Content-Type=application/json    Authorization=${MANAGER_TOKEN}
+    
+    ${response}=        PUT On Session
+    ...                 vkho
+    ...                 /receipts/update
+    ...                 json=${update_data}
+    ...                 headers=${headers}
+    ...                 expected_status=200
+    
+    ${json}=            Evaluate         json.loads('''${response.text}''')    json
+    Dictionary Should Contain Key        ${json}    id
+    
+    RETURN            ${json}
+
+Update Replenishment
+    [Documentation]     Update an existing replenishment
+    [Arguments]         ${replenish_id}    ${update_data}
+    
+    Should Not Be Empty    ${replenish_id}    msg=Replenishment ID cannot be empty
+    Dictionary Should Contain Key    ${update_data}    id
+    ...    msg=Update data must contain id field
+    Should Be Equal     ${update_data}[id]    ${replenish_id}
+    ...    msg=Update data ID must match replenish_id parameter
+    
+    ${headers}=         Create Dictionary    Content-Type=application/json    Authorization=${MANAGER_TOKEN}
+    
+    ${response}=        PUT On Session
+    ...                 vkho
+    ...                 /replenishments/update
+    ...                 json=${update_data}
+    ...                 headers=${headers}
+    ...                 expected_status=200
+    
+    ${json}=            Evaluate         json.loads('''${response.text}''')    json
+    Dictionary Should Contain Key        ${json}    id
+    
+    RETURN            ${json}
+
+Update Package
+    [Documentation]     Update an existing package
+    [Arguments]         ${package_id}    ${update_data}
+    
+    Should Not Be Empty    ${package_id}    msg=Package ID cannot be empty
+    Dictionary Should Contain Key    ${update_data}    id
+    ...    msg=Update data must contain id field
+    Should Be Equal     ${update_data}[id]    ${package_id}
+    ...    msg=Update data ID must match package_id parameter
+    
+    ${headers}=         Create Dictionary    Content-Type=application/json    Authorization=${MANAGER_TOKEN}
+    
+    ${response}=        PUT On Session
+    ...                 vkho
+    ...                 /packages/update
+    ...                 json=${update_data}
+    ...                 headers=${headers}
+    ...                 expected_status=200
+    
+    ${json}=            Evaluate         json.loads('''${response.text}''')    json
+    Dictionary Should Contain Key        ${json}    id
+    
+    RETURN            ${json}
+
+Delete Product
+    [Documentation]     Delete a product
+    [Arguments]         ${product_id}
+    
+    Should Not Be Empty    ${product_id}    msg=Product ID cannot be empty
+    
+    ${headers}=         Create Dictionary    Content-Type=application/json    Authorization=${ADMIN_TOKEN}
+    
+    ${response}=        DELETE On Session
+    ...                 vkho
+    ...                 /products/delete/${product_id}
+    ...                 headers=${headers}
+    ...                 expected_status=200
+    
+    RETURN            ${TRUE}
+
+Delete Receipt
+    [Documentation]     Delete a receipt
+    [Arguments]         ${receipt_id}
+    
+    Should Not Be Empty    ${receipt_id}    msg=Receipt ID cannot be empty
+    
+    ${headers}=         Create Dictionary    Content-Type=application/json    Authorization=${MANAGER_TOKEN}
+    
+    ${response}=        DELETE On Session
+    ...                 vkho
+    ...                 /receipts/delete/${receipt_id}
+    ...                 headers=${headers}
+    ...                 expected_status=200
+    
+    RETURN            ${TRUE}
+
+Delete Replenishment
+    [Documentation]     Delete a replenishment
+    [Arguments]         ${replenish_id}
+    
+    Should Not Be Empty    ${replenish_id}    msg=Replenishment ID cannot be empty
+    
+    ${headers}=         Create Dictionary    Content-Type=application/json    Authorization=${MANAGER_TOKEN}
+    
+    ${response}=        DELETE On Session
+    ...                 vkho
+    ...                 /replenishments/delete/${replenish_id}
+    ...                 headers=${headers}
+    ...                 expected_status=200
+    
+    RETURN            ${TRUE}
+
+Delete Package
+    [Documentation]     Delete a package
+    [Arguments]         ${package_id}
+    
+    Should Not Be Empty    ${package_id}    msg=Package ID cannot be empty
+    
+    ${headers}=         Create Dictionary    Content-Type=application/json    Authorization=${MANAGER_TOKEN}
+    
+    ${response}=        DELETE On Session
+    ...                 vkho
+    ...                 /packages/delete/${package_id}
+    ...                 headers=${headers}
+    ...                 expected_status=200
+    
+    RETURN            ${TRUE}
+
+*** Test Cases ***
+01 - Setup Test Environment
+    [Documentation]     Setup API sessions for both admin and manager
+    [Tags]              setup
+    Setup API Session As Admin
+    Setup API Session As Manager
+    Log                 Successfully authenticated as both admin and manager
+
+02 - Create Product Test
+    [Documentation]     Test creating a new product
+    [Tags]              product    create    positive
+    
+    ${product_data}=    Generate Unique Product Data
+    ${product_id}    ${response}=    Create Product    ${product_data}
+    
+    Should Not Be Empty    ${product_id}
+    Should Be Equal     ${response}[sku]    ${product_data}[sku]
+    
+    Set Global Variable  ${TEST_PRODUCT_ID}      ${product_id}
+    Set Global Variable  ${TEST_PRODUCT_DATA}    ${product_data}
+    
+    Log                 Successfully created product: ${response}[name] with ID: ${TEST_PRODUCT_ID}
+
+03 - Create Master Product Test
+    [Documentation]     Test creating a new master product
+    [Tags]              master    create    positive
+    
+    ${master_data}=     Generate Unique Master Product Data
+    ${master_id}    ${response}=    Create Master Product    ${master_data}
+    
+    Should Not Be Empty    ${master_id}
+    Should Be Equal     ${response}[sku]    ${master_data}[sku]
+    
+    Set Global Variable  ${TEST_MASTER_ID}      ${master_id}
+    Set Global Variable  ${TEST_MASTER_DATA}    ${master_data}
+    
+    Log                 Successfully created master product: ${response}[name] with ID: ${TEST_MASTER_ID}
+
+04 - Create Receipt Test
+    [Documentation]     Test creating a new receipt
+    [Tags]              receipt    create    positive
+    
+    ${receipt_data}=    Generate Unique Receipt Data
+    ${receipt_id}    ${response}=    Create Receipt    ${receipt_data}
+    
+    Should Not Be Empty    ${receipt_id}
+    Should Be Equal     ${response}[code]    ${receipt_data}[code]
+    
+    Set Global Variable  ${TEST_RECEIPT_ID}      ${receipt_id}
+    Set Global Variable  ${TEST_RECEIPT_DATA}    ${receipt_data}
+    
+    Log                 Successfully created receipt: ${response}[code] with ID: ${TEST_RECEIPT_ID}
+
+05 - Create Replenishment Test
+    [Documentation]     Test creating a new replenishment
+    [Tags]              replenish    create    positive
+    
+    ${replenish_data}=  Generate Unique Replenishment Data
+    ${replenish_id}    ${response}=    Create Replenishment    ${replenish_data}
+    
+    Should Not Be Empty    ${replenish_id}
+    Should Be Equal     ${response}[code]    ${replenish_data}[code]
+    
+    Set Global Variable  ${TEST_REPLENISH_ID}      ${replenish_id}
+    Set Global Variable  ${TEST_REPLENISH_DATA}    ${replenish_data}
+    
+    Log                 Successfully created replenishment: ${response}[code] with ID: ${TEST_REPLENISH_ID}
+
+06 - Create Package Test
+    [Documentation]     Test creating a new package
+    [Tags]              package    create    positive
+    
+    ${package_data}=    Create Dictionary
+    ...                 warehouseId=${WAREHOUSE_ID}
+    ...                 status=${PACKAGE_STATUS_NEW}
+    ...                 note=Test Package Note
+    
+    ${package_id}    ${response}=    Create Package    ${package_data}
+    
+    Should Not Be Empty    ${package_id}
+    Should Be Equal     ${response}[warehouseId]    ${WAREHOUSE_ID}
+    
+    Set Global Variable  ${TEST_PACKAGE_ID}      ${package_id}
+    Set Global Variable  ${TEST_PACKAGE_DATA}    ${package_data}
+    
+    Log                 Successfully created package with ID: ${TEST_PACKAGE_ID}
+
+07 - Update Product Test
+    [Documentation]     Test updating an existing product
+    [Tags]              product    update    positive
+    
+    Run Keyword If      "${TEST_PRODUCT_ID}" == "${EMPTY}"    Create Product Test
+    
+    ${update_data}=     Create Dictionary
+    ...                 id=${TEST_PRODUCT_ID}
+    ...                 name=Updated Product Name
+    ...                 description=Updated Description
+    ...                 status=${PRODUCT_STATUS_ENABLE}
+    
+    ${updated_product}=    Update Product    ${TEST_PRODUCT_ID}    ${update_data}
+    Should Be Equal     ${updated_product}[name]    Updated Product Name
+    
+    Log                 Successfully updated product: ${TEST_PRODUCT_ID}
+
+08 - Update Receipt Test
+    [Documentation]     Test updating an existing receipt
+    [Tags]              receipt    update    positive
+    
+    Run Keyword If      "${TEST_RECEIPT_ID}" == "${EMPTY}"    Create Receipt Test
+    
+    ${update_data}=     Create Dictionary
+    ...                 id=${TEST_RECEIPT_ID}
+    ...                 status=${RECEIPT_STATUS_PENDING}
+    ...                 note=Updated Receipt Note
+    
+    ${updated_receipt}=    Update Receipt    ${TEST_RECEIPT_ID}    ${update_data}
+    Should Be Equal     ${updated_receipt}[status]    ${RECEIPT_STATUS_PENDING}
+    
+    Log                 Successfully updated receipt: ${TEST_RECEIPT_ID}
+
+09 - Update Replenishment Test
+    [Documentation]     Test updating an existing replenishment
+    [Tags]              replenish    update    positive
+    
+    Run Keyword If      "${TEST_REPLENISH_ID}" == "${EMPTY}"    Create Replenishment Test
+    
+    ${update_data}=     Create Dictionary
+    ...                 id=${TEST_REPLENISH_ID}
+    ...                 status=${REPLENISH_STATUS_PENDING}
+    ...                 note=Updated Replenishment Note
+    
+    ${updated_replenish}=    Update Replenishment    ${TEST_REPLENISH_ID}    ${update_data}
+    Should Be Equal     ${updated_replenish}[status]    ${REPLENISH_STATUS_PENDING}
+    
+    Log                 Successfully updated replenishment: ${TEST_REPLENISH_ID}
+
+10 - Update Package Test
+    [Documentation]     Test updating an existing package
+    [Tags]              package    update    positive
+    
+    Run Keyword If      "${TEST_PACKAGE_ID}" == "${EMPTY}"    Create Package Test
+    
+    ${update_data}=     Create Dictionary
+    ...                 id=${TEST_PACKAGE_ID}
+    ...                 status=${PACKAGE_STATUS_PENDING}
+    ...                 note=Updated Package Note
+    
+    ${updated_package}=    Update Package    ${TEST_PACKAGE_ID}    ${update_data}
+    Should Be Equal     ${updated_package}[status]    ${PACKAGE_STATUS_PENDING}
+    
+    Log                 Successfully updated package: ${TEST_PACKAGE_ID}
+
+11 - Verify Product and Receipt Integration Test
+    [Documentation]     Test verifying product and receipt integration
+    [Tags]              integration    positive
+    
+    Run Keyword If      "${TEST_PRODUCT_ID}" == "${EMPTY}"    Create Product Test
+    Run Keyword If      "${TEST_RECEIPT_ID}" == "${EMPTY}"    Create Receipt Test
+    
+    ${product}=         Get Product By ID    ${TEST_PRODUCT_ID}
+    ${receipt}=         Get Receipt By ID    ${TEST_RECEIPT_ID}
+    
+    Should Be Equal     ${product}[warehouseId]    ${receipt}[warehouseId]
+    ...    msg=Product and receipt warehouse IDs do not match
+    
+    Log                 Successfully verified product and receipt integration
+
+12 - Verify Replenishment and Package Integration Test
+    [Documentation]     Test verifying replenishment and package integration
+    [Tags]              integration    positive
+    
+    Run Keyword If      "${TEST_REPLENISH_ID}" == "${EMPTY}"    Create Replenishment Test
+    Run Keyword If      "${TEST_PACKAGE_ID}" == "${EMPTY}"    Create Package Test
+    
+    ${replenish}=       Get Replenishment By ID    ${TEST_REPLENISH_ID}
+    ${package}=         Get Package By ID    ${TEST_PACKAGE_ID}
+    
+    Should Be Equal     ${replenish}[warehouseId]    ${package}[warehouseId]
+    ...    msg=Replenishment and package warehouse IDs do not match
+    
+    Log                 Successfully verified replenishment and package integration
+
+13 - Cleanup Test Environment
+    [Documentation]     Clean up all test resources
+    [Tags]              cleanup
+    
+    Run Keyword If      "${TEST_PACKAGE_ID}" != "${EMPTY}"
+    ...                 Delete Package    ${TEST_PACKAGE_ID}
+    Run Keyword If      "${TEST_REPLENISH_ID}" != "${EMPTY}"
+    ...                 Delete Replenishment    ${TEST_REPLENISH_ID}
+    Run Keyword If      "${TEST_RECEIPT_ID}" != "${EMPTY}"
+    ...                 Delete Receipt    ${TEST_RECEIPT_ID}
+    Run Keyword If      "${TEST_PRODUCT_ID}" != "${EMPTY}"
+    ...                 Delete Product    ${TEST_PRODUCT_ID}
+    
+    Log                 Test environment cleaned up successfully

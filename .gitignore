@@ -1,0 +1,11 @@
+# .gitignore
+# Cursor IDE
+.cursorignore
+.cursor/
+
+# Robot Framework
+robot/results/*
+robot/logs/
+robot/output.xml
+robot/report.html
+robot/log.html
