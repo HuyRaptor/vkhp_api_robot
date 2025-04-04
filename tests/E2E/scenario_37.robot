@@ -8,29 +8,9 @@ Library           OperatingSystem
 Library           String
 Library           DateTime
 Library           Process
+Resource          ../../Variables/variables.robot
 Suite Setup       Setup Test Suite
 Suite Teardown    Teardown Test Suite
-
-*** Variables ***
-${BASE_URL}             https://api.vkho.net
-${USERNAME}             huynh22.manager
-${PASSWORD}             Snowfox1991
-${RESULTS_DIR}          ${CURDIR}${/}results
-${SUMMARY_FILE}         ${RESULTS_DIR}${/}purchase_order_test_summary.txt
-${TEST_WAREHOUSE_ID}    ${EMPTY}
-${TEST_SUPPLIER_ID}     ${EMPTY}
-${TEST_PURCHASE_ORDER_ID}  ${EMPTY}
-${TEST_WAREHOUSE_NAME}  ${EMPTY}
-${TEST_SUPPLIER_NAME}   ${EMPTY}
-${TEST_PURCHASE_ORDER_CODE}  ${EMPTY}
-${MAX_RETRIES}          3
-${RETRY_DELAY}          2
-${START_TIME}           ${EMPTY}
-${OPERATION_COUNT}      0
-${TIMEOUT_DELAY}        5    # Simulated timeout delay in seconds
-${API_VERSION}          v1.1
-${PAGE_SIZE}            10
-${CONCURRENT_THREADS}   3    # Number of concurrent operations
 
 *** Keywords ***
 Setup Test Suite

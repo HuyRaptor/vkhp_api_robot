@@ -6,17 +6,7 @@ Library           Collections
 Library           OperatingSystem
 Library           String
 Library           DateTime
-
-*** Variables ***
-${BASE_URL}                      https://api.vkho.net
-${USERNAME}                      huynh22.manager
-${PASSWORD}                      Snowfox1991
-${WAREHOUSE_ID}                  6
-${PARENT_PRODUCT_CATEGORY_ID}    1  # This would be set to an actual parent category ID
-${RESULTS_DIR}                   ${CURDIR}${/}results
-${TEST_CATEGORY_ID}              ${EMPTY}
-${TEST_CATEGORY_NAME}            ${EMPTY}
-${TEST_CATEGORY_DATA}            ${EMPTY}
+Resource          ../../Variables/variables.robot
 
 *** Keywords ***
 Setup API Session

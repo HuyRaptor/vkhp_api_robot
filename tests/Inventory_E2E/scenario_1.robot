@@ -7,19 +7,7 @@ Library           Collections
 Library           OperatingSystem
 Library           String
 Library           DateTime
-
-*** Variables ***
-${BASE_URL}             https://api.vkho.net
-${MANAGER_USERNAME}     huynh22.manager
-${MANAGER_PASSWORD}     Snowfox1991
-${RESULTS_DIR}          ${CURDIR}${/}results
-${TEST_MASTER_PRODUCT_ID}    ${EMPTY}
-${TEST_PRODUCT_ID}           ${EMPTY}
-${TEST_WAREHOUSE_ID}         ${EMPTY}
-${TEST_RACK_ID}              ${EMPTY}
-${MAX_QUANTITY}              10000   # Maximum product quantity
-${MIN_QUANTITY}              1      # Minimum product quantity
-${CURRENT_DATE}              2025-04-02T00:00:00Z    # Fixed date for testing
+Resource          ../../Variables/variables.robot
 
 *** Keywords ***
 Setup Manager Session

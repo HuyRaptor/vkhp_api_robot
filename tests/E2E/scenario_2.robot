@@ -6,47 +6,7 @@ Library           Collections
 Library           OperatingSystem
 Library           String
 Library           DateTime
-
-*** Variables ***
-${BASE_URL}             https://api.vkho.net
-${USERNAME}             huynh22.manager
-${PASSWORD}             Snowfox1991
-${WAREHOUSE_ID}         6
-${RESULTS_DIR}          ${CURDIR}${/}results
-${TEST_ORDER_ID}        ${EMPTY}
-${TEST_ORDER_CODE}      ${EMPTY}
-${TEST_ORDER_DATA}      ${EMPTY}
-${TEST_PACKAGE_ID}      ${EMPTY}
-${INITIAL_DRIVER}       Placeholder Driver
-${ASSIGNED_DRIVER}      Priority Driver 001
-
-# Order Status Constants from OpenAPI
-${STATUS_NEW}           NEW
-${STATUS_PICKING}       PICKING
-${STATUS_PACKAGED}      PACKAGED
-${STATUS_READY}         READY
-${STATUS_DISABLE}       DISABLE
-${STATUS_MOVING}        MOVING
-${STATUS_SUCCESS}       SUCCESS
-${STATUS_WAITING}       WAITING
-${STATUS_INITIAL}       INITIAL
-${STATUS_WAIT_PAYMENT}  WAIT_PAYMENT
-${STATUS_SUBMITTED}     SUBMITTED
-${STATUS_AWAIT_PICKUP}  AWAITING_PICKUP
-${STATUS_DELIVERING}    DELIVERING
-${STATUS_DELIVERED}     DELIVERED
-${STATUS_CANCELLED}     CANCELLED
-${STATUS_PAYMENT_FAIL}  PAYMENT_FAILED
-${STATUS_RETURN}        RETURN
-
-# Package Status Constants from OpenAPI
-${PACKAGE_STATUS_ENABLE}    ENABLE
-${PACKAGE_STATUS_DISABLE}   DISABLE
-${PACKAGE_STATUS_NEW}       NEW
-${PACKAGE_STATUS_WAITING}   WAITING
-${PACKAGE_STATUS_SHIPPING}  SHIPPING
-${PACKAGE_STATUS_LOST}      LOST
-${PACKAGE_STATUS_ERROR}     ERROR
+Resource          ../../Variables/variables.robot
 
 *** Keywords ***
 Setup API Session

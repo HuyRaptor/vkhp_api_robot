@@ -6,6 +6,7 @@ Library           Collections
 Library           OperatingSystem
 Library           String
 Library           DateTime
+Resource          ../../Variables/variables.robot
 
 *** Variables ***
 ${BASE_URL}             https://api.vkho.net

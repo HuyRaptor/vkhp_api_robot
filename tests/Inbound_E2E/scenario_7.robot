@@ -6,49 +6,7 @@ Library           Collections
 Library           OperatingSystem
 Library           String
 Library           DateTime
-
-*** Variables ***
-${BASE_URL}             https://api.vkho.net
-${ADMIN_USERNAME}       huynh22.admin
-${ADMIN_PASSWORD}       Snowfox1991
-${MANAGER_USERNAME}     huynh22.manager
-${MANAGER_PASSWORD}     Snowfox1991
-${WAREHOUSE_ID}         6
-${RESULTS_DIR}          ${CURDIR}${/}results
-
-# Test Data Variables
-${TEST_RECEIPT_ID}      ${EMPTY}
-${TEST_RECEIPT_DATA}    ${EMPTY}
-${TEST_PRODUCT_ID}      ${EMPTY}
-${TEST_PRODUCT_DATA}    ${EMPTY}
-${TEST_MASTER_ID}       ${EMPTY}
-${TEST_MASTER_DATA}     ${EMPTY}
-${TEST_REPLENISH_ID}    ${EMPTY}
-${TEST_REPLENISH_DATA}  ${EMPTY}
-${TEST_PACKAGE_ID}      ${EMPTY}
-${TEST_PACKAGE_DATA}    ${EMPTY}
-
-# Status Constants from OpenAPI
-${RECEIPT_STATUS_NEW}           NEW
-${RECEIPT_STATUS_PENDING}       PENDING
-${RECEIPT_STATUS_COMPLETED}     COMPLETED
-${RECEIPT_STATUS_CANCELLED}     CANCELLED
-
-${PRODUCT_STATUS_ENABLE}        ENABLE
-${PRODUCT_STATUS_DISABLE}       DISABLE
-
-${MASTER_STATUS_ENABLE}         ENABLE
-${MASTER_STATUS_DISABLE}        DISABLE
-
-${REPLENISH_STATUS_NEW}         NEW
-${REPLENISH_STATUS_PENDING}     PENDING
-${REPLENISH_STATUS_COMPLETED}   COMPLETED
-${REPLENISH_STATUS_CANCELLED}   CANCELLED
-
-${PACKAGE_STATUS_NEW}           NEW
-${PACKAGE_STATUS_PENDING}       PENDING
-${PACKAGE_STATUS_COMPLETED}     COMPLETED
-${PACKAGE_STATUS_CANCELLED}     CANCELLED
+Resource          ../../Variables/variables.robot
 
 *** Keywords ***
 Setup API Session As Admin

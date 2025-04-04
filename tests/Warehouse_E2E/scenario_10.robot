@@ -7,28 +7,7 @@ Library           Collections
 Library           OperatingSystem
 Library           String
 Library           DateTime
-
-*** Variables ***
-${BASE_URL}             https://api.vkho.net
-${ADMIN_USERNAME}       huynh22
-${ADMIN_PASSWORD}       Snowfox1991
-${TENANT1_USERNAME}     tenant1.manager
-${TENANT1_PASSWORD}     Tenant1Pass
-${TENANT2_USERNAME}     tenant2.manager
-${TENANT2_PASSWORD}     Tenant2Pass
-${RESULTS_DIR}          ${CURDIR}${/}results
-@{TEST_WAREHOUSE_IDS}   ${EMPTY}
-@{TEST_ZONE_IDS}        ${EMPTY}
-@{TEST_BLOCK_IDS}       ${EMPTY}
-@{TEST_RACK_IDS}        ${EMPTY}
-${TEST_PRODUCT_ID}      ${EMPTY}
-${MAX_WAREHOUSE_ACREAGE}    7000    # Max total acreage
-${MAX_ZONE_CAPACITY}        3000    # Max capacity per zone
-${MAX_BLOCK_CAPACITY}       1500    # Max capacity per block
-${MAX_RACK_CAPACITY}        700     # Max capacity per rack
-${MAX_BATCH_QUANTITY}       5000    # Max units per batch
-${TENANT_ID_1}              tenant1
-${TENANT_ID_2}              tenant2
+Resource          ../../Variables/variables.robot
 
 *** Keywords ***
 Setup Admin Session

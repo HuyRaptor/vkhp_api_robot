@@ -9,24 +9,7 @@ Library           DateTime
 Library           BuiltIn
 Library           Process
 Library           JSONLibrary
-
-*** Variables ***
-${BASE_URL}             https://api.vkho.net
-${USERNAME}             huynh22.manager
-${PASSWORD}             Snowfox1991
-${WAREHOUSE_ID}         6
-${RESULTS_DIR}          ${CURDIR}${/}results
-${TEST_ORDER_ID}        ${EMPTY}
-${TEST_ORDER_DATA}      ${EMPTY}
-${TEST_PRODUCT_ORDER_ID} ${EMPTY}
-${TEST_CUSTOMER_ID}     ${EMPTY}
-${MAX_QUANTITY}         9999
-${MIN_QUANTITY}         1
-${MAX_STRING_LENGTH}    255
-${MIN_STRING_LENGTH}    1
-${MAX_ORDERS}           10
-${CONCURRENT_REQUESTS}  5
-${TIMEOUT}              30s
+Resource          ../../Variables/variables.robot
 
 *** Keywords ***
 Setup API Session

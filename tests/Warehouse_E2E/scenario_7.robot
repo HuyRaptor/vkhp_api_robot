@@ -7,19 +7,7 @@ Library           Collections
 Library           OperatingSystem
 Library           String
 Library           DateTime
-
-*** Variables ***
-${BASE_URL}             https://api.vkho.net
-${ADMIN_USERNAME}       huynh22
-${ADMIN_PASSWORD}       Snowfox1991
-${MANAGER_USERNAME}     huynh22.manager
-${MANAGER_PASSWORD}     Snowfox1991
-${RESULTS_DIR}          ${CURDIR}${/}results
-@{TEST_WAREHOUSE_IDS}   ${EMPTY}
-${TEST_ZONE_ID}         ${EMPTY}
-${TEST_RACK_ID}         ${EMPTY}
-${TEST_PRODUCT_ID}      ${EMPTY}
-${MAX_PRODUCT_QUANTITY}  1000    # Total product units across all warehouses
+Resource          ../../Variables/variables.robot
 
 *** Keywords ***
 Setup Admin Session

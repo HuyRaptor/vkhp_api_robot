@@ -6,35 +6,7 @@ Library           Collections
 Library           OperatingSystem
 Library           String
 Library           DateTime
-
-*** Variables ***
-${BASE_URL}             https://api.vkho.net
-${USERNAME}             huynh22.manager
-${PASSWORD}             Snowfox1991
-${WAREHOUSE_ID}         6
-${RESULTS_DIR}          ${CURDIR}${/}results
-${TEST_ORDER_ID}        ${EMPTY}
-${TEST_ORDER_DATA}      ${EMPTY}
-${TEST_PRODUCT_ORDER_ID} ${EMPTY}
-
-# Order Status Constants
-${STATUS_NEW}           NEW
-${STATUS_PICKING}       PICKING
-${STATUS_PACKAGED}      PACKAGED
-${STATUS_READY}         READY
-${STATUS_DISABLE}       DISABLE
-${STATUS_MOVING}        MOVING
-${STATUS_SUCCESS}       SUCCESS
-${STATUS_WAITING}       WAITING
-${STATUS_INITIAL}       INITIAL
-${STATUS_WAIT_PAYMENT}  WAIT_PAYMENT
-${STATUS_SUBMITTED}     SUBMITTED
-${STATUS_AWAITING_PICKUP} AWAITING_PICKUP
-${STATUS_DELIVERING}    DELIVERING
-${STATUS_DELIVERED}     DELIVERED
-${STATUS_CANCELLED}     CANCELLED
-${STATUS_PAYMENT_FAILED} PAYMENT_FAILED
-${STATUS_RETURN}        RETURN
+Resource          ../../Variables/variables.robot
 
 *** Keywords ***
 Setup API Session

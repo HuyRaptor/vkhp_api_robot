@@ -8,30 +8,7 @@ Library           OperatingSystem
 Library           String
 Library           DateTime
 Library           BuiltIn
-
-*** Variables ***
-${BASE_URL}             https://api.vkho.net
-${MANAGER_USERNAME}     huynh22.manager
-${MANAGER_PASSWORD}     Snowfox1991
-${RESULTS_DIR}          ${CURDIR}${/}results
-${TEST_WAREHOUSE1_ID}   ${EMPTY}
-${TEST_WAREHOUSE2_ID}   ${EMPTY}
-${TEST_RACK1_ID}        ${EMPTY}
-${TEST_RACK2_ID}        ${EMPTY}
-${TEST_SUPPLIER_ID}     ${EMPTY}
-${TEST_CAT1_ID}         ${EMPTY}    # Parent category (e.g., Electronics)
-${TEST_CAT2_ID}         ${EMPTY}    # Subcategory (e.g., Laptops)
-${TEST_CAT3_ID}         ${EMPTY}    # Sub-subcategory (e.g., Gaming)
-${TEST_MASTER_ID1}      ${EMPTY}
-${TEST_MASTER_ID2}      ${EMPTY}
-${TEST_PRODUCT_ID1}     ${EMPTY}
-${TEST_PRODUCT_ID2}     ${EMPTY}
-${MAX_QUANTITY}         10000      # Maximum product/rack capacity
-${MIN_QUANTITY}         1         # Minimum product quantity
-${REPLENISH_THRESHOLD}  500       # Threshold for replenishment
-${CURRENT_DATE}         2025-04-02T00:00:00Z    # Fixed date for testing
-${NEAR_EXPIRY_DATE}     2025-04-10T00:00:00Z    # Near expiration for edge case
-${EXPIRED_DATE}         2025-03-01T00:00:00Z    # Already expired
+Resource          ../../Variables/variables.robot
 
 *** Keywords ***
 Setup Manager Session

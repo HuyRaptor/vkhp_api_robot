@@ -8,17 +8,7 @@ Library           OperatingSystem
 Library           String
 Library           DateTime
 Library           BuiltIn
-
-*** Variables ***
-${BASE_URL}             https://api.vkho.net
-${ADMIN_USERNAME}       huynh22
-${ADMIN_PASSWORD}       Snowfox1991
-${RESULTS_DIR}          ${CURDIR}${/}results
-${TEST_USER_ID}         ${EMPTY}
-${TEST_USERNAME}        ${EMPTY}
-${TEST_USER_DATA}       ${EMPTY}
-${BULK_USER_IDS}        ${EMPTY}
-${AUTH_TOKEN}           ${EMPTY}
+Resource          ../../Variables/variables.robot
 
 *** Keywords ***
 Setup API Session

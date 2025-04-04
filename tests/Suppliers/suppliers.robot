@@ -6,13 +6,7 @@ Library           Collections
 Library           OperatingSystem
 Library           String
 Library           DateTime
-
-*** Variables ***
-${BASE_URL}             https://api.vkho.net
-${USERNAME}             huynh22.manager
-${PASSWORD}             Snowfox1991
-${WAREHOUSE_ID}         6
-${PRODUCT_CATEGORY_ID}  37
+Resource          ../../Variables/variables.robot
 
 *** Test Cases ***
 01 - Login And Get Authentication Token

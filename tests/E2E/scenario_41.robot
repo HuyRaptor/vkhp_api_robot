@@ -7,17 +7,7 @@ Library           OperatingSystem
 Library           String
 Library           DateTime
 Library           BuiltIn
-
-*** Variables ***
-${BASE_URL}             https://api.vkho.net
-${USERNAME}             huynh22
-${PASSWORD}             Snowfox1991
-${PRODUCT_CATEGORY_ID}  37
-${RESULTS_DIR}          ${CURDIR}${/}results
-${TEST_WAREHOUSE_ID}    ${EMPTY}
-${TEST_WAREHOUSE_NAME}  ${EMPTY}
-${TEST_WAREHOUSE_DATA}  ${EMPTY}
-${BULK_WAREHOUSE_IDS}   ${EMPTY}
+Resource          ../../Variables/variables.robot
 
 *** Keywords ***
 Setup API Session

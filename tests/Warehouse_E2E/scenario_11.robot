@@ -7,25 +7,7 @@ Library           Collections
 Library           OperatingSystem
 Library           String
 Library           DateTime
-
-*** Variables ***
-${BASE_URL}             https://api.vkho.net
-${ADMIN_USERNAME}       huynh22
-${ADMIN_PASSWORD}       Snowfox1991
-${MANAGER_USERNAME}     huynh22.manager
-${MANAGER_PASSWORD}     Snowfox1991
-${RESULTS_DIR}          ${CURDIR}${/}results
-${TEST_WAREHOUSE_ID}    ${EMPTY}
-@{TEST_ZONE_IDS}        ${EMPTY}
-@{TEST_BLOCK_IDS}       ${EMPTY}
-@{TEST_RACK_IDS}        ${EMPTY}
-${TEST_PRODUCT_ID}      ${EMPTY}
-${MAX_WAREHOUSE_ACREAGE}    8000    # Max total acreage
-${MAX_ZONE_CAPACITY}        3500    # Max capacity per zone
-${MAX_BLOCK_CAPACITY}       1800    # Max capacity per block
-${MAX_RACK_CAPACITY}        800     # Max capacity per rack
-${MAX_BATCH_QUANTITY}       6000    # Max units per batch
-${CURRENT_DATE}             2025-04-01T00:00:00Z    # Fixed date for testing
+Resource          ../../Variables/variables.robot
 
 *** Keywords ***
 Setup Admin Session

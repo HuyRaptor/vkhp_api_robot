@@ -7,22 +7,7 @@ Library           Collections
 Library           OperatingSystem
 Library           String
 Library           DateTime
-
-*** Variables ***
-${BASE_URL}             https://api.vkho.net
-# Admin account for warehouse management
-${ADMIN_USERNAME}       huynh22
-${ADMIN_PASSWORD}       Snowfox1991
-# Manager account for zones and racks management
-${MANAGER_USERNAME}     huynh22.manager
-${MANAGER_PASSWORD}     Snowfox1991
-${RESULTS_DIR}          ${CURDIR}${/}results
-# Test data placeholders
-${TEST_WAREHOUSE_ID}    ${EMPTY}
-${TEST_WAREHOUSE_NAME}  ${EMPTY}
-${TEST_ZONE_ID}         ${EMPTY}
-${TEST_ZONE_NAME}       ${EMPTY}
-${TEST_RACK_ID}         ${EMPTY}
+Resource          ../../Variables/variables.robot
 
 *** Keywords ***
 Setup Admin API Session

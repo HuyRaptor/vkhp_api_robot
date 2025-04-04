@@ -7,21 +7,7 @@ Library           Collections
 Library           OperatingSystem
 Library           String
 Library           DateTime
-
-*** Variables ***
-${BASE_URL}             https://api.vkho.net
-${ADMIN_USERNAME}       admin
-${ADMIN_PASSWORD}       admin
-${MANAGER_USERNAME}     huynh22.manager
-${MANAGER_PASSWORD}     Snowfox1991
-${WAREHOUSE_ID}         6
-${ZONE_ID}              ${EMPTY}
-${PRODUCT_ID}           ${EMPTY}
-${TRANSFER_ID}          ${EMPTY}
-${RESULTS_DIR}          ${CURDIR}${/}results
-${INVALID_ZONE_ID}      999999
-${INVALID_PRODUCT_ID}   999999
-${INVALID_WAREHOUSE_ID} 999999
+Resource          ../../Variables/variables.robot
 
 *** Keywords ***
 Setup API Session

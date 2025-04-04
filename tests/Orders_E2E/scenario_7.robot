@@ -9,51 +9,7 @@ Library           DateTime
 Library           BuiltIn
 Library           Process
 Library           JSONLibrary
-
-*** Variables ***
-${BASE_URL}                     https://api.vkho.net
-${USERNAME}                     huynh22.manager
-${PASSWORD}                     Snowfox1991
-${WAREHOUSE_ID}                 6
-${RESULTS_DIR}                  ${CURDIR}${/}results
-${TEST_ORDER_ID}                ${EMPTY}
-${TEST_ORDER_DATA}              ${EMPTY}
-${TEST_PRODUCT_ORDER_ID}        ${EMPTY}
-${TEST_CUSTOMER_ID}             ${EMPTY}
-
-# Processing Constants
-${MAX_QUANTITY}                 9999
-${MIN_QUANTITY}                 1
-${MAX_ITEMS_PER_ORDER}         100
-${MAX_TOTAL_AMOUNT}            1000000
-${MIN_TOTAL_AMOUNT}            0
-${MAX_PRODUCTS_PER_ORDER}      50
-${MIN_PRODUCTS_PER_ORDER}      1
-${MAX_ORDER_WEIGHT}            1000
-${MIN_ORDER_WEIGHT}            0.1
-${MAX_ORDER_VOLUME}            100
-${MIN_ORDER_VOLUME}            0.01
-
-# Business Rule Constants
-${MIN_DELIVERY_TIME}           1h
-${MAX_DELIVERY_TIME}           7d
-${MAX_RETRY_ATTEMPTS}          3
-${RETRY_DELAY}                 5s
-${MAX_CONCURRENT_ORDERS}       5
-${MIN_ORDER_INTERVAL}          1m
-${MAX_ORDER_PRIORITY}          5
-${MIN_ORDER_PRIORITY}          1
-${MAX_DISCOUNT_PERCENT}        50
-${MIN_DISCOUNT_PERCENT}        0
-
-# Order Status Constants
-${ORDER_STATUS_NEW}            NEW
-${ORDER_STATUS_DRAFT}          DRAFT
-${ORDER_STATUS_PICKING}        PICKING
-${ORDER_STATUS_PACKAGED}       PACKAGED
-${ORDER_STATUS_SHIPPED}        SHIPPED
-${ORDER_STATUS_DELIVERED}      DELIVERED
-${ORDER_STATUS_CANCELLED}      CANCELLED
+Resource          ../../Variables/variables.robot
 
 *** Keywords ***
 Setup API Session

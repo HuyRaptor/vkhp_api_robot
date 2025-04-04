@@ -7,19 +7,7 @@ Library           Collections
 Library           OperatingSystem
 Library           String
 Library           DateTime
-
-*** Variables ***
-${BASE_URL}             https://api.vkho.net
-${ADMIN_USERNAME}       huynh22
-${ADMIN_PASSWORD}       Snowfox1991
-${MANAGER_USERNAME}     huynh22.manager
-${MANAGER_PASSWORD}     Snowfox1991
-${RESULTS_DIR}          ${CURDIR}${/}results
-${TEST_WAREHOUSE_ID}    ${EMPTY}
-@{TEST_ZONE_IDS}        ${EMPTY}
-@{TEST_RACK_IDS}        ${EMPTY}
-${MAX_WAREHOUSE_CAPACITY}    5000    # Total capacity in square footage
-${MAX_ZONE_CAPACITY}         2000    # Max capacity per zone
+Resource          ../../Variables/variables.robot
 
 *** Keywords ***
 Setup Admin Session

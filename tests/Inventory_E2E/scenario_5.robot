@@ -8,25 +8,7 @@ Library           OperatingSystem
 Library           String
 Library           DateTime
 Library           BuiltIn
-
-*** Variables ***
-${BASE_URL}             https://api.vkho.net
-${MANAGER_USERNAME}     huynh22.manager
-${MANAGER_PASSWORD}     Snowfox1991
-${RESULTS_DIR}          ${CURDIR}${/}results
-${TEST_WAREHOUSE1_ID}   ${EMPTY}
-${TEST_WAREHOUSE2_ID}   ${EMPTY}
-${TEST_RACK1_ID}        ${EMPTY}
-${TEST_RACK2_ID}        ${EMPTY}
-${TEST_SUPPLIER_ID1}    ${EMPTY}
-${TEST_SUPPLIER_ID2}    ${EMPTY}
-${TEST_MASTER_ID1}      ${EMPTY}
-${TEST_MASTER_ID2}      ${EMPTY}
-${TEST_PRODUCT_IDS}     @{EMPTY}    # List to store batch-created product IDs
-${MAX_QUANTITY}         10000      # Maximum product/rack capacity
-${MIN_QUANTITY}         1         # Minimum product quantity
-${MAX_BATCH_SIZE}       50        # Maximum products in a batch
-${CURRENT_DATE}         2025-04-02T00:00:00Z    # Fixed date for testing
+Resource          ../../Variables/variables.robot
 
 *** Keywords ***
 Setup Manager Session

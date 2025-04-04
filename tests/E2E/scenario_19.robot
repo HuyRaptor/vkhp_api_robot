@@ -6,24 +6,7 @@ Library           Collections
 Library           OperatingSystem
 Library           String
 Library           DateTime
-
-*** Variables ***
-${BASE_URL}             https://api.vkho.net
-${USERNAME}             huynh22.manager
-${PASSWORD}             Snowfox1991
-${WAREHOUSE_ID}         6
-${SUPPLIER_ID}          56
-${PRODUCT_CATEGORY_ID}  37
-${BLOCK_ID}             ${EMPTY}
-${SHELF_ID}             ${EMPTY}
-${RACK_ID}              ${EMPTY}
-${POSITION_CAPACITY}    20       # Example capacity per position in units
-${RACK_CAPACITY}        50
-${SHELF_CAPACITY}       100
-${BLOCK_CAPACITY}       200
-${RESULTS_DIR}          ${CURDIR}${/}results
-${PRODUCT_IDS}          ${EMPTY}  # List for multiple products
-${ORDER_IDS}            ${EMPTY}  # List for multiple orders
+Resource          ../../Variables/variables.robot
 
 *** Keywords ***
 Setup API Session

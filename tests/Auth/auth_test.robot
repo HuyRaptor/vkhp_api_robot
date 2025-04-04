@@ -5,12 +5,7 @@ Library           Collections
 Library           OperatingSystem
 Library           String
 Library           DateTime
-
-*** Variables ***
-${BASE_URL}        https://api.vkho.net
-${USERNAME}        huynh22.manager
-${PASSWORD}        Snowfox1991
-${RESULTS_DIR}     ${CURDIR}${/}results
+Resource          ../../Variables/variables.robot
 
 *** Test Cases ***
 User Should Be Able To Login
