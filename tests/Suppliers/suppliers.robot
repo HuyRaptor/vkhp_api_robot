@@ -18,7 +18,7 @@ Resource          ../../Variables/variables.robot
     
     # Prepare login request
     ${headers}=         Create Dictionary    Content-Type=application/json
-    ${body}=            Create Dictionary    username=${USERNAME}    password=${PASSWORD}
+    ${body}=            Create Dictionary    username=${MANAGER_USERNAME}    password=${MANAGER_PASSWORD}
     
     # Send login request
     ${response}=        POST On Session

@@ -10,8 +10,8 @@ Resource          ../../Variables/variables.robot
 
 *** Variables ***
 ${BASE_URL}             https://api.vkho.net
-${USERNAME}             huynh22.manager
-${PASSWORD}             Snowfox1991
+${MANAGER_USERNAME}             huynh22.manager
+${MANAGER_PASSWORD}             Snowfox1991
 ${WAREHOUSE_ID}         6
 ${PRODUCT_CATEGORY_ID}  37
 ${RESULTS_DIR}          ${CURDIR}${/}results
@@ -26,7 +26,7 @@ Setup API Session
     
     # Prepare login request
     ${headers}=         Create Dictionary    Content-Type=application/json
-    ${body}=            Create Dictionary    username=${USERNAME}    password=${PASSWORD}
+    ${body}=            Create Dictionary    username=${MANAGER_USERNAME}    password=${MANAGER_PASSWORD}
     
     # Send login request
     ${response}=        POST On Session

@@ -44,13 +44,13 @@ Generate Unique User Data
     [Arguments]         ${custom_username}=testuser    ${role}=USER
     
     ${timestamp}=       Evaluate         int(time.time())    time
-    ${username}=        Set Variable     ${custom_username}${timestamp}
+    ${MANAGER_USERNAME}=        Set Variable     ${custom_username}${timestamp}
     
     # Base user data
     ${user_data}=       Create Dictionary
-    ...                 username=${username}
+    ...                 username=${MANAGER_USERNAME}
     ...                 password=Password${timestamp}!
-    ...                 email=${username}@example.com
+    ...                 email=${MANAGER_USERNAME}@example.com
     ...                 fullName=Test User ${timestamp}
     ...                 role=${role}
     
@@ -207,10 +207,10 @@ Get All Users
 
 Authenticate User
     [Documentation]     Authenticate a user and return their token
-    [Arguments]         ${username}    ${password}
+    [Arguments]         ${MANAGER_USERNAME}    ${MANAGER_PASSWORD}
     
     ${headers}=         Create Dictionary    Content-Type=application/json
-    ${body}=            Create Dictionary    username=${username}    password=${password}
+    ${body}=            Create Dictionary    username=${MANAGER_USERNAME}    password=${MANAGER_PASSWORD}
     
     ${response}=        POST On Session
     ...                 vkho

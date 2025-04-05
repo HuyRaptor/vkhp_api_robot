@@ -13,7 +13,7 @@ User Should Be Able To Login
     [Tags]    authentication    login    positive
     # Create session
     ${headers}=    Create Dictionary    Content-Type=application/json
-    ${body}=       Create Dictionary    username=${USERNAME}    password=${PASSWORD}
+    ${body}=       Create Dictionary    username=${MANAGER_USERNAME}    password=${MANAGER_PASSWORD}
     
     # Send login request
     Create Session    vkho    ${BASE_URL}    verify=True    disable_warnings=True

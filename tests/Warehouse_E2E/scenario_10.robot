@@ -28,10 +28,10 @@ Setup Admin Session
 
 Setup Tenant Session
     [Documentation]     Create API session and authenticate with tenant credentials
-    [Arguments]         ${username}    ${password}    ${tenant_id}
+    [Arguments]         ${MANAGER_USERNAME}    ${MANAGER_PASSWORD}    ${tenant_id}
     Create Session      vkho             ${BASE_URL}      verify=True    disable_warnings=True
     ${headers}=         Create Dictionary    Content-Type=application/json    X-Tenant-Id=${tenant_id}
-    ${body}=            Create Dictionary    username=${username}    password=${password}
+    ${body}=            Create Dictionary    username=${MANAGER_USERNAME}    password=${MANAGER_PASSWORD}
     ${response}=        POST On Session
     ...                 vkho
     ...                 /auth/login

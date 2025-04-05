@@ -32,7 +32,7 @@ Setup API Session
     [Documentation]     Create API session and authenticate
     Create Session      vkho             ${BASE_URL}      verify=True    disable_warnings=True
     ${headers}=         Create Dictionary    Content-Type=application/json
-    ${body}=            Create Dictionary    username=${USERNAME}    password=${PASSWORD}
+    ${body}=            Create Dictionary    username=${MANAGER_USERNAME}    password=${MANAGER_PASSWORD}
     ${response}=        POST On Session
     ...                 vkho
     ...                 /auth/login
