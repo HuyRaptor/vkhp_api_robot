@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 *** Settings ***
 Documentation     Comprehensive Test Suite for Receipt Operations with Master Products and Replenishments in vKho API
 ...               Includes product management, master products, replenishments, and package handling with product order constraints
@@ -476,3 +477,5 @@ Create Package
     ...                 Delete Master Product    ${TEST_MASTER_ID}
     
     Log                 Test environment cleaned up successfully
+=======
+>>>>>>> parent of 9c39705 (Update test_suite_04032025_v1.3)
