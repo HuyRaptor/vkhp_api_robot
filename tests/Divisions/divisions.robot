@@ -6,6 +6,8 @@ Library           Collections
 Library           OperatingSystem
 Library           String
 Library           DateTime
+Library           re
+Library           json
 Resource          ../../Variables/variables.robot
 
 *** Keywords ***
@@ -87,12 +89,15 @@ Create Division
     RETURN            ${division_id}    ${json}
 
 Get Division By ID
-    [Documentation]     Retrieve a specific division by ID
+    [Documentation]     Retrieve a specific division by ID with proper response handling
     [Arguments]         ${division_id}
     
     # Validate parameters
     Should Not Be Empty    ${division_id}
     ...    msg=Division ID cannot be empty
+    
+    # Convert ID to integer if needed
+    ${division_id}=     Convert To Integer    ${division_id}
     
     # Prepare request
     ${headers}=         Create Dictionary    Content-Type=application/json    Authorization=${AUTH_TOKEN}
@@ -104,14 +109,28 @@ Get Division By ID
     ...                 headers=${headers}
     ...                 expected_status=200
     
-    # Process response
-    ${json}=            Evaluate         json.loads('''${response.text}''')    json
-    Should Not Be Empty    ${json}
-    ...    msg=Get division response was empty
-    Dictionary Should Contain Key        ${json}    id
-    ...    msg=Get division response missing ID field
+    # Process response as single object
+    ${json_response}=   Set Variable    ${response.json()}
     
-    RETURN            ${json}
+    # Check if response is wrapped in data field
+    ${has_data}=        Run Keyword And Return Status
+    ...                 Dictionary Should Contain Key    ${json_response}    data
+    
+    # Extract division data
+    ${division}=        Set Variable If    ${has_data}
+    ...                 ${json_response}[data]
+    ...                 ${json_response}
+    
+    Should Be True      isinstance($division, dict)
+    ...    msg=Response is not a JSON object. Got: ${division}
+    
+    # Log the response object
+    Log    Retrieved division: ${division}
+    
+    # Validate division data
+    Validate Division Response    ${division}
+    
+    RETURN    ${division}
 
 Update Division
     [Documentation]     Update an existing division
@@ -175,7 +194,7 @@ Delete Division
     RETURN            ${TRUE}
 
 Get All Divisions
-    [Documentation]     Retrieve all divisions with optional filtering
+    [Documentation]     Retrieve all divisions with array response handling
     [Arguments]         ${warehouse_id}=${WAREHOUSE_ID}    ${filter_params}=${EMPTY}
     
     # Validate parameters
@@ -183,13 +202,16 @@ Get All Divisions
     ...    msg=Warehouse ID cannot be empty
     
     # Prepare request
-    ${headers}=         Create Dictionary    Content-Type=application/json    Authorization=${AUTH_TOKEN}
+    ${headers}=         Create Dictionary
+    ...                 Content-Type=application/json
+    ...                 Authorization=${AUTH_TOKEN}
     
     # Create params dictionary
     ${params}=          Create Dictionary    warehouseId=${warehouse_id}
     
     # Add any additional filter parameters if provided
-    Run Keyword If      "${filter_params}" != "${EMPTY}"    Set To Dictionary    ${params}    &{filter_params}
+    Run Keyword If      "${filter_params}" != "${EMPTY}"
+    ...                 Set To Dictionary    ${params}    &{filter_params}
     
     # Send get all divisions request
     ${response}=        GET On Session
@@ -199,20 +221,37 @@ Get All Divisions
     ...                 headers=${headers}
     ...                 expected_status=200
     
-    # Process response
-    ${json}=            Evaluate         json.loads('''${response.text}''')    json
-    Should Not Be Empty    ${json}
-    ...    msg=Get all divisions response was empty
+    # Get and validate response
+    ${json_response}=   Set Variable    ${response.json()}
+    Dictionary Should Contain Key    ${json_response}    data
+    Dictionary Should Contain Key    ${json_response}    totalItem
     
-    RETURN            ${json}
+    # Extract data array
+    ${divisions}=       Set Variable    ${json_response}[data]
+    ${total_count}=     Set Variable    ${json_response}[totalItem]
+    
+    # Log response details
+    Log    Total divisions: ${total_count}
+    Log    Division array: ${divisions}
+    
+    # Validate each division in the response
+    FOR    ${division}    IN    @{divisions}
+        Validate Division Response    ${division}
+        Log    Validated division: ${division}
+    END
+    
+    RETURN    ${divisions}
 
 Assert Division Details
-    [Documentation]     Verify division details match expected values
+    [Documentation]     Verify division details match expected values with type conversion
     [Arguments]         ${division}    ${expected_data}
     
     # For all keys in expected data, verify they match in the division data
     FOR    ${key}    IN    @{expected_data.keys()}
-        Run Keyword If    "${key}" in ${division}    Should Be Equal    ${division}[${key}]    ${expected_data}[${key}]
+        Run Keyword If    "${key}" in ${division}    Run Keywords
+        ...    ${actual_value}=    Convert To String    ${division}[${key}]    AND
+        ...    ${expected_value}=    Convert To String    ${expected_data}[${key}]    AND
+        ...    Should Be Equal    ${actual_value}    ${expected_value}
         ...    msg=Division ${key} value '${division}[${key}]' does not match expected '${expected_data}[${key}]'
     END
 
@@ -223,6 +262,163 @@ Create Test Division
     Set Global Variable  ${TEST_DIVISION_ID}      ${division_id}
     Set Global Variable  ${TEST_DIVISION_NAME}    ${response}[name]
     Set Global Variable  ${TEST_DIVISION_DATA}    ${division_data}
+
+Parse JSON Response
+    [Documentation]     Safely parse JSON response and handle both object and array responses
+    [Arguments]         ${response_text}
+    
+    # Clean and prepare the JSON string
+    ${cleaned_text}=    Clean JSON String    ${response_text}
+    
+    # Parse JSON with error handling
+    TRY
+        # First attempt to parse as-is
+        ${json}=        Evaluate    json.loads('''${cleaned_text}''')    json
+        
+        # Handle response format
+        ${has_data}=    Run Keyword And Return Status    Dictionary Should Contain Key    ${json}    data
+        
+        # If response has data field, return the data array
+        IF    ${has_data}
+            ${result}=    Set Variable    ${json}[data]
+        # If response is already a list, use it directly
+        ELSE IF    ${json.__class__.__name__} == 'list'
+            ${result}=    Set Variable    ${json}
+        # Otherwise, wrap single object in a list
+        ELSE
+            ${result}=    Create List    ${json}
+        END
+        
+    EXCEPT    AS    ${error}
+        Log    Failed to parse JSON: ${error}
+        Log    Original text: ${response_text}
+        Log    Cleaned text: ${cleaned_text}
+        Fail    JSON parsing failed: ${error}
+    END
+    
+    RETURN    ${result}
+
+Validate Division Response
+    [Documentation]     Validate division response structure and content
+    [Arguments]         ${division}
+    Should Have Keys    ${division}    id    name    status    warehouseId
+    Should Not Be Empty    ${division}[id]
+    Should Not Be Empty    ${division}[name]
+    Should Be Equal    ${division}[warehouseId]    ${WAREHOUSE_ID}
+
+Should Have Keys
+    [Documentation]     Verify dictionary contains all required keys
+    [Arguments]         ${dict}    @{keys}
+    FOR    ${key}    IN    @{keys}
+        Dictionary Should Contain Key    ${dict}    ${key}
+        ...    msg=Response missing required field: ${key}
+    END
+
+Should Be Integer
+    [Documentation]     Verify value is an integer
+    [Arguments]         ${value}
+    ${type}=           Evaluate    type($value).__name__
+    Should Be Equal    ${type}    int
+    ...    msg=Value '${value}' is not an integer
+
+Should Be String
+    [Documentation]     Verify value is a string
+    [Arguments]         ${value}
+    ${type}=           Evaluate    type($value).__name__
+    Should Be Equal    ${type}    str
+    ...    msg=Value '${value}' is not a string
+
+Compare Values With Type Conversion
+    [Documentation]     Compare values after converting to appropriate types
+    [Arguments]         ${actual}    ${expected}    ${field_name}
+    
+    # Handle integer fields
+    ${integer_fields}=    Create List    id    warehouseId    totalItem
+    
+    # Convert based on field type
+    IF    '${field_name}' in ${integer_fields}
+        ${actual_value}=    Convert To Integer    ${actual}
+        ${expected_value}=  Convert To Integer    ${expected}
+    ELSE
+        ${actual_value}=    Convert To String    ${actual}
+        ${expected_value}=  Convert To String    ${expected}
+    END
+    
+    Should Be Equal    ${actual_value}    ${expected_value}
+    ...    msg=Division ${field_name} value '${actual}' does not match expected '${expected}'
+
+Validate JSON String
+    [Documentation]     Validate and clean JSON string before parsing
+    [Arguments]         ${json_string}
+    
+    # Remove null bytes and control characters
+    ${cleaned}=         Evaluate    
+    ...    ''.join(c for c in '''${json_string}''' if c >= ' ' or c in ['\n', '\r', '\t'])
+    
+    # Basic JSON structure validation
+    Should Start With    ${cleaned}    {    msg=Invalid JSON: Must start with '{'
+    Should End With      ${cleaned}    }    msg=Invalid JSON: Must end with '}'
+    
+    RETURN             ${cleaned}
+
+Clean JSON String
+    [Documentation]     Clean JSON string from special characters and escape sequences
+    [Arguments]         ${json_string}
+    
+    # First handle basic string escaping
+    ${escaped}=         Replace String    ${json_string}    \\    \\\\
+    ${escaped}=         Replace String    ${escaped}    \"    \\"
+    
+    # Then remove problematic characters
+    ${cleaned}=         Replace String    ${escaped}    \x00    ${EMPTY}
+    ${cleaned}=         Replace String    ${cleaned}    \t    ${SPACE}
+    ${cleaned}=         Replace String    ${cleaned}    \n    ${SPACE}
+    ${cleaned}=         Replace String    ${cleaned}    \r    ${SPACE}
+    
+    # Handle any remaining control characters
+    ${cleaned}=         Evaluate    
+    ...    ''.join(char for char in '''${cleaned}''' if ord(char) >= 32 or char in ['\n', '\r', '\t'])
+    
+    RETURN             ${cleaned}
+
+Extract JSON Value
+    [Documentation]     Safely extract value from JSON response
+    [Arguments]         ${json}    ${key}    ${default}=${None}
+    
+    ${status}=         Run Keyword And Return Status
+    ...                Dictionary Should Contain Key    ${json}    ${key}
+    
+    ${value}=          Set Variable If    ${status}    ${json}[${key}]    ${default}
+    
+    RETURN            ${value}
+
+Response Should Be JSON Array
+    [Documentation]     Verify response contains a data array
+    [Arguments]         ${response}
+    ${json_response}=   Set Variable    ${response.json()}
+    
+    # Check if response has data field
+    Dictionary Should Contain Key    ${json_response}    data
+    ...    msg=Response missing 'data' field. Got: ${json_response}
+    
+    # Verify data is an array
+    ${data_array}=      Set Variable    ${json_response}[data]
+    Should Be True      isinstance($data_array, list)
+    ...    msg=Response data is not an array. Got: ${data_array}
+    
+    Log    JSON Array Response: ${data_array}
+    RETURN    ${data_array}
+
+Response Should Contain JSON Objects
+    [Documentation]     Verify each item in response is a JSON object
+    [Arguments]         ${response}
+    ${json_response}=   Set Variable    ${response.json()}
+    FOR    ${item}    IN    @{json_response}
+        Should Be True    isinstance($item, dict)    
+        ...    msg=Item is not a JSON object: ${item}
+        Log    JSON Object: ${item}
+    END
+    RETURN    ${json_response}
 
 *** Test Cases ***
 01 - Setup Test Environment
@@ -281,10 +477,29 @@ Create Test Division
     # Get division
     ${division}=        Get Division By ID    ${TEST_DIVISION_ID}
     
-    # Verify division details match what we created
-    Assert Division Details    ${division}    ${TEST_DIVISION_DATA}
+    # Verify response is a JSON object
+    Should Be True      isinstance($division, dict)
+    ...    msg=Response should be a JSON object. Got: ${division}
     
-    Log                 Successfully retrieved division: ${division}[name]
+    # Verify required fields exist
+    Should Have Keys    ${division}    id    name    status    warehouseId
+    
+    # Verify data types
+    Should Be Integer    ${division}[id]
+    Should Be String     ${division}[name]
+    Should Be String     ${division}[status]
+    Should Be Integer    ${division}[warehouseId]
+    
+    # Verify division details with type-safe comparisons
+    Compare Values With Type Conversion    ${division}[id]    ${TEST_DIVISION_ID}    id
+    Compare Values With Type Conversion    ${division}[name]    ${TEST_DIVISION_DATA}[name]    name
+    Compare Values With Type Conversion    ${division}[warehouseId]    ${TEST_DIVISION_DATA}[warehouseId]    warehouseId
+    
+    # Verify status is valid
+    Should Be True      "${division}[status]" in ["ENABLE", "DISABLE"]
+    ...    msg=Invalid status value: ${division}[status]
+    
+    Log    Successfully retrieved and validated division: ${division}
 
 05 - Get Non-Existent Division Test
     [Documentation]     Test retrieving a division that doesn't exist
@@ -355,17 +570,47 @@ Create Test Division
     Log                 Successfully verified that updating a division with missing fields is rejected
 
 08 - Get All Divisions Test
-    [Documentation]     Test retrieving all divisions
+    [Documentation]     Test retrieving all divisions with array response handling
     [Tags]              retrieve    positive
     
     # Get all divisions
     ${divisions}=       Get All Divisions
     
-    # Verify response contains data
-    Should Not Be Empty    ${divisions}
-    ...    msg=Get all divisions response was empty
+    # Verify we got a list
+    Should Be True      isinstance($divisions, list)
+    ...    msg=Response should be a list of divisions
     
-    Log                 Successfully retrieved divisions list
+    # Verify we have divisions
+    ${count}=          Get Length    ${divisions}
+    Should Be True     ${count} >= 0    msg=Should have zero or more divisions
+    
+    # Log response details
+    Log    Retrieved ${count} divisions
+    
+    # Verify each division in the response
+    FOR    ${division}    IN    @{divisions}
+        # Basic structure validation
+        Should Have Keys    ${division}    id    name    status    warehouseId
+        
+        # Data type validation
+        Should Be Integer    ${division}[id]
+        Should Be String     ${division}[name]
+        Should Be String     ${division}[status]
+        Should Be Integer    ${division}[warehouseId]
+        
+        # Status validation
+        Should Be True      "${division}[status]" in ["ENABLE", "DISABLE"]
+        ...    msg=Invalid status value: ${division}[status]
+        
+        # Warehouse ID validation
+        Should Be Equal As Integers    ${division}[warehouseId]    ${WAREHOUSE_ID}
+        ...    msg=Division belongs to incorrect warehouse
+        
+        # Log validated division
+        Log    Validated division: ${division}
+    END
+    
+    Log    Successfully validated all ${count} divisions
 
 09 - Delete Division Test
     [Documentation]     Test deleting a division

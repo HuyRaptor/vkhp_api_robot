@@ -7,6 +7,7 @@ Library           Collections
 Library           OperatingSystem
 Library           String
 Library           DateTime
+Library           BuiltIn
 Resource          ../../Variables/variables.robot
 
 *** Keywords ***
@@ -296,14 +297,14 @@ Validate BatchInventory
     Log                 Authentication completed successfully for admin and tenants
 
     # Step 1: Positive - Create Warehouses for Tenant 1
-    ${warehouse1_data}=    Generate Warehouse Data    ${TENANT_ID_1}    ${MAX_WAREHOUSE_ACREAGE - 1000}    Primary
+    ${warehouse1_data}=    Generate Warehouse Data    ${TENANT_ID_1}    ${Evaluate    ${MAX_WAREHOUSE_ACREAGE} - 1000}    Primary
     ${status_w1}    ${warehouse1_response}=    Create Warehouse    ${warehouse1_data}    ${tenant1_token}
     Should Be Equal As Integers    ${status_w1}    201
     Append To List    ${TEST_WAREHOUSE_IDS}    ${warehouse1_response}[id]
     Log                 Created Tenant 1 primary warehouse: ${warehouse1_response}[id]
 
     # Step 2: Positive - Create Warehouse for Tenant 2
-    ${warehouse2_data}=    Generate Warehouse Data    ${TENANT_ID_2}    ${MAX_WAREHOUSE_ACREAGE - 2000}    Secondary
+    ${warehouse2_data}=    Generate Warehouse Data    ${TENANT_ID_2}    ${Evaluate    ${MAX_WAREHOUSE_ACREAGE} - 2000}    Secondary
     ${status_w2}    ${warehouse2_response}=    Create Warehouse    ${warehouse2_data}    ${tenant2_token}
     Should Be Equal As Integers    ${status_w2}    201
     Append To List    ${TEST_WAREHOUSE_IDS}    ${warehouse2_response}[id]

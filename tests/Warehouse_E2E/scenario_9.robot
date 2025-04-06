@@ -7,6 +7,7 @@ Library           Collections
 Library           OperatingSystem
 Library           String
 Library           DateTime
+Library           BuiltIn
 Resource          ../../Variables/variables.robot
 
 *** Keywords ***
@@ -273,14 +274,14 @@ Validate Expiration
     Log                 Authentication completed successfully
 
     # Step 1: Positive - Create Primary Warehouse with Maintenance Schedule
-    ${warehouse1_data}=    Generate Warehouse Data    Primary    ${MAX_WAREHOUSE_ACREAGE - 1000}
+    ${warehouse1_data}=    Generate Warehouse Data    Primary    ${Evaluate    ${MAX_WAREHOUSE_ACREAGE} - 1000}
     ${status_w1}    ${warehouse1_response}=    Create Warehouse    ${warehouse1_data}
     Should Be Equal As Integers    ${status_w1}    201
     Append To List    ${TEST_WAREHOUSE_IDS}    ${warehouse1_response}[id]
     Log                 Created primary warehouse: ${warehouse1_response}[name] with ID: ${warehouse1_response}[id]
 
     # Step 2: Positive - Create Secondary Warehouse
-    ${warehouse2_data}=    Generate Warehouse Data    Secondary    ${MAX_WAREHOUSE_ACREAGE - 2000}
+    ${warehouse2_data}=    Generate Warehouse Data    Secondary    ${Evaluate    ${MAX_WAREHOUSE_ACREAGE} - 2000}
     ${status_w2}    ${warehouse2_response}=    Create Warehouse    ${warehouse2_data}
     Should Be Equal As Integers    ${status_w2}    201
     Append To List    ${TEST_WAREHOUSE_IDS}    ${warehouse2_response}[id]

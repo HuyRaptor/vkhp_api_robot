@@ -7,6 +7,7 @@ Library           Collections
 Library           OperatingSystem
 Library           String
 Library           DateTime
+Library           BuiltIn
 Resource          ../../Variables/variables.robot
 
 *** Keywords ***
@@ -48,7 +49,7 @@ Generate Warehouse Data
     ${warehouse_data}=  Create Dictionary
     ...                 name=Optimized Warehouse ${timestamp}
     ...                 address=700 Smart Ln
-    ...                 acreage=${MAX_WAREHOUSE_ACREAGE - 1500}
+    ...                 acreage=${Evaluate    ${MAX_WAREHOUSE_ACREAGE} - 1500}
     ...                 status=ENABLED
     ...                 optimizationSettings=${optimization}
     RETURN            ${warehouse_data}

@@ -7,6 +7,7 @@ Library           Collections
 Library           OperatingSystem
 Library           String
 Library           DateTime
+Library           BuiltIn
 Resource          ../../Variables/variables.robot
 
 *** Keywords ***
@@ -281,7 +282,7 @@ Validate Inventory
     Log                 Created warehouse: ${warehouse_response}[name] with ID: ${warehouse_response}[id]
 
     # Step 2: Negative - Attempt Warehouse with Excess Acreage
-    ${invalid_warehouse}=    Generate Warehouse Data    ${MAX_WAREHOUSE_ACREAGE + 1}
+    ${invalid_warehouse}=    Generate Warehouse Data    ${Evaluate    ${MAX_WAREHOUSE_ACREAGE} + 1}
     ${status_w2}    ${warehouse_response2}=    Create Warehouse    ${invalid_warehouse}
     Should Be Equal As Integers    ${status_w2}    400
     Should Contain    ${warehouse_response2}[message]    acreage    ignore_case=True

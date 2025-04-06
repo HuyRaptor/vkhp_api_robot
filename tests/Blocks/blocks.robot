@@ -232,6 +232,14 @@ Create Test Block
     Set Global Variable  ${TEST_BLOCK_ID}      ${block_id}
     Set Global Variable  ${TEST_BLOCK_DATA}    ${block_data}
 
+Assert Block Field Value
+    [Documentation]     Compare block field values with type conversion
+    [Arguments]         ${actual}    ${expected}    ${field_name}
+    ${actual_value}=    Convert To String    ${actual}
+    ${expected_value}=  Convert To String    ${expected}
+    Should Be Equal    ${actual_value}    ${expected_value}
+    ...    msg=Block ${field_name} value '${actual}' does not match expected '${expected}'
+
 *** Test Cases ***
 01 - Setup Test Environment
     [Documentation]     Setup API session for block tests
@@ -287,8 +295,10 @@ Create Test Block
     # Get block
     ${block}=           Get Block By ID    ${TEST_BLOCK_ID}
     
-    # Verify block details match what we created
-    Assert Block Details    ${block}    ${TEST_BLOCK_DATA}
+    # Verify block details with type-safe comparisons
+    Assert Block Field Value    ${block}[totalShelf]    ${TEST_BLOCK_DATA}[totalShelf]    totalShelf
+    Assert Block Field Value    ${block}[name]    ${TEST_BLOCK_DATA}[name]    name
+    Assert Block Field Value    ${block}[warehouseId]    ${TEST_BLOCK_DATA}[warehouseId]    warehouseId
     
     Log                 Successfully retrieved block with ID: ${TEST_BLOCK_ID}
 

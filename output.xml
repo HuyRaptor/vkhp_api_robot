@@ -1,44 +1,45 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<robot generator="Robot 7.2.2 (Python 3.13.2 on win32)" generated="2025-04-05T16:10:42.101550" rpa="false" schemaversion="5">
-<suite id="s1" name="Auth" source="D:\robot_file\tests\Auth">
-<suite id="s1-s1" name="Auth Test" source="D:\robot_file\tests\Auth\auth_test.robot">
-<test id="s1-s1-t1" name="User Should Be Able To Login" line="11">
-<kw name="Create Dictionary" owner="BuiltIn">
-<msg time="2025-04-05T16:10:42.621041" level="INFO">${headers} = {'Content-Type': 'application/json'}</msg>
-<var>${headers}</var>
-<arg>Content-Type=application/json</arg>
-<doc>Creates and returns a dictionary based on the given ``items``.</doc>
-<status status="PASS" start="2025-04-05T16:10:42.620584" elapsed="0.000517"/>
-</kw>
-<kw name="Create Dictionary" owner="BuiltIn">
-<msg time="2025-04-05T16:10:42.621746" level="INFO">${body} = {'username': 'huynh22.manager', 'password': 'Snowfox1991'}</msg>
-<var>${body}</var>
-<arg>username=${MANAGER_USERNAME}</arg>
-<arg>password=${MANAGER_PASSWORD}</arg>
-<doc>Creates and returns a dictionary based on the given ``items``.</doc>
-<status status="PASS" start="2025-04-05T16:10:42.621486" elapsed="0.000307"/>
-</kw>
+<robot generator="Robot 7.2.2 (Python 3.13.2 on win32)" generated="2025-04-06T20:30:00.054329" rpa="false" schemaversion="5">
+<suite id="s1" name="Divisions" source="D:\robot_file\tests\Divisions">
+<suite id="s1-s1" name="Divisions" source="D:\robot_file\tests\Divisions\divisions.robot">
+<test id="s1-s1-t1" name="01 - Setup Test Environment" line="424">
+<kw name="Setup API Session">
 <kw name="Create Session" owner="RequestsLibrary">
-<msg time="2025-04-05T16:10:42.622392" level="INFO">Creating Session using : alias=vkho, url=https://api.vkho.net, headers={},                     cookies={}, auth=None, timeout=None, proxies=None, verify=True,                     debug=0 </msg>
+<msg time="2025-04-06T20:30:00.600860" level="INFO">Creating Session using : alias=vkho, url=https://api.vkho.net, headers={},                     cookies={}, auth=None, timeout=None, proxies=None, verify=True,                     debug=0 </msg>
 <arg>vkho</arg>
 <arg>${BASE_URL}</arg>
 <arg>verify=True</arg>
 <arg>disable_warnings=True</arg>
 <doc>Create Session: create a HTTP session to a server</doc>
-<status status="PASS" start="2025-04-05T16:10:42.622081" elapsed="0.000517"/>
+<status status="PASS" start="2025-04-06T20:30:00.600556" elapsed="0.000505"/>
+</kw>
+<kw name="Create Dictionary" owner="BuiltIn">
+<msg time="2025-04-06T20:30:00.601428" level="INFO">${headers} = {'Content-Type': 'application/json'}</msg>
+<var>${headers}</var>
+<arg>Content-Type=application/json</arg>
+<doc>Creates and returns a dictionary based on the given ``items``.</doc>
+<status status="PASS" start="2025-04-06T20:30:00.601205" elapsed="0.000259"/>
+</kw>
+<kw name="Create Dictionary" owner="BuiltIn">
+<msg time="2025-04-06T20:30:00.601792" level="INFO">${body} = {'username': 'huynh22.manager', 'password': 'Snowfox1991'}</msg>
+<var>${body}</var>
+<arg>username=${MANAGER_USERNAME}</arg>
+<arg>password=${MANAGER_PASSWORD}</arg>
+<doc>Creates and returns a dictionary based on the given ``items``.</doc>
+<status status="PASS" start="2025-04-06T20:30:00.601575" elapsed="0.000241"/>
 </kw>
 <kw name="POST On Session" owner="RequestsLibrary">
-<msg time="2025-04-05T16:10:42.905450" level="INFO">POST Request : url=https://api.vkho.net/auth/login 
+<msg time="2025-04-06T20:30:00.782154" level="INFO">POST Request : url=https://api.vkho.net/auth/login 
  path_url=/auth/login 
  headers={'User-Agent': 'python-requests/2.32.3', 'Accept-Encoding': 'gzip, deflate', 'Accept': '*/*', 'Connection': 'keep-alive', 'Content-Type': 'application/json', 'Content-Length': '58'} 
  body=b'{"username": "huynh22.manager", "password": "Snowfox1991"}' 
  </msg>
-<msg time="2025-04-05T16:10:42.905551" level="INFO">POST Response : url=https://api.vkho.net/auth/login 
+<msg time="2025-04-06T20:30:00.782276" level="INFO">POST Response : url=https://api.vkho.net/auth/login 
  status=201, reason=Created 
- headers={'Access-Control-Allow-Origin': '*', 'Alt-Svc': 'h3=":443"; ma=2592000', 'Content-Length': '3123', 'Content-Type': 'application/json; charset=utf-8', 'Date': 'Sat, 05 Apr 2025 09:10:42 GMT', 'Etag': 'W/"c33-rh2PhiMAc6n+5f0k+j7vuWoDJIk"', 'Server': 'Caddy'} 
- body={"access_token":"eyJhbGciOiJSUzI1NiIsInR5cCIgOiAiSldUIiwia2lkIiA6ICI0TVhBLW1VYjduYV90RjNJd1VrWXNreHZrbVNqQWJpSEV6MnFpN3ZaRGhJIn0.eyJleHAiOjE3NDM4Njk0NDIsImlhdCI6MTc0Mzg0NDI0MiwianRpIjoiMmM1NTU4MmUtYTY3MC00ZmMzLThkMzYtNWQ3MDU4YzYyOGY5IiwiaXNzIjoiaHR0cHM6Ly9rYy5jb25jb24udm4vcmVhbG1zL3ZraG9fc3RhZyIsInN1YiI6IjIzYzY2NzE3LThkY2EtNDk3MS1hZDA5LTk2ODFkNjMyZjA5YyIsInR5cCI6IkJlYXJlciIsImF6cCI6InZraG9fYXBwIiwic2lkIjoiNTQxOTdkZDMtZjI5Yy00YTYwLTk0NzktNTdhZThhNjdmYmE5IiwiYWNyIjoiMSIsImFsbG93ZWQtb3JpZ2lucyI6WyIqIl0sInJlYWxtX2FjY2VzcyI6eyJyb2xlcyI6WyJtYW5hZ2VyIiwic3RhZmYiXX0sInNjb3BlIjoib3BlbmlkIHByb2ZpbGUgZW1haWwiLCJlbWFpbF92ZXJpZmllZCI6ZmFsc2UsIm5hbWUiOiJIdXkgUUMgTWFuYWdlciIsInByZWZlcnJlZF91c2VybmFtZSI6Imh1eW5oMjIubWFuYWdlciIsImdpdmVuX25hbWUiOiJIdXkiLCJmYW1pbHlfbmFtZSI6IlFDIE1hbmFnZXIiLCJlbWFpbCI6InZvbGliZWFyMTUzQGdtYWlsLmNvbSJ9.hrEHRsPc6iOlz6MGACuVJRIcVIt3Fbc9dI6vuk4V6FOeogCmAzByRtBwe6yVFiiic12u-QE2yHntZhHY2Sf0F69oW1mWkTNbw6dJSnH63x1idWakQVWQ-AmsKefp6KPBR13WVXfqc0olOfc4D9eWbDyyPVaikOlR7eEOm63s86VSxgX99T2zd-kX033yXrdw8ZVkd8_8iskFVQAF4DlJa9rif1TLWZG3WvshBmHNOeyKGkIPjUupxptMzI3hOyzchguX5r1fMcuu6XD2miDm5qsg3vHipbF_4T1GwY5hOWGeqYcfrnIhIIDILOk85RFV1DNKiIstCOV29ytwgFqd9g","expires_in":25200,"refresh_expires_in":21600,"refresh_token":"eyJhbGciOiJIUzUxMiIsInR5cCIgOiAiSldUIiwia2lkIiA6ICIzN2Y0YjMyOS02ZjY5LTRiOWItYmY2OC1kMTI1NTA0MDU0NzEifQ.eyJleHAiOjE3NDM4NjU4NDIsImlhdCI6MTc0Mzg0NDI0MiwianRpIjoiNzBjMmM1ODMtZjNlNy00NjYyLWJhYzYtZmE1ZWE5Mjc1MTIxIiwiaXNzIjoiaHR0cHM6Ly9rYy5jb25jb24udm4vcmVhbG1zL3ZraG9fc3RhZyIsImF1ZCI6Imh0dHBzOi8va2MuY29uY29uLnZuL3JlYWxtcy92a2hvX3N0YWciLCJzdWIiOiIyM2M2NjcxNy04ZGNhLTQ5NzEtYWQwOS05NjgxZDYzMmYwOWMiLCJ0eXAiOiJSZWZyZXNoIiwiYXpwIjoidmtob19hcHAiLCJzaWQiOiI1NDE5N2RkMy1mMjljLTRhNjAtOTQ3OS01N2FlOGE2N2ZiYTkiLCJzY29wZSI6Im9wZW5pZCB3ZWItb3JpZ2lucyBhY3IgcHJvZmlsZSBlbWFpbCBiYXNpYyByb2xlcyJ9.Z4j9bS80zZh7DapJDp-xINP5ah3D_x2AkfZ2AuuS785AnBaSo-S6k3f95EEQnn_K0u4fLC413B7gV7ZHqSCicA","token_type":"Bearer","id_token":"eyJhbGciOiJSUzI1NiIsInR5cCIgOiAiSldUIiwia2lkIiA6ICI0TVhBLW1VYjduYV90RjNJd1VrWXNreHZrbVNqQWJpSEV6MnFpN3ZaRGhJIn0.eyJleHAiOjE3NDM4Njk0NDIsImlhdCI6MTc0Mzg0NDI0MiwianRpIjoiNjhlODkzNjQtZTcyZi00YjRmLWEzNTItZmRmN2Y3ZjU2M2Y3IiwiaXNzIjoiaHR0cHM6Ly9rYy5jb25jb24udm4vcmVhbG1zL3ZraG9fc3RhZyIsImF1ZCI6InZraG9fYXBwIiwic3ViIjoiMjNjNjY3MTctOGRjYS00OTcxLWFkMDktOTY4MWQ2MzJmMDljIiwidHlwIjoiSUQiLCJhenAiOiJ2a2hvX2FwcCIsInNpZCI6IjU0MTk3ZGQzLWYyOWMtNGE2MC05NDc5LTU3YWU4YTY3ZmJhOSIsImF0X2hhc2giOiJ4djg4Y1lrendnaFBGeFQ3RjVmZ1RBIiwiYWNyIjoiMSIsImVtYWlsX3ZlcmlmaWVkIjpmYWxzZSwibmFtZSI6Ikh1eSBRQyBNYW5hZ2VyIiwicHJlZmVycmVkX3VzZXJuYW1lIjoiaHV5bmgyMi5tYW5hZ2VyIiwiZ2l2ZW5fbmFtZSI6Ikh1eSIsImZhbWlseV9uYW1lIjoiUUMgTWFuYWdlciIsImVtYWlsIjoidm9saWJlYXIxNTNAZ21haWwuY29tIn0.VhH9P-RBxf5FnzaySprSUnuJnC7-rxQf1t9wfOdhXUitxLlcX6MKyP9XmYuujeMuJZQREU3kjIxttxvTM-eAy692A9wRQSO8_-i0xmPG6M6qjlOchENDhKYQjXQaVHO-YiLMQqeZuWePt8_-DGoDY6NoF_bYzUOEZ9g5GEUW16eJlcr-mIymb6xmenFP-kCsS1uAqR6ysDjnUlA6uDgLIDXz6_BfbeLD7_Dr1r1OJHUb2bgDWWhrA_bfKyTbtUh5IovzoU0-BapBaNIyqi82WuwueWtS9ksgOckeEX3DF-E7zUzuNg6uvwi2nwtgFAJcLx43to97-Ku5Zf4sP78SVw","not-before-policy":0,"session_state":"54197dd3-f29c-4a60-9479-57ae8a67fba9","scope":"openid profile email"} 
+ headers={'Access-Control-Allow-Origin': '*', 'Alt-Svc': 'h3=":443"; ma=2592000', 'Content-Length': '3123', 'Content-Type': 'application/json; charset=utf-8', 'Date': 'Sun, 06 Apr 2025 13:30:00 GMT', 'Etag': 'W/"c33-CAMbbpcBaZL/kb+hgMjT5HUwSSY"', 'Server': 'Caddy'} 
+ body={"access_token":"eyJhbGciOiJSUzI1NiIsInR5cCIgOiAiSldUIiwia2lkIiA6ICI0TVhBLW1VYjduYV90RjNJd1VrWXNreHZrbVNqQWJpSEV6MnFpN3ZaRGhJIn0.eyJleHAiOjE3NDM5NzE0MDAsImlhdCI6MTc0Mzk0NjIwMCwianRpIjoiMzJjYWViNzItZTYyOS00MmY1LTkzYzYtOWU3ZGYyYmY1MzM0IiwiaXNzIjoiaHR0cHM6Ly9rYy5jb25jb24udm4vcmVhbG1zL3ZraG9fc3RhZyIsInN1YiI6IjIzYzY2NzE3LThkY2EtNDk3MS1hZDA5LTk2ODFkNjMyZjA5YyIsInR5cCI6IkJlYXJlciIsImF6cCI6InZraG9fYXBwIiwic2lkIjoiZTk3MmEwMzMtYmM5OS00MGEwLWExYmItODQxZmQ0NTQ2MTUwIiwiYWNyIjoiMSIsImFsbG93ZWQtb3JpZ2lucyI6WyIqIl0sInJlYWxtX2FjY2VzcyI6eyJyb2xlcyI6WyJtYW5hZ2VyIiwic3RhZmYiXX0sInNjb3BlIjoib3BlbmlkIHByb2ZpbGUgZW1haWwiLCJlbWFpbF92ZXJpZmllZCI6ZmFsc2UsIm5hbWUiOiJIdXkgUUMgTWFuYWdlciIsInByZWZlcnJlZF91c2VybmFtZSI6Imh1eW5oMjIubWFuYWdlciIsImdpdmVuX25hbWUiOiJIdXkiLCJmYW1pbHlfbmFtZSI6IlFDIE1hbmFnZXIiLCJlbWFpbCI6InZvbGliZWFyMTUzQGdtYWlsLmNvbSJ9.OlrsF3qEIsR8V2esJF-h61KSD6qFthku-_AROGCqgv_axJ4rYRDtHAH45EVpO6S2lFBWyAVD5FWTyKwD7gIqdcgWFY-il1PXc96toA0PtmsKsv-qOG0DxuF5z3CWhGClvMAtrPoJpmFtmT6XL6Xk-FNbSiQa0mFd70O52NYpyIKamOW4qJsVaY8PXGgEdPJXqGSgf0PAm4Mj_Fh7IWByi2c5Wi8paXHyHbWrRJs23UCAUjwu3MavbByXCq_z7yKfQIRt8qkfP8Qb5MEpSduTZwHgHxS8aoPmoRoKmgIaJctKFvpChGYq1AvJVnC-WYwBY8vLPbjnIkYxn30E4d5Q4g","expires_in":25200,"refresh_expires_in":21600,"refresh_token":"eyJhbGciOiJIUzUxMiIsInR5cCIgOiAiSldUIiwia2lkIiA6ICIzN2Y0YjMyOS02ZjY5LTRiOWItYmY2OC1kMTI1NTA0MDU0NzEifQ.eyJleHAiOjE3NDM5Njc4MDAsImlhdCI6MTc0Mzk0NjIwMCwianRpIjoiYWMyNzE2NTgtOWQ0MS00OWEwLTg0MTctOWFjNDUwYThlMjZlIiwiaXNzIjoiaHR0cHM6Ly9rYy5jb25jb24udm4vcmVhbG1zL3ZraG9fc3RhZyIsImF1ZCI6Imh0dHBzOi8va2MuY29uY29uLnZuL3JlYWxtcy92a2hvX3N0YWciLCJzdWIiOiIyM2M2NjcxNy04ZGNhLTQ5NzEtYWQwOS05NjgxZDYzMmYwOWMiLCJ0eXAiOiJSZWZyZXNoIiwiYXpwIjoidmtob19hcHAiLCJzaWQiOiJlOTcyYTAzMy1iYzk5LTQwYTAtYTFiYi04NDFmZDQ1NDYxNTAiLCJzY29wZSI6Im9wZW5pZCB3ZWItb3JpZ2lucyBhY3IgcHJvZmlsZSBlbWFpbCBiYXNpYyByb2xlcyJ9.qxthkY2aAsNrv_IWKPhxsjeCSCfigg_OX9LKOIDluWhloekhAGQjasahicl4QM63f5b1-eiMzEJ1pJ7O6gVKYg","token_type":"Bearer","id_token":"eyJhbGciOiJSUzI1NiIsInR5cCIgOiAiSldUIiwia2lkIiA6ICI0TVhBLW1VYjduYV90RjNJd1VrWXNreHZrbVNqQWJpSEV6MnFpN3ZaRGhJIn0.eyJleHAiOjE3NDM5NzE0MDAsImlhdCI6MTc0Mzk0NjIwMCwianRpIjoiZmYxMzIwZDMtMGIyOC00ZTJkLTgzYzgtNGM5M2JhMWY2OWI1IiwiaXNzIjoiaHR0cHM6Ly9rYy5jb25jb24udm4vcmVhbG1zL3ZraG9fc3RhZyIsImF1ZCI6InZraG9fYXBwIiwic3ViIjoiMjNjNjY3MTctOGRjYS00OTcxLWFkMDktOTY4MWQ2MzJmMDljIiwidHlwIjoiSUQiLCJhenAiOiJ2a2hvX2FwcCIsInNpZCI6ImU5NzJhMDMzLWJjOTktNDBhMC1hMWJiLTg0MWZkNDU0NjE1MCIsImF0X2hhc2giOiJaTUlnRzU1NUFDWFBjSEtmeElCcTR3IiwiYWNyIjoiMSIsImVtYWlsX3ZlcmlmaWVkIjpmYWxzZSwibmFtZSI6Ikh1eSBRQyBNYW5hZ2VyIiwicHJlZmVycmVkX3VzZXJuYW1lIjoiaHV5bmgyMi5tYW5hZ2VyIiwiZ2l2ZW5fbmFtZSI6Ikh1eSIsImZhbWlseV9uYW1lIjoiUUMgTWFuYWdlciIsImVtYWlsIjoidm9saWJlYXIxNTNAZ21haWwuY29tIn0.AbZ04KwWJCi17hCc2T8sXkymikJ3PJ9JlQkkSWJLjlqQhj5nwCRlZrSgT6n49md4wWFr9g-JYaSmqnbZtv2cr_dyQlsOt74oXNHJZr4GzNo_VFZFWI3RRIv_TCEhs6ScaeP5wGcMwrtuBNqBlQx25jTNEhhvE7aKKnAE1t9sekoulYpZbWjDqtGsl3QpK5UWlBtHFmV08TB_gwo_m014JSMVUMbvL4WGjSQjUpNyvXm4fVAAVo9qslKo39coJpffRco3-2FljwS9t6HIWTixf2epmsLvRcRGR0jZ4H-8x_TbZ0a0g8--S-DeSFMmyA-Q35pTVYQQrA_BhjzzkcGFxA","not-before-policy":0,"session_state":"e972a033-bc99-40a0-a1bb-841fd4546150","scope":"openid profile email"} 
  </msg>
-<msg time="2025-04-05T16:10:42.905679" level="INFO">${response} = &lt;Response [201]&gt;</msg>
+<msg time="2025-04-06T20:30:00.782427" level="INFO">${response} = &lt;Response [201]&gt;</msg>
 <var>${response}</var>
 <arg>vkho</arg>
 <arg>/auth/login</arg>
@@ -46,289 +47,1458 @@
 <arg>headers=${headers}</arg>
 <arg>expected_status=201</arg>
 <doc>Sends a POST request on a previously created HTTP Session.</doc>
-<status status="PASS" start="2025-04-05T16:10:42.622870" elapsed="0.282834"/>
-</kw>
-<kw name="Log" owner="BuiltIn">
-<msg time="2025-04-05T16:10:42.906610" level="INFO">{"access_token":"eyJhbGciOiJSUzI1NiIsInR5cCIgOiAiSldUIiwia2lkIiA6ICI0TVhBLW1VYjduYV90RjNJd1VrWXNreHZrbVNqQWJpSEV6MnFpN3ZaRGhJIn0.eyJleHAiOjE3NDM4Njk0NDIsImlhdCI6MTc0Mzg0NDI0MiwianRpIjoiMmM1NTU4MmUtYTY3MC00ZmMzLThkMzYtNWQ3MDU4YzYyOGY5IiwiaXNzIjoiaHR0cHM6Ly9rYy5jb25jb24udm4vcmVhbG1zL3ZraG9fc3RhZyIsInN1YiI6IjIzYzY2NzE3LThkY2EtNDk3MS1hZDA5LTk2ODFkNjMyZjA5YyIsInR5cCI6IkJlYXJlciIsImF6cCI6InZraG9fYXBwIiwic2lkIjoiNTQxOTdkZDMtZjI5Yy00YTYwLTk0NzktNTdhZThhNjdmYmE5IiwiYWNyIjoiMSIsImFsbG93ZWQtb3JpZ2lucyI6WyIqIl0sInJlYWxtX2FjY2VzcyI6eyJyb2xlcyI6WyJtYW5hZ2VyIiwic3RhZmYiXX0sInNjb3BlIjoib3BlbmlkIHByb2ZpbGUgZW1haWwiLCJlbWFpbF92ZXJpZmllZCI6ZmFsc2UsIm5hbWUiOiJIdXkgUUMgTWFuYWdlciIsInByZWZlcnJlZF91c2VybmFtZSI6Imh1eW5oMjIubWFuYWdlciIsImdpdmVuX25hbWUiOiJIdXkiLCJmYW1pbHlfbmFtZSI6IlFDIE1hbmFnZXIiLCJlbWFpbCI6InZvbGliZWFyMTUzQGdtYWlsLmNvbSJ9.hrEHRsPc6iOlz6MGACuVJRIcVIt3Fbc9dI6vuk4V6FOeogCmAzByRtBwe6yVFiiic12u-QE2yHntZhHY2Sf0F69oW1mWkTNbw6dJSnH63x1idWakQVWQ-AmsKefp6KPBR13WVXfqc0olOfc4D9eWbDyyPVaikOlR7eEOm63s86VSxgX99T2zd-kX033yXrdw8ZVkd8_8iskFVQAF4DlJa9rif1TLWZG3WvshBmHNOeyKGkIPjUupxptMzI3hOyzchguX5r1fMcuu6XD2miDm5qsg3vHipbF_4T1GwY5hOWGeqYcfrnIhIIDILOk85RFV1DNKiIstCOV29ytwgFqd9g","expires_in":25200,"refresh_expires_in":21600,"refresh_token":"eyJhbGciOiJIUzUxMiIsInR5cCIgOiAiSldUIiwia2lkIiA6ICIzN2Y0YjMyOS02ZjY5LTRiOWItYmY2OC1kMTI1NTA0MDU0NzEifQ.eyJleHAiOjE3NDM4NjU4NDIsImlhdCI6MTc0Mzg0NDI0MiwianRpIjoiNzBjMmM1ODMtZjNlNy00NjYyLWJhYzYtZmE1ZWE5Mjc1MTIxIiwiaXNzIjoiaHR0cHM6Ly9rYy5jb25jb24udm4vcmVhbG1zL3ZraG9fc3RhZyIsImF1ZCI6Imh0dHBzOi8va2MuY29uY29uLnZuL3JlYWxtcy92a2hvX3N0YWciLCJzdWIiOiIyM2M2NjcxNy04ZGNhLTQ5NzEtYWQwOS05NjgxZDYzMmYwOWMiLCJ0eXAiOiJSZWZyZXNoIiwiYXpwIjoidmtob19hcHAiLCJzaWQiOiI1NDE5N2RkMy1mMjljLTRhNjAtOTQ3OS01N2FlOGE2N2ZiYTkiLCJzY29wZSI6Im9wZW5pZCB3ZWItb3JpZ2lucyBhY3IgcHJvZmlsZSBlbWFpbCBiYXNpYyByb2xlcyJ9.Z4j9bS80zZh7DapJDp-xINP5ah3D_x2AkfZ2AuuS785AnBaSo-S6k3f95EEQnn_K0u4fLC413B7gV7ZHqSCicA","token_type":"Bearer","id_token":"eyJhbGciOiJSUzI1NiIsInR5cCIgOiAiSldUIiwia2lkIiA6ICI0TVhBLW1VYjduYV90RjNJd1VrWXNreHZrbVNqQWJpSEV6MnFpN3ZaRGhJIn0.eyJleHAiOjE3NDM4Njk0NDIsImlhdCI6MTc0Mzg0NDI0MiwianRpIjoiNjhlODkzNjQtZTcyZi00YjRmLWEzNTItZmRmN2Y3ZjU2M2Y3IiwiaXNzIjoiaHR0cHM6Ly9rYy5jb25jb24udm4vcmVhbG1zL3ZraG9fc3RhZyIsImF1ZCI6InZraG9fYXBwIiwic3ViIjoiMjNjNjY3MTctOGRjYS00OTcxLWFkMDktOTY4MWQ2MzJmMDljIiwidHlwIjoiSUQiLCJhenAiOiJ2a2hvX2FwcCIsInNpZCI6IjU0MTk3ZGQzLWYyOWMtNGE2MC05NDc5LTU3YWU4YTY3ZmJhOSIsImF0X2hhc2giOiJ4djg4Y1lrendnaFBGeFQ3RjVmZ1RBIiwiYWNyIjoiMSIsImVtYWlsX3ZlcmlmaWVkIjpmYWxzZSwibmFtZSI6Ikh1eSBRQyBNYW5hZ2VyIiwicHJlZmVycmVkX3VzZXJuYW1lIjoiaHV5bmgyMi5tYW5hZ2VyIiwiZ2l2ZW5fbmFtZSI6Ikh1eSIsImZhbWlseV9uYW1lIjoiUUMgTWFuYWdlciIsImVtYWlsIjoidm9saWJlYXIxNTNAZ21haWwuY29tIn0.VhH9P-RBxf5FnzaySprSUnuJnC7-rxQf1t9wfOdhXUitxLlcX6MKyP9XmYuujeMuJZQREU3kjIxttxvTM-eAy692A9wRQSO8_-i0xmPG6M6qjlOchENDhKYQjXQaVHO-YiLMQqeZuWePt8_-DGoDY6NoF_bYzUOEZ9g5GEUW16eJlcr-mIymb6xmenFP-kCsS1uAqR6ysDjnUlA6uDgLIDXz6_BfbeLD7_Dr1r1OJHUb2bgDWWhrA_bfKyTbtUh5IovzoU0-BapBaNIyqi82WuwueWtS9ksgOckeEX3DF-E7zUzuNg6uvwi2nwtgFAJcLx43to97-Ku5Zf4sP78SVw","not-before-policy":0,"session_state":"54197dd3-f29c-4a60-9479-57ae8a67fba9","scope":"openid profile email"}</msg>
-<arg>${response.text}</arg>
-<doc>Logs the given message with the given level.</doc>
-<status status="PASS" start="2025-04-05T16:10:42.906044" elapsed="0.000710"/>
+<status status="PASS" start="2025-04-06T20:30:00.601909" elapsed="0.180545"/>
 </kw>
 <kw name="Evaluate" owner="BuiltIn">
-<msg time="2025-04-05T16:10:42.908061" level="INFO">${json} = {'access_token': 'eyJhbGciOiJSUzI1NiIsInR5cCIgOiAiSldUIiwia2lkIiA6ICI0TVhBLW1VYjduYV90RjNJd1VrWXNreHZrbVNqQWJpSEV6MnFpN3ZaRGhJIn0.eyJleHAiOjE3NDM4Njk0NDIsImlhdCI6MTc0Mzg0NDI0MiwianRpIjoiMmM1NTU4MmUtYT...</msg>
+<msg time="2025-04-06T20:30:00.783393" level="INFO">${json} = {'access_token': 'eyJhbGciOiJSUzI1NiIsInR5cCIgOiAiSldUIiwia2lkIiA6ICI0TVhBLW1VYjduYV90RjNJd1VrWXNreHZrbVNqQWJpSEV6MnFpN3ZaRGhJIn0.eyJleHAiOjE3NDM5NzE0MDAsImlhdCI6MTc0Mzk0NjIwMCwianRpIjoiMzJjYWViNzItZT...</msg>
 <var>${json}</var>
 <arg>json.loads('''${response.text}''')</arg>
 <arg>json</arg>
 <doc>Evaluates the given expression in Python and returns the result.</doc>
-<status status="PASS" start="2025-04-05T16:10:42.907019" elapsed="0.001071"/>
+<status status="PASS" start="2025-04-06T20:30:00.782621" elapsed="0.000812"/>
 </kw>
 <kw name="Dictionary Should Contain Key" owner="Collections">
 <arg>${json}</arg>
 <arg>access_token</arg>
+<arg>msg=Authentication failed: Response did not contain access_token</arg>
 <doc>Fails if ``key`` is not found from ``dictionary``.</doc>
-<status status="PASS" start="2025-04-05T16:10:42.908334" elapsed="0.000140"/>
+<status status="PASS" start="2025-04-06T20:30:00.783530" elapsed="0.000156"/>
 </kw>
-<kw name="Set Suite Variable" owner="BuiltIn">
-<msg time="2025-04-05T16:10:42.909594" level="INFO">${ACCESS_TOKEN} = eyJhbGciOiJSUzI1NiIsInR5cCIgOiAiSldUIiwia2lkIiA6ICI0TVhBLW1VYjduYV90RjNJd1VrWXNreHZrbVNqQWJpSEV6MnFpN3ZaRGhJIn0.eyJleHAiOjE3NDM4Njk0NDIsImlhdCI6MTc0Mzg0NDI0MiwianRpIjoiMmM1NTU4MmUtYTY3MC00ZmMzLThkMzYt...</msg>
-<arg>${ACCESS_TOKEN}</arg>
-<arg>${json}[access_token]</arg>
-<doc>Makes a variable available everywhere within the scope of the current suite.</doc>
-<status status="PASS" start="2025-04-05T16:10:42.908722" elapsed="0.000915"/>
+<kw name="Set Variable" owner="BuiltIn">
+<msg time="2025-04-06T20:30:00.783935" level="INFO">${token} = Bearer eyJhbGciOiJSUzI1NiIsInR5cCIgOiAiSldUIiwia2lkIiA6ICI0TVhBLW1VYjduYV90RjNJd1VrWXNreHZrbVNqQWJpSEV6MnFpN3ZaRGhJIn0.eyJleHAiOjE3NDM5NzE0MDAsImlhdCI6MTc0Mzk0NjIwMCwianRpIjoiMzJjYWViNzItZTYyOS00MmY1L...</msg>
+<var>${token}</var>
+<arg>Bearer ${json}[access_token]</arg>
+<doc>Returns the given values which can then be assigned to a variables.</doc>
+<status status="PASS" start="2025-04-06T20:30:00.783799" elapsed="0.000159"/>
+</kw>
+<kw name="Set Global Variable" owner="BuiltIn">
+<msg time="2025-04-06T20:30:00.784952" level="INFO">${AUTH_TOKEN} = Bearer eyJhbGciOiJSUzI1NiIsInR5cCIgOiAiSldUIiwia2lkIiA6ICI0TVhBLW1VYjduYV90RjNJd1VrWXNreHZrbVNqQWJpSEV6MnFpN3ZaRGhJIn0.eyJleHAiOjE3NDM5NzE0MDAsImlhdCI6MTc0Mzk0NjIwMCwianRpIjoiMzJjYWViNzItZTYyOS00MmY1L...</msg>
+<arg>${AUTH_TOKEN}</arg>
+<arg>${token}</arg>
+<doc>Makes a variable available globally in all tests and suites.</doc>
+<status status="PASS" start="2025-04-06T20:30:00.784050" elapsed="0.000946"/>
 </kw>
 <kw name="Create Directory" owner="OperatingSystem">
-<msg time="2025-04-05T16:10:42.910255" level="INFO" html="true">Created directory '&lt;a href="file://D:\robot_file\Variables\results"&gt;D:\robot_file\Variables\results&lt;/a&gt;'.</msg>
+<msg time="2025-04-06T20:30:00.785340" level="INFO" html="true">Directory '&lt;a href="file://D:\robot_file\Variables\results"&gt;D:\robot_file\Variables\results&lt;/a&gt;' already exists.</msg>
 <arg>${RESULTS_DIR}</arg>
 <doc>Creates the specified directory.</doc>
-<status status="PASS" start="2025-04-05T16:10:42.909897" elapsed="0.000411"/>
+<status status="PASS" start="2025-04-06T20:30:00.785095" elapsed="0.000293"/>
 </kw>
-<kw name="Evaluate" owner="BuiltIn">
-<msg time="2025-04-05T16:10:42.911097" level="INFO">${timestamp} = 1743844242911</msg>
-<var>${timestamp}</var>
-<arg>int(round(time.time() * 1000))</arg>
-<arg>time</arg>
-<doc>Evaluates the given expression in Python and returns the result.</doc>
-<status status="PASS" start="2025-04-05T16:10:42.910861" elapsed="0.000262"/>
-</kw>
-<kw name="Create File" owner="OperatingSystem">
-<msg time="2025-04-05T16:10:42.913415" level="INFO" html="true">Created file '&lt;a href="file://D:\robot_file\Variables\results\login_response_1743844242911.json"&gt;D:\robot_file\Variables\results\login_response_1743844242911.json&lt;/a&gt;'.</msg>
-<arg>${RESULTS_DIR}${/}login_response_${timestamp}.json</arg>
-<arg>${response.text}</arg>
-<doc>Creates a file with the given content and encoding.</doc>
-<status status="PASS" start="2025-04-05T16:10:42.911484" elapsed="0.002019"/>
+<doc>Create API session and authenticate</doc>
+<status status="PASS" start="2025-04-06T20:30:00.599905" elapsed="0.185553"/>
 </kw>
 <kw name="Log" owner="BuiltIn">
-<msg time="2025-04-05T16:10:42.913998" level="INFO">Login successful. Token: Bearer eyJhbGciOiJSUzI1NiIsInR5cCIgOiAiSldUIiwia2lkIiA6ICI0TVhBLW1VYjduYV90RjNJd1VrWXNreHZrbVNqQWJpSEV6MnFpN3ZaRGhJIn0.eyJleHAiOjE3NDM4Njk0NDIsImlhdCI6MTc0Mzg0NDI0MiwianRpIjoiMmM1NTU4MmUtYTY3MC00ZmMzLThkMzYtNWQ3MDU4YzYyOGY5IiwiaXNzIjoiaHR0cHM6Ly9rYy5jb25jb24udm4vcmVhbG1zL3ZraG9fc3RhZyIsInN1YiI6IjIzYzY2NzE3LThkY2EtNDk3MS1hZDA5LTk2ODFkNjMyZjA5YyIsInR5cCI6IkJlYXJlciIsImF6cCI6InZraG9fYXBwIiwic2lkIjoiNTQxOTdkZDMtZjI5Yy00YTYwLTk0NzktNTdhZThhNjdmYmE5IiwiYWNyIjoiMSIsImFsbG93ZWQtb3JpZ2lucyI6WyIqIl0sInJlYWxtX2FjY2VzcyI6eyJyb2xlcyI6WyJtYW5hZ2VyIiwic3RhZmYiXX0sInNjb3BlIjoib3BlbmlkIHByb2ZpbGUgZW1haWwiLCJlbWFpbF92ZXJpZmllZCI6ZmFsc2UsIm5hbWUiOiJIdXkgUUMgTWFuYWdlciIsInByZWZlcnJlZF91c2VybmFtZSI6Imh1eW5oMjIubWFuYWdlciIsImdpdmVuX25hbWUiOiJIdXkiLCJmYW1pbHlfbmFtZSI6IlFDIE1hbmFnZXIiLCJlbWFpbCI6InZvbGliZWFyMTUzQGdtYWlsLmNvbSJ9.hrEHRsPc6iOlz6MGACuVJRIcVIt3Fbc9dI6vuk4V6FOeogCmAzByRtBwe6yVFiiic12u-QE2yHntZhHY2Sf0F69oW1mWkTNbw6dJSnH63x1idWakQVWQ-AmsKefp6KPBR13WVXfqc0olOfc4D9eWbDyyPVaikOlR7eEOm63s86VSxgX99T2zd-kX033yXrdw8ZVkd8_8iskFVQAF4DlJa9rif1TLWZG3WvshBmHNOeyKGkIPjUupxptMzI3hOyzchguX5r1fMcuu6XD2miDm5qsg3vHipbF_4T1GwY5hOWGeqYcfrnIhIIDILOk85RFV1DNKiIstCOV29ytwgFqd9g</msg>
-<arg>Login successful. Token: Bearer ${ACCESS_TOKEN}</arg>
+<msg time="2025-04-06T20:30:00.785823" level="INFO">Successfully authenticated with token: Bearer eyJhbGciOiJSUzI1NiIsInR5cCIgOiAiSldUIiwia2lkIiA6ICI0TVhBLW1VYjduYV90RjNJd1VrWXNreHZrbVNqQWJpSEV6MnFpN3ZaRGhJIn0.eyJleHAiOjE3NDM5NzE0MDAsImlhdCI6MTc0Mzk0NjIwMCwianRpIjoiMzJjYWViNzItZTYyOS00MmY1LTkzYzYtOWU3ZGYyYmY1MzM0IiwiaXNzIjoiaHR0cHM6Ly9rYy5jb25jb24udm4vcmVhbG1zL3ZraG9fc3RhZyIsInN1YiI6IjIzYzY2NzE3LThkY2EtNDk3MS1hZDA5LTk2ODFkNjMyZjA5YyIsInR5cCI6IkJlYXJlciIsImF6cCI6InZraG9fYXBwIiwic2lkIjoiZTk3MmEwMzMtYmM5OS00MGEwLWExYmItODQxZmQ0NTQ2MTUwIiwiYWNyIjoiMSIsImFsbG93ZWQtb3JpZ2lucyI6WyIqIl0sInJlYWxtX2FjY2VzcyI6eyJyb2xlcyI6WyJtYW5hZ2VyIiwic3RhZmYiXX0sInNjb3BlIjoib3BlbmlkIHByb2ZpbGUgZW1haWwiLCJlbWFpbF92ZXJpZmllZCI6ZmFsc2UsIm5hbWUiOiJIdXkgUUMgTWFuYWdlciIsInByZWZlcnJlZF91c2VybmFtZSI6Imh1eW5oMjIubWFuYWdlciIsImdpdmVuX25hbWUiOiJIdXkiLCJmYW1pbHlfbmFtZSI6IlFDIE1hbmFnZXIiLCJlbWFpbCI6InZvbGliZWFyMTUzQGdtYWlsLmNvbSJ9.OlrsF3qEIsR8V2esJF-h61KSD6qFthku-_AROGCqgv_axJ4rYRDtHAH45EVpO6S2lFBWyAVD5FWTyKwD7gIqdcgWFY-il1PXc96toA0PtmsKsv-qOG0DxuF5z3CWhGClvMAtrPoJpmFtmT6XL6Xk-FNbSiQa0mFd70O52NYpyIKamOW4qJsVaY8PXGgEdPJXqGSgf0PAm4Mj_Fh7IWByi2c5Wi8paXHyHbWrRJs23UCAUjwu3MavbByXCq_z7yKfQIRt8qkfP8Qb5MEpSduTZwHgHxS8aoPmoRoKmgIaJctKFvpChGYq1AvJVnC-WYwBY8vLPbjnIkYxn30E4d5Q4g</msg>
+<arg>Successfully authenticated with token: ${AUTH_TOKEN}</arg>
 <doc>Logs the given message with the given level.</doc>
-<status status="PASS" start="2025-04-05T16:10:42.913822" elapsed="0.000236"/>
+<status status="PASS" start="2025-04-06T20:30:00.785700" elapsed="0.000184"/>
 </kw>
-<doc>Verify that a user can successfully login and receive a token</doc>
-<tag>authentication</tag>
-<tag>login</tag>
-<tag>positive</tag>
-<status status="PASS" start="2025-04-05T16:10:42.618863" elapsed="0.295391"/>
+<doc>Setup API session for division tests</doc>
+<tag>setup</tag>
+<status status="PASS" start="2025-04-06T20:30:00.599065" elapsed="0.187045"/>
 </test>
-<test id="s1-s1-t2" name="User Authentication Should Be Validated With Valid Token" line="45">
-<kw name="Should Not Be Empty" owner="BuiltIn">
-<msg time="2025-04-05T16:10:42.915722" level="INFO">Length is 1151.</msg>
-<arg>${ACCESS_TOKEN}</arg>
-<arg>msg=No authentication token available. Run login test first.</arg>
-<doc>Verifies that the given item is not empty.</doc>
-<status status="PASS" start="2025-04-05T16:10:42.915551" elapsed="0.000216"/>
+<test id="s1-s1-t2" name="02 - Create Division Test" line="430">
+<kw name="Generate Unique Division Data">
+<kw name="Evaluate" owner="BuiltIn">
+<msg time="2025-04-06T20:30:00.787714" level="INFO">${timestamp} = 1743946200</msg>
+<var>${timestamp}</var>
+<arg>int(time.time())</arg>
+<arg>time</arg>
+<doc>Evaluates the given expression in Python and returns the result.</doc>
+<status status="PASS" start="2025-04-06T20:30:00.787516" elapsed="0.000224"/>
+</kw>
+<kw name="Set Variable" owner="BuiltIn">
+<msg time="2025-04-06T20:30:00.787978" level="INFO">${division_name} = Test Division 1743946200</msg>
+<var>${division_name}</var>
+<arg>${custom_name} ${timestamp}</arg>
+<doc>Returns the given values which can then be assigned to a variables.</doc>
+<status status="PASS" start="2025-04-06T20:30:00.787833" elapsed="0.000167"/>
 </kw>
 <kw name="Create Dictionary" owner="BuiltIn">
-<msg time="2025-04-05T16:10:42.916188" level="INFO">${headers} = {'Authorization': 'Bearer eyJhbGciOiJSUzI1NiIsInR5cCIgOiAiSldUIiwia2lkIiA6ICI0TVhBLW1VYjduYV90RjNJd1VrWXNreHZrbVNqQWJpSEV6MnFpN3ZaRGhJIn0.eyJleHAiOjE3NDM4Njk0NDIsImlhdCI6MTc0Mzg0NDI0MiwianRpIjoiMmM1NT...</msg>
-<var>${headers}</var>
-<arg>Authorization=Bearer ${ACCESS_TOKEN}</arg>
-<arg>Content-Type=application/json</arg>
+<msg time="2025-04-06T20:30:00.788302" level="INFO">${division_data} = {'name': 'Test Division 1743946200', 'warehouseId': '6'}</msg>
+<var>${division_data}</var>
+<arg>name=${division_name}</arg>
+<arg>warehouseId=${WAREHOUSE_ID}</arg>
 <doc>Creates and returns a dictionary based on the given ``items``.</doc>
-<status status="PASS" start="2025-04-05T16:10:42.915968" elapsed="0.000247"/>
+<status status="PASS" start="2025-04-06T20:30:00.788103" elapsed="0.000228"/>
 </kw>
-<kw name="GET On Session" owner="RequestsLibrary">
-<msg time="2025-04-05T16:10:42.979508" level="INFO">GET Request : url=https://api.vkho.net/auth/authenticate 
- path_url=/auth/authenticate 
- headers={'User-Agent': 'python-requests/2.32.3', 'Accept-Encoding': 'gzip, deflate', 'Accept': '*/*', 'Connection': 'keep-alive', 'Authorization': 'Bearer eyJhbGciOiJSUzI1NiIsInR5cCIgOiAiSldUIiwia2lkIiA6ICI0TVhBLW1VYjduYV90RjNJd1VrWXNreHZrbVNqQWJpSEV6MnFpN3ZaRGhJIn0.eyJleHAiOjE3NDM4Njk0NDIsImlhdCI6MTc0Mzg0NDI0MiwianRpIjoiMmM1NTU4MmUtYTY3MC00ZmMzLThkMzYtNWQ3MDU4YzYyOGY5IiwiaXNzIjoiaHR0cHM6Ly9rYy5jb25jb24udm4vcmVhbG1zL3ZraG9fc3RhZyIsInN1YiI6IjIzYzY2NzE3LThkY2EtNDk3MS1hZDA5LTk2ODFkNjMyZjA5YyIsInR5cCI6IkJlYXJlciIsImF6cCI6InZraG9fYXBwIiwic2lkIjoiNTQxOTdkZDMtZjI5Yy00YTYwLTk0NzktNTdhZThhNjdmYmE5IiwiYWNyIjoiMSIsImFsbG93ZWQtb3JpZ2lucyI6WyIqIl0sInJlYWxtX2FjY2VzcyI6eyJyb2xlcyI6WyJtYW5hZ2VyIiwic3RhZmYiXX0sInNjb3BlIjoib3BlbmlkIHByb2ZpbGUgZW1haWwiLCJlbWFpbF92ZXJpZmllZCI6ZmFsc2UsIm5hbWUiOiJIdXkgUUMgTWFuYWdlciIsInByZWZlcnJlZF91c2VybmFtZSI6Imh1eW5oMjIubWFuYWdlciIsImdpdmVuX25hbWUiOiJIdXkiLCJmYW1pbHlfbmFtZSI6IlFDIE1hbmFnZXIiLCJlbWFpbCI6InZvbGliZWFyMTUzQGdtYWlsLmNvbSJ9.hrEHRsPc6iOlz6MGACuVJRIcVIt3Fbc9dI6vuk4V6FOeogCmAzByRtBwe6yVFiiic12u-QE2yHntZhHY2Sf0F69oW1mWkTNbw6dJSnH63x1idWakQVWQ-AmsKefp6KPBR13WVXfqc0olOfc4D9eWbDyyPVaikOlR7eEOm63s86VSxgX99T2zd-kX033yXrdw8ZVkd8_8iskFVQAF4DlJa9rif1TLWZG3WvshBmHNOeyKGkIPjUupxptMzI3hOyzchguX5r1fMcuu6XD2miDm5qsg3vHipbF_4T1GwY5hOWGeqYcfrnIhIIDILOk85RFV1DNKiIstCOV29ytwgFqd9g', 'Content-Type': 'application/json'} 
- body=None 
+<return>
+<value>${division_data}</value>
+<status status="PASS" start="2025-04-06T20:30:00.788388" elapsed="0.000041"/>
+</return>
+<msg time="2025-04-06T20:30:00.788538" level="INFO">${division_data} = {'name': 'Test Division 1743946200', 'warehouseId': '6'}</msg>
+<var>${division_data}</var>
+<doc>Generate unique data for division tests</doc>
+<status status="PASS" start="2025-04-06T20:30:00.787268" elapsed="0.001291"/>
+</kw>
+<kw name="Create Division">
+<kw name="Dictionary Should Contain Key" owner="Collections">
+<arg>${division_data}</arg>
+<arg>name</arg>
+<arg>msg=Missing required parameter: name</arg>
+<doc>Fails if ``key`` is not found from ``dictionary``.</doc>
+<status status="PASS" start="2025-04-06T20:30:00.789085" elapsed="0.000158"/>
+</kw>
+<kw name="Dictionary Should Contain Key" owner="Collections">
+<arg>${division_data}</arg>
+<arg>warehouseId</arg>
+<arg>msg=Missing required parameter: warehouseId</arg>
+<doc>Fails if ``key`` is not found from ``dictionary``.</doc>
+<status status="PASS" start="2025-04-06T20:30:00.789349" elapsed="0.000155"/>
+</kw>
+<kw name="Create Dictionary" owner="BuiltIn">
+<msg time="2025-04-06T20:30:00.789788" level="INFO">${headers} = {'Content-Type': 'application/json', 'Authorization': 'Bearer eyJhbGciOiJSUzI1NiIsInR5cCIgOiAiSldUIiwia2lkIiA6ICI0TVhBLW1VYjduYV90RjNJd1VrWXNreHZrbVNqQWJpSEV6MnFpN3ZaRGhJIn0.eyJleHAiOjE3NDM5NzE0MDAsIm...</msg>
+<var>${headers}</var>
+<arg>Content-Type=application/json</arg>
+<arg>Authorization=${AUTH_TOKEN}</arg>
+<doc>Creates and returns a dictionary based on the given ``items``.</doc>
+<status status="PASS" start="2025-04-06T20:30:00.789602" elapsed="0.000211"/>
+</kw>
+<kw name="POST On Session" owner="RequestsLibrary">
+<msg time="2025-04-06T20:30:00.856218" level="INFO">POST Request : url=https://api.vkho.net/divison/create 
+ path_url=/divison/create 
+ headers={'User-Agent': 'python-requests/2.32.3', 'Accept-Encoding': 'gzip, deflate', 'Accept': '*/*', 'Connection': 'keep-alive', 'Content-Type': 'application/json', 'Authorization': 'Bearer eyJhbGciOiJSUzI1NiIsInR5cCIgOiAiSldUIiwia2lkIiA6ICI0TVhBLW1VYjduYV90RjNJd1VrWXNreHZrbVNqQWJpSEV6MnFpN3ZaRGhJIn0.eyJleHAiOjE3NDM5NzE0MDAsImlhdCI6MTc0Mzk0NjIwMCwianRpIjoiMzJjYWViNzItZTYyOS00MmY1LTkzYzYtOWU3ZGYyYmY1MzM0IiwiaXNzIjoiaHR0cHM6Ly9rYy5jb25jb24udm4vcmVhbG1zL3ZraG9fc3RhZyIsInN1YiI6IjIzYzY2NzE3LThkY2EtNDk3MS1hZDA5LTk2ODFkNjMyZjA5YyIsInR5cCI6IkJlYXJlciIsImF6cCI6InZraG9fYXBwIiwic2lkIjoiZTk3MmEwMzMtYmM5OS00MGEwLWExYmItODQxZmQ0NTQ2MTUwIiwiYWNyIjoiMSIsImFsbG93ZWQtb3JpZ2lucyI6WyIqIl0sInJlYWxtX2FjY2VzcyI6eyJyb2xlcyI6WyJtYW5hZ2VyIiwic3RhZmYiXX0sInNjb3BlIjoib3BlbmlkIHByb2ZpbGUgZW1haWwiLCJlbWFpbF92ZXJpZmllZCI6ZmFsc2UsIm5hbWUiOiJIdXkgUUMgTWFuYWdlciIsInByZWZlcnJlZF91c2VybmFtZSI6Imh1eW5oMjIubWFuYWdlciIsImdpdmVuX25hbWUiOiJIdXkiLCJmYW1pbHlfbmFtZSI6IlFDIE1hbmFnZXIiLCJlbWFpbCI6InZvbGliZWFyMTUzQGdtYWlsLmNvbSJ9.OlrsF3qEIsR8V2esJF-h61KSD6qFthku-_AROGCqgv_axJ4rYRDtHAH45EVpO6S2lFBWyAVD5FWTyKwD7gIqdcgWFY-il1PXc96toA0PtmsKsv-qOG0DxuF5z3CWhGClvMAtrPoJpmFtmT6XL6Xk-FNbSiQa0mFd70O52NYpyIKamOW4qJsVaY8PXGgEdPJXqGSgf0PAm4Mj_Fh7IWByi2c5Wi8paXHyHbWrRJs23UCAUjwu3MavbByXCq_z7yKfQIRt8qkfP8Qb5MEpSduTZwHgHxS8aoPmoRoKmgIaJctKFvpChGYq1AvJVnC-WYwBY8vLPbjnIkYxn30E4d5Q4g', 'Content-Length': '56'} 
+ body=b'{"name": "Test Division 1743946200", "warehouseId": "6"}' 
  </msg>
-<msg time="2025-04-05T16:10:42.979589" level="INFO">GET Response : url=https://api.vkho.net/auth/authenticate 
- status=200, reason=OK 
- headers={'Access-Control-Allow-Origin': '*', 'Alt-Svc': 'h3=":443"; ma=2592000', 'Content-Length': '940', 'Content-Type': 'application/json; charset=utf-8', 'Date': 'Sat, 05 Apr 2025 09:10:42 GMT', 'Etag': 'W/"3ac-gyanqxN2Xiv1/AtYbx7EfJWSHVE"', 'Server': 'Caddy'} 
- body={"userInfo":{"sub":"23c66717-8dca-4971-ad09-9681d632f09c","email_verified":false,"name":"Huy QC Manager","preferred_username":"huynh22.manager","given_name":"Huy","family_name":"QC Manager","email":"volibear153@gmail.com"},"warehouses":[{"id":6,"name":"Distribution Hub","code":"WH_6","address":"2924 Mount Street, CINCINNATI, OH 45268","acreage":50000,"createDate":"2025-03-03T04:40:09.315Z","status":"ENABLE","userIds":["23c66717-8dca-4971-ad09-9681d632f09c","c2f403dc-86e0-4986-884a-eb875caa8f15","7094178e-56ce-449f-804f-6fab9a4b1a74","93e527b4-9844-4df0-bd9f-387e30c60acc"]},{"id":7,"name":"Fulfillment Zone","code":"WH_7","address":"29715 3rd Street, Royalworth, Missouri - 57379, Germany","acreage":50000,"createDate":"2025-03-03T04:41:13.434Z","status":"ENABLE","userIds":["23c66717-8dca-4971-ad09-9681d632f09c","c2f403dc-86e0-4986-884a-eb875caa8f15","7094178e-56ce-449f-804f-6fab9a4b1a74","93e527b4-9844-4df0-bd9f-387e30c60acc"]}]} 
+<msg time="2025-04-06T20:30:00.856319" level="INFO">POST Response : url=https://api.vkho.net/divison/create 
+ status=201, reason=Created 
+ headers={'Access-Control-Allow-Origin': '*', 'Alt-Svc': 'h3=":443"; ma=2592000', 'Content-Length': '169', 'Content-Type': 'application/json; charset=utf-8', 'Date': 'Sun, 06 Apr 2025 13:30:00 GMT', 'Etag': 'W/"a9-Ki0XLo0iw5AP6HAN/A5yk8wCvtw"', 'Server': 'Caddy'} 
+ body={"id":62,"code":"62","name":"Test Division 1743946200","createDate":"2025-04-06T13:30:00.883Z","updateDate":"2025-04-06T13:30:00.883Z","status":"ENABLE","warehouseId":6} 
  </msg>
-<msg time="2025-04-05T16:10:42.979784" level="INFO">${response} = &lt;Response [200]&gt;</msg>
+<msg time="2025-04-06T20:30:00.856433" level="INFO">${response} = &lt;Response [201]&gt;</msg>
 <var>${response}</var>
 <arg>vkho</arg>
-<arg>/auth/authenticate</arg>
+<arg>/divison/create</arg>
+<arg>json=${division_data}</arg>
+<arg>headers=${headers}</arg>
+<arg>expected_status=201</arg>
+<doc>Sends a POST request on a previously created HTTP Session.</doc>
+<status status="PASS" start="2025-04-06T20:30:00.789902" elapsed="0.066556"/>
+</kw>
+<kw name="Evaluate" owner="BuiltIn">
+<msg time="2025-04-06T20:30:00.856852" level="INFO">${timestamp} = 1743946200</msg>
+<var>${timestamp}</var>
+<arg>int(time.time())</arg>
+<arg>time</arg>
+<doc>Evaluates the given expression in Python and returns the result.</doc>
+<status status="PASS" start="2025-04-06T20:30:00.856622" elapsed="0.000254"/>
+</kw>
+<kw name="Create File" owner="OperatingSystem">
+<msg time="2025-04-06T20:30:00.858539" level="INFO" html="true">Created file '&lt;a href="file://D:\robot_file\Variables\results\division_create_1743946200.json"&gt;D:\robot_file\Variables\results\division_create_1743946200.json&lt;/a&gt;'.</msg>
+<arg>${RESULTS_DIR}${/}division_create_${timestamp}.json</arg>
+<arg>${response.text}</arg>
+<doc>Creates a file with the given content and encoding.</doc>
+<status status="PASS" start="2025-04-06T20:30:00.856974" elapsed="0.001810"/>
+</kw>
+<kw name="Evaluate" owner="BuiltIn">
+<msg time="2025-04-06T20:30:00.860172" level="INFO">${json} = {'id': 62, 'code': '62', 'name': 'Test Division 1743946200', 'createDate': '2025-04-06T13:30:00.883Z', 'updateDate': '2025-04-06T13:30:00.883Z', 'status': 'ENABLE', 'warehouseId': 6}</msg>
+<var>${json}</var>
+<arg>json.loads('''${response.text}''')</arg>
+<arg>json</arg>
+<doc>Evaluates the given expression in Python and returns the result.</doc>
+<status status="PASS" start="2025-04-06T20:30:00.859052" elapsed="0.001156"/>
+</kw>
+<kw name="Should Not Be Empty" owner="BuiltIn">
+<msg time="2025-04-06T20:30:00.860720" level="INFO">Length is 7.</msg>
+<arg>${json}</arg>
+<arg>msg=Create division response was empty</arg>
+<doc>Verifies that the given item is not empty.</doc>
+<status status="PASS" start="2025-04-06T20:30:00.860341" elapsed="0.000743"/>
+</kw>
+<kw name="Dictionary Should Contain Key" owner="Collections">
+<arg>${json}</arg>
+<arg>id</arg>
+<arg>msg=Create division response missing ID field</arg>
+<doc>Fails if ``key`` is not found from ``dictionary``.</doc>
+<status status="PASS" start="2025-04-06T20:30:00.861390" elapsed="0.000215"/>
+</kw>
+<kw name="Convert To String" owner="BuiltIn">
+<msg time="2025-04-06T20:30:00.861894" level="INFO">${division_id} = 62</msg>
+<var>${division_id}</var>
+<arg>${json}[id]</arg>
+<doc>Converts the given item to a Unicode string.</doc>
+<status status="PASS" start="2025-04-06T20:30:00.861718" elapsed="0.000200"/>
+</kw>
+<return>
+<value>${division_id}</value>
+<value>${json}</value>
+<status status="PASS" start="2025-04-06T20:30:00.861962" elapsed="0.000038"/>
+</return>
+<msg time="2025-04-06T20:30:00.862149" level="INFO">${division_id} = 62</msg>
+<msg time="2025-04-06T20:30:00.862193" level="INFO">${response} = {'id': 62, 'code': '62', 'name': 'Test Division 1743946200', 'createDate': '2025-04-06T13:30:00.883Z', 'updateDate': '2025-04-06T13:30:00.883Z', 'status': 'ENABLE', 'warehouseId': 6}</msg>
+<var>${division_id}</var>
+<var>${response}</var>
+<arg>${division_data}</arg>
+<doc>Create a new division and return its ID</doc>
+<status status="PASS" start="2025-04-06T20:30:00.788847" elapsed="0.073367"/>
+</kw>
+<kw name="Should Not Be Empty" owner="BuiltIn">
+<msg time="2025-04-06T20:30:00.862877" level="INFO">Length is 2.</msg>
+<arg>${division_id}</arg>
+<arg>msg=Failed to create division: No ID returned</arg>
+<doc>Verifies that the given item is not empty.</doc>
+<status status="PASS" start="2025-04-06T20:30:00.862660" elapsed="0.000274"/>
+</kw>
+<kw name="Should Be Equal" owner="BuiltIn">
+<arg>${response}[name]</arg>
+<arg>${division_data}[name]</arg>
+<arg>msg=Created division name does not match input data</arg>
+<doc>Fails if the given objects are unequal.</doc>
+<status status="PASS" start="2025-04-06T20:30:00.863406" elapsed="0.000230"/>
+</kw>
+<kw name="Set Global Variable" owner="BuiltIn">
+<msg time="2025-04-06T20:30:00.864886" level="INFO">${TEST_DIVISION_ID} = 62</msg>
+<arg>${TEST_DIVISION_ID}</arg>
+<arg>${division_id}</arg>
+<doc>Makes a variable available globally in all tests and suites.</doc>
+<status status="PASS" start="2025-04-06T20:30:00.863905" elapsed="0.001024"/>
+</kw>
+<kw name="Set Global Variable" owner="BuiltIn">
+<msg time="2025-04-06T20:30:00.866233" level="INFO">${TEST_DIVISION_NAME} = Test Division 1743946200</msg>
+<arg>${TEST_DIVISION_NAME}</arg>
+<arg>${response}[name]</arg>
+<doc>Makes a variable available globally in all tests and suites.</doc>
+<status status="PASS" start="2025-04-06T20:30:00.865172" elapsed="0.001104"/>
+</kw>
+<kw name="Set Global Variable" owner="BuiltIn">
+<msg time="2025-04-06T20:30:00.867740" level="INFO">${TEST_DIVISION_DATA} = {'name': 'Test Division 1743946200', 'warehouseId': '6'}</msg>
+<arg>${TEST_DIVISION_DATA}</arg>
+<arg>${division_data}</arg>
+<doc>Makes a variable available globally in all tests and suites.</doc>
+<status status="PASS" start="2025-04-06T20:30:00.866518" elapsed="0.001272"/>
+</kw>
+<kw name="Log" owner="BuiltIn">
+<msg time="2025-04-06T20:30:00.868169" level="INFO">Successfully created division: Test Division 1743946200 with ID: 62</msg>
+<arg>Successfully created division: ${TEST_DIVISION_NAME} with ID: ${TEST_DIVISION_ID}</arg>
+<doc>Logs the given message with the given level.</doc>
+<status status="PASS" start="2025-04-06T20:30:00.868029" elapsed="0.000189"/>
+</kw>
+<doc>Test creating a new division</doc>
+<tag>create</tag>
+<tag>positive</tag>
+<status status="PASS" start="2025-04-06T20:30:00.786835" elapsed="0.081639"/>
+</test>
+<test id="s1-s1-t3" name="03 - Create Division Missing Required Field Test" line="453">
+<kw name="Generate Unique Division Data">
+<kw name="Evaluate" owner="BuiltIn">
+<msg time="2025-04-06T20:30:00.870927" level="INFO">${timestamp} = 1743946200</msg>
+<var>${timestamp}</var>
+<arg>int(time.time())</arg>
+<arg>time</arg>
+<doc>Evaluates the given expression in Python and returns the result.</doc>
+<status status="PASS" start="2025-04-06T20:30:00.870708" elapsed="0.000247"/>
+</kw>
+<kw name="Set Variable" owner="BuiltIn">
+<msg time="2025-04-06T20:30:00.871219" level="INFO">${division_name} = Missing Field Division 1743946200</msg>
+<var>${division_name}</var>
+<arg>${custom_name} ${timestamp}</arg>
+<doc>Returns the given values which can then be assigned to a variables.</doc>
+<status status="PASS" start="2025-04-06T20:30:00.871057" elapsed="0.000185"/>
+</kw>
+<kw name="Create Dictionary" owner="BuiltIn">
+<msg time="2025-04-06T20:30:00.871554" level="INFO">${division_data} = {'name': 'Missing Field Division 1743946200', 'warehouseId': '6'}</msg>
+<var>${division_data}</var>
+<arg>name=${division_name}</arg>
+<arg>warehouseId=${WAREHOUSE_ID}</arg>
+<doc>Creates and returns a dictionary based on the given ``items``.</doc>
+<status status="PASS" start="2025-04-06T20:30:00.871338" elapsed="0.000240"/>
+</kw>
+<return>
+<value>${division_data}</value>
+<status status="PASS" start="2025-04-06T20:30:00.871622" elapsed="0.000031"/>
+</return>
+<msg time="2025-04-06T20:30:00.871763" level="INFO">${incomplete_data} = {'name': 'Missing Field Division 1743946200', 'warehouseId': '6'}</msg>
+<var>${incomplete_data}</var>
+<arg>custom_name=Missing Field Division</arg>
+<doc>Generate unique data for division tests</doc>
+<status status="PASS" start="2025-04-06T20:30:00.870403" elapsed="0.001381"/>
+</kw>
+<kw name="Remove From Dictionary" owner="Collections">
+<msg time="2025-04-06T20:30:00.872190" level="INFO">Removed item with key 'warehouseId' and value '6'.</msg>
+<arg>${incomplete_data}</arg>
+<arg>warehouseId</arg>
+<doc>Removes the given ``keys`` from the ``dictionary``.</doc>
+<status status="PASS" start="2025-04-06T20:30:00.872062" elapsed="0.000171"/>
+</kw>
+<kw name="Create Dictionary" owner="BuiltIn">
+<msg time="2025-04-06T20:30:00.872671" level="INFO">${headers} = {'Content-Type': 'application/json', 'Authorization': 'Bearer eyJhbGciOiJSUzI1NiIsInR5cCIgOiAiSldUIiwia2lkIiA6ICI0TVhBLW1VYjduYV90RjNJd1VrWXNreHZrbVNqQWJpSEV6MnFpN3ZaRGhJIn0.eyJleHAiOjE3NDM5NzE0MDAsIm...</msg>
+<var>${headers}</var>
+<arg>Content-Type=application/json</arg>
+<arg>Authorization=${AUTH_TOKEN}</arg>
+<doc>Creates and returns a dictionary based on the given ``items``.</doc>
+<status status="PASS" start="2025-04-06T20:30:00.872461" elapsed="0.000239"/>
+</kw>
+<kw name="Run Keyword And Expect Error" owner="BuiltIn">
+<kw name="Create Division">
+<kw name="Dictionary Should Contain Key" owner="Collections">
+<arg>${division_data}</arg>
+<arg>name</arg>
+<arg>msg=Missing required parameter: name</arg>
+<doc>Fails if ``key`` is not found from ``dictionary``.</doc>
+<status status="PASS" start="2025-04-06T20:30:00.873479" elapsed="0.000154"/>
+</kw>
+<kw name="Dictionary Should Contain Key" owner="Collections">
+<msg time="2025-04-06T20:30:00.873982" level="FAIL">Missing required parameter: warehouseId</msg>
+<arg>${division_data}</arg>
+<arg>warehouseId</arg>
+<arg>msg=Missing required parameter: warehouseId</arg>
+<doc>Fails if ``key`` is not found from ``dictionary``.</doc>
+<status status="FAIL" start="2025-04-06T20:30:00.873736" elapsed="0.000385">Missing required parameter: warehouseId</status>
+</kw>
+<kw name="Create Dictionary" owner="BuiltIn">
+<var>${headers}</var>
+<arg>Content-Type=application/json</arg>
+<arg>Authorization=${AUTH_TOKEN}</arg>
+<doc>Creates and returns a dictionary based on the given ``items``.</doc>
+<status status="NOT RUN" start="2025-04-06T20:30:00.874251" elapsed="0.000020"/>
+</kw>
+<kw name="POST On Session" owner="RequestsLibrary">
+<var>${response}</var>
+<arg>vkho</arg>
+<arg>/divison/create</arg>
+<arg>json=${division_data}</arg>
+<arg>headers=${headers}</arg>
+<arg>expected_status=201</arg>
+<doc>Sends a POST request on a previously created HTTP Session.</doc>
+<status status="NOT RUN" start="2025-04-06T20:30:00.874384" elapsed="0.000022"/>
+</kw>
+<kw name="Evaluate" owner="BuiltIn">
+<var>${timestamp}</var>
+<arg>int(time.time())</arg>
+<arg>time</arg>
+<doc>Evaluates the given expression in Python and returns the result.</doc>
+<status status="NOT RUN" start="2025-04-06T20:30:00.874535" elapsed="0.000028"/>
+</kw>
+<kw name="Create File" owner="OperatingSystem">
+<arg>${RESULTS_DIR}${/}division_create_${timestamp}.json</arg>
+<arg>${response.text}</arg>
+<doc>Creates a file with the given content and encoding.</doc>
+<status status="NOT RUN" start="2025-04-06T20:30:00.874721" elapsed="0.000033"/>
+</kw>
+<kw name="Evaluate" owner="BuiltIn">
+<var>${json}</var>
+<arg>json.loads('''${response.text}''')</arg>
+<arg>json</arg>
+<doc>Evaluates the given expression in Python and returns the result.</doc>
+<status status="NOT RUN" start="2025-04-06T20:30:00.874846" elapsed="0.000018"/>
+</kw>
+<kw name="Should Not Be Empty" owner="BuiltIn">
+<arg>${json}</arg>
+<arg>msg=Create division response was empty</arg>
+<doc>Verifies that the given item is not empty.</doc>
+<status status="NOT RUN" start="2025-04-06T20:30:00.874942" elapsed="0.000015"/>
+</kw>
+<kw name="Dictionary Should Contain Key" owner="Collections">
+<arg>${json}</arg>
+<arg>id</arg>
+<arg>msg=Create division response missing ID field</arg>
+<doc>Fails if ``key`` is not found from ``dictionary``.</doc>
+<status status="NOT RUN" start="2025-04-06T20:30:00.875051" elapsed="0.000017"/>
+</kw>
+<kw name="Convert To String" owner="BuiltIn">
+<var>${division_id}</var>
+<arg>${json}[id]</arg>
+<doc>Converts the given item to a Unicode string.</doc>
+<status status="NOT RUN" start="2025-04-06T20:30:00.875145" elapsed="0.000016"/>
+</kw>
+<return>
+<value>${division_id}</value>
+<value>${json}</value>
+<status status="NOT RUN" start="2025-04-06T20:30:00.875198" elapsed="0.000015"/>
+</return>
+<arg>${incomplete_data}</arg>
+<doc>Create a new division and return its ID</doc>
+<status status="FAIL" start="2025-04-06T20:30:00.873227" elapsed="0.002111">Missing required parameter: warehouseId</status>
+</kw>
+<arg>*Missing required parameter: warehouseId*</arg>
+<arg>Create Division</arg>
+<arg>${incomplete_data}</arg>
+<doc>Runs the keyword and checks that the expected error occurred.</doc>
+<status status="PASS" start="2025-04-06T20:30:00.872980" elapsed="0.002599"/>
+</kw>
+<kw name="Log" owner="BuiltIn">
+<msg time="2025-04-06T20:30:00.875961" level="INFO">Successfully verified that creating a division with missing fields is rejected</msg>
+<arg>Successfully verified that creating a division with missing fields is rejected</arg>
+<doc>Logs the given message with the given level.</doc>
+<status status="PASS" start="2025-04-06T20:30:00.875858" elapsed="0.000148"/>
+</kw>
+<doc>Test creating a division with missing required fields</doc>
+<tag>create</tag>
+<tag>negative</tag>
+<status status="PASS" start="2025-04-06T20:30:00.869684" elapsed="0.006556"/>
+</test>
+<test id="s1-s1-t4" name="04 - Get Division Test" line="470">
+<kw name="Run Keyword If" owner="BuiltIn">
+<arg>"${TEST_DIVISION_ID}" == "${EMPTY}"</arg>
+<arg>Create Test Division</arg>
+<doc>Runs the given keyword with the given arguments, if ``condition`` is true.</doc>
+<status status="PASS" start="2025-04-06T20:30:00.877485" elapsed="0.000564"/>
+</kw>
+<kw name="Get Division By ID">
+<kw name="Should Not Be Empty" owner="BuiltIn">
+<msg time="2025-04-06T20:30:00.878721" level="INFO">Length is 2.</msg>
+<arg>${division_id}</arg>
+<arg>msg=Division ID cannot be empty</arg>
+<doc>Verifies that the given item is not empty.</doc>
+<status status="PASS" start="2025-04-06T20:30:00.878580" elapsed="0.000182"/>
+</kw>
+<kw name="Convert To Integer" owner="BuiltIn">
+<msg time="2025-04-06T20:30:00.879016" level="INFO">${division_id} = 62</msg>
+<var>${division_id}</var>
+<arg>${division_id}</arg>
+<doc>Converts the given item to an integer number.</doc>
+<status status="PASS" start="2025-04-06T20:30:00.878859" elapsed="0.000180"/>
+</kw>
+<kw name="Create Dictionary" owner="BuiltIn">
+<msg time="2025-04-06T20:30:00.879794" level="INFO">${headers} = {'Content-Type': 'application/json', 'Authorization': 'Bearer eyJhbGciOiJSUzI1NiIsInR5cCIgOiAiSldUIiwia2lkIiA6ICI0TVhBLW1VYjduYV90RjNJd1VrWXNreHZrbVNqQWJpSEV6MnFpN3ZaRGhJIn0.eyJleHAiOjE3NDM5NzE0MDAsIm...</msg>
+<var>${headers}</var>
+<arg>Content-Type=application/json</arg>
+<arg>Authorization=${AUTH_TOKEN}</arg>
+<doc>Creates and returns a dictionary based on the given ``items``.</doc>
+<status status="PASS" start="2025-04-06T20:30:00.879130" elapsed="0.000692"/>
+</kw>
+<kw name="GET On Session" owner="RequestsLibrary">
+<msg time="2025-04-06T20:30:00.905520" level="INFO">GET Request : url=https://api.vkho.net/divison/get-one/62 
+ path_url=/divison/get-one/62 
+ headers={'User-Agent': 'python-requests/2.32.3', 'Accept-Encoding': 'gzip, deflate', 'Accept': '*/*', 'Connection': 'keep-alive', 'Content-Type': 'application/json', 'Authorization': 'Bearer eyJhbGciOiJSUzI1NiIsInR5cCIgOiAiSldUIiwia2lkIiA6ICI0TVhBLW1VYjduYV90RjNJd1VrWXNreHZrbVNqQWJpSEV6MnFpN3ZaRGhJIn0.eyJleHAiOjE3NDM5NzE0MDAsImlhdCI6MTc0Mzk0NjIwMCwianRpIjoiMzJjYWViNzItZTYyOS00MmY1LTkzYzYtOWU3ZGYyYmY1MzM0IiwiaXNzIjoiaHR0cHM6Ly9rYy5jb25jb24udm4vcmVhbG1zL3ZraG9fc3RhZyIsInN1YiI6IjIzYzY2NzE3LThkY2EtNDk3MS1hZDA5LTk2ODFkNjMyZjA5YyIsInR5cCI6IkJlYXJlciIsImF6cCI6InZraG9fYXBwIiwic2lkIjoiZTk3MmEwMzMtYmM5OS00MGEwLWExYmItODQxZmQ0NTQ2MTUwIiwiYWNyIjoiMSIsImFsbG93ZWQtb3JpZ2lucyI6WyIqIl0sInJlYWxtX2FjY2VzcyI6eyJyb2xlcyI6WyJtYW5hZ2VyIiwic3RhZmYiXX0sInNjb3BlIjoib3BlbmlkIHByb2ZpbGUgZW1haWwiLCJlbWFpbF92ZXJpZmllZCI6ZmFsc2UsIm5hbWUiOiJIdXkgUUMgTWFuYWdlciIsInByZWZlcnJlZF91c2VybmFtZSI6Imh1eW5oMjIubWFuYWdlciIsImdpdmVuX25hbWUiOiJIdXkiLCJmYW1pbHlfbmFtZSI6IlFDIE1hbmFnZXIiLCJlbWFpbCI6InZvbGliZWFyMTUzQGdtYWlsLmNvbSJ9.OlrsF3qEIsR8V2esJF-h61KSD6qFthku-_AROGCqgv_axJ4rYRDtHAH45EVpO6S2lFBWyAVD5FWTyKwD7gIqdcgWFY-il1PXc96toA0PtmsKsv-qOG0DxuF5z3CWhGClvMAtrPoJpmFtmT6XL6Xk-FNbSiQa0mFd70O52NYpyIKamOW4qJsVaY8PXGgEdPJXqGSgf0PAm4Mj_Fh7IWByi2c5Wi8paXHyHbWrRJs23UCAUjwu3MavbByXCq_z7yKfQIRt8qkfP8Qb5MEpSduTZwHgHxS8aoPmoRoKmgIaJctKFvpChGYq1AvJVnC-WYwBY8vLPbjnIkYxn30E4d5Q4g'} 
+ body=None 
+ </msg>
+<msg time="2025-04-06T20:30:00.905626" level="INFO">GET Response : url=https://api.vkho.net/divison/get-one/62 
+ status=200, reason=OK 
+ headers={'Access-Control-Allow-Origin': '*', 'Alt-Svc': 'h3=":443"; ma=2592000', 'Content-Length': '169', 'Content-Type': 'application/json; charset=utf-8', 'Date': 'Sun, 06 Apr 2025 13:30:00 GMT', 'Etag': 'W/"a9-Ki0XLo0iw5AP6HAN/A5yk8wCvtw"', 'Server': 'Caddy'} 
+ body={"id":62,"code":"62","name":"Test Division 1743946200","createDate":"2025-04-06T13:30:00.883Z","updateDate":"2025-04-06T13:30:00.883Z","status":"ENABLE","warehouseId":6} 
+ </msg>
+<msg time="2025-04-06T20:30:00.905763" level="INFO">${response} = &lt;Response [200]&gt;</msg>
+<var>${response}</var>
+<arg>vkho</arg>
+<arg>/divison/get-one/${division_id}</arg>
 <arg>headers=${headers}</arg>
 <arg>expected_status=200</arg>
 <doc>Sends a GET request on a previously created HTTP Session.</doc>
-<status status="PASS" start="2025-04-05T16:10:42.916458" elapsed="0.063352"/>
+<status status="PASS" start="2025-04-06T20:30:00.879925" elapsed="0.025881"/>
+</kw>
+<kw name="Set Variable" owner="BuiltIn">
+<msg time="2025-04-06T20:30:00.906791" level="INFO">${json_response} = {'id': 62, 'code': '62', 'name': 'Test Division 1743946200', 'createDate': '2025-04-06T13:30:00.883Z', 'updateDate': '2025-04-06T13:30:00.883Z', 'status': 'ENABLE', 'warehouseId': 6}</msg>
+<var>${json_response}</var>
+<arg>${response.json()}</arg>
+<doc>Returns the given values which can then be assigned to a variables.</doc>
+<status status="PASS" start="2025-04-06T20:30:00.906051" elapsed="0.000778"/>
+</kw>
+<kw name="Run Keyword And Return Status" owner="BuiltIn">
+<kw name="Dictionary Should Contain Key" owner="Collections">
+<msg time="2025-04-06T20:30:00.907251" level="FAIL">Dictionary does not contain key 'data'.</msg>
+<arg>${json_response}</arg>
+<arg>data</arg>
+<doc>Fails if ``key`` is not found from ``dictionary``.</doc>
+<status status="FAIL" start="2025-04-06T20:30:00.907080" elapsed="0.000243">Dictionary does not contain key 'data'.</status>
+</kw>
+<msg time="2025-04-06T20:30:00.907398" level="INFO">${has_data} = False</msg>
+<var>${has_data}</var>
+<arg>Dictionary Should Contain Key</arg>
+<arg>${json_response}</arg>
+<arg>data</arg>
+<doc>Runs the given keyword with given arguments and returns the status as a Boolean value.</doc>
+<status status="PASS" start="2025-04-06T20:30:00.906946" elapsed="0.000473"/>
+</kw>
+<kw name="Set Variable If" owner="BuiltIn">
+<msg time="2025-04-06T20:30:00.907662" level="INFO">${division} = {'id': 62, 'code': '62', 'name': 'Test Division 1743946200', 'createDate': '2025-04-06T13:30:00.883Z', 'updateDate': '2025-04-06T13:30:00.883Z', 'status': 'ENABLE', 'warehouseId': 6}</msg>
+<var>${division}</var>
+<arg>${has_data}</arg>
+<arg>${json_response}[data]</arg>
+<arg>${json_response}</arg>
+<doc>Sets variable based on the given condition.</doc>
+<status status="PASS" start="2025-04-06T20:30:00.907525" elapsed="0.000160"/>
+</kw>
+<kw name="Should Be True" owner="BuiltIn">
+<arg>isinstance($division, dict)</arg>
+<arg>msg=Response is not a JSON object. Got: ${division}</arg>
+<doc>Fails if the given condition is not true.</doc>
+<status status="PASS" start="2025-04-06T20:30:00.907782" elapsed="0.000259"/>
+</kw>
+<kw name="Log" owner="BuiltIn">
+<msg time="2025-04-06T20:30:00.908253" level="INFO">Retrieved division: {'id': 62, 'code': '62', 'name': 'Test Division 1743946200', 'createDate': '2025-04-06T13:30:00.883Z', 'updateDate': '2025-04-06T13:30:00.883Z', 'status': 'ENABLE', 'warehouseId': 6}</msg>
+<arg>Retrieved division: ${division}</arg>
+<doc>Logs the given message with the given level.</doc>
+<status status="PASS" start="2025-04-06T20:30:00.908145" elapsed="0.000144"/>
+</kw>
+<kw name="Validate Division Response">
+<kw name="Should Have Keys">
+<for flavor="IN">
+<iter>
+<kw name="Dictionary Should Contain Key" owner="Collections">
+<arg>${dict}</arg>
+<arg>${key}</arg>
+<arg>msg=Response missing required field: ${key}</arg>
+<doc>Fails if ``key`` is not found from ``dictionary``.</doc>
+<status status="PASS" start="2025-04-06T20:30:00.909124" elapsed="0.000339"/>
+</kw>
+<var name="${key}">id</var>
+<status status="PASS" start="2025-04-06T20:30:00.908982" elapsed="0.000527"/>
+</iter>
+<iter>
+<kw name="Dictionary Should Contain Key" owner="Collections">
+<arg>${dict}</arg>
+<arg>${key}</arg>
+<arg>msg=Response missing required field: ${key}</arg>
+<doc>Fails if ``key`` is not found from ``dictionary``.</doc>
+<status status="PASS" start="2025-04-06T20:30:00.909745" elapsed="0.000426"/>
+</kw>
+<var name="${key}">name</var>
+<status status="PASS" start="2025-04-06T20:30:00.909600" elapsed="0.000643"/>
+</iter>
+<iter>
+<kw name="Dictionary Should Contain Key" owner="Collections">
+<arg>${dict}</arg>
+<arg>${key}</arg>
+<arg>msg=Response missing required field: ${key}</arg>
+<doc>Fails if ``key`` is not found from ``dictionary``.</doc>
+<status status="PASS" start="2025-04-06T20:30:00.910481" elapsed="0.000178"/>
+</kw>
+<var name="${key}">status</var>
+<status status="PASS" start="2025-04-06T20:30:00.910385" elapsed="0.000311"/>
+</iter>
+<iter>
+<kw name="Dictionary Should Contain Key" owner="Collections">
+<arg>${dict}</arg>
+<arg>${key}</arg>
+<arg>msg=Response missing required field: ${key}</arg>
+<doc>Fails if ``key`` is not found from ``dictionary``.</doc>
+<status status="PASS" start="2025-04-06T20:30:00.910850" elapsed="0.000217"/>
+</kw>
+<var name="${key}">warehouseId</var>
+<status status="PASS" start="2025-04-06T20:30:00.910764" elapsed="0.000343"/>
+</iter>
+<var>${key}</var>
+<value>@{keys}</value>
+<status status="PASS" start="2025-04-06T20:30:00.908864" elapsed="0.002282"/>
+</for>
+<arg>${division}</arg>
+<arg>id</arg>
+<arg>name</arg>
+<arg>status</arg>
+<arg>warehouseId</arg>
+<doc>Verify dictionary contains all required keys</doc>
+<status status="PASS" start="2025-04-06T20:30:00.908661" elapsed="0.002550"/>
 </kw>
 <kw name="Should Not Be Empty" owner="BuiltIn">
-<msg time="2025-04-05T16:10:42.980707" level="INFO">Length is 940.</msg>
-<arg>${response.text}</arg>
+<msg time="2025-04-06T20:30:00.911479" level="FAIL">Could not get length of '62'.</msg>
+<arg>${division}[id]</arg>
 <doc>Verifies that the given item is not empty.</doc>
-<status status="PASS" start="2025-04-05T16:10:42.980128" elapsed="0.000636"/>
+<status status="FAIL" start="2025-04-06T20:30:00.911307" elapsed="0.001729">Could not get length of '62'.</status>
 </kw>
-<kw name="Evaluate" owner="BuiltIn">
-<msg time="2025-04-05T16:10:42.981307" level="INFO">${timestamp} = 1743844242981</msg>
-<var>${timestamp}</var>
-<arg>int(round(time.time() * 1000))</arg>
-<arg>time</arg>
-<doc>Evaluates the given expression in Python and returns the result.</doc>
-<status status="PASS" start="2025-04-05T16:10:42.981068" elapsed="0.000264"/>
+<kw name="Should Not Be Empty" owner="BuiltIn">
+<arg>${division}[name]</arg>
+<doc>Verifies that the given item is not empty.</doc>
+<status status="NOT RUN" start="2025-04-06T20:30:00.913215" elapsed="0.000030"/>
 </kw>
-<kw name="Create File" owner="OperatingSystem">
-<msg time="2025-04-05T16:10:42.982556" level="INFO" html="true">Created file '&lt;a href="file://D:\robot_file\Variables\results\auth_response_1743844242981.json"&gt;D:\robot_file\Variables\results\auth_response_1743844242981.json&lt;/a&gt;'.</msg>
-<arg>${RESULTS_DIR}${/}auth_response_${timestamp}.json</arg>
-<arg>${response.text}</arg>
-<doc>Creates a file with the given content and encoding.</doc>
-<status status="PASS" start="2025-04-05T16:10:42.981580" elapsed="0.001033"/>
+<kw name="Should Be Equal" owner="BuiltIn">
+<arg>${division}[warehouseId]</arg>
+<arg>${WAREHOUSE_ID}</arg>
+<doc>Fails if the given objects are unequal.</doc>
+<status status="NOT RUN" start="2025-04-06T20:30:00.913362" elapsed="0.000020"/>
+</kw>
+<arg>${division}</arg>
+<doc>Validate division response structure and content</doc>
+<status status="FAIL" start="2025-04-06T20:30:00.908415" elapsed="0.005080">Could not get length of '62'.</status>
+</kw>
+<return>
+<value>${division}</value>
+<status status="NOT RUN" start="2025-04-06T20:30:00.913547" elapsed="0.000020"/>
+</return>
+<var>${division}</var>
+<arg>${TEST_DIVISION_ID}</arg>
+<doc>Retrieve a specific division by ID with proper response handling</doc>
+<status status="FAIL" start="2025-04-06T20:30:00.878333" elapsed="0.035317">Could not get length of '62'.</status>
+</kw>
+<kw name="Should Be True" owner="BuiltIn">
+<arg>isinstance($division, dict)</arg>
+<arg>msg=Response should be a JSON object. Got: ${division}</arg>
+<doc>Fails if the given condition is not true.</doc>
+<status status="NOT RUN" start="2025-04-06T20:30:00.913987" elapsed="0.000030"/>
+</kw>
+<kw name="Should Have Keys">
+<arg>${division}</arg>
+<arg>id</arg>
+<arg>name</arg>
+<arg>status</arg>
+<arg>warehouseId</arg>
+<doc>Verify dictionary contains all required keys</doc>
+<status status="NOT RUN" start="2025-04-06T20:30:00.914339" elapsed="0.000024"/>
+</kw>
+<kw name="Should Be Integer">
+<arg>${division}[id]</arg>
+<doc>Verify value is an integer</doc>
+<status status="NOT RUN" start="2025-04-06T20:30:00.914593" elapsed="0.000022"/>
+</kw>
+<kw name="Should Be String">
+<arg>${division}[name]</arg>
+<doc>Verify value is a string</doc>
+<status status="NOT RUN" start="2025-04-06T20:30:00.914867" elapsed="0.000021"/>
+</kw>
+<kw name="Should Be String">
+<arg>${division}[status]</arg>
+<doc>Verify value is a string</doc>
+<status status="NOT RUN" start="2025-04-06T20:30:00.915115" elapsed="0.000021"/>
+</kw>
+<kw name="Should Be Integer">
+<arg>${division}[warehouseId]</arg>
+<doc>Verify value is an integer</doc>
+<status status="NOT RUN" start="2025-04-06T20:30:00.915388" elapsed="0.000021"/>
+</kw>
+<kw name="Compare Values With Type Conversion">
+<arg>${division}[id]</arg>
+<arg>${TEST_DIVISION_ID}</arg>
+<arg>id</arg>
+<doc>Compare values after converting to appropriate types</doc>
+<status status="NOT RUN" start="2025-04-06T20:30:00.915746" elapsed="0.000023"/>
+</kw>
+<kw name="Compare Values With Type Conversion">
+<arg>${division}[name]</arg>
+<arg>${TEST_DIVISION_DATA}[name]</arg>
+<arg>name</arg>
+<doc>Compare values after converting to appropriate types</doc>
+<status status="NOT RUN" start="2025-04-06T20:30:00.916363" elapsed="0.000029"/>
+</kw>
+<kw name="Compare Values With Type Conversion">
+<arg>${division}[warehouseId]</arg>
+<arg>${TEST_DIVISION_DATA}[warehouseId]</arg>
+<arg>warehouseId</arg>
+<doc>Compare values after converting to appropriate types</doc>
+<status status="NOT RUN" start="2025-04-06T20:30:00.916794" elapsed="0.000025"/>
+</kw>
+<kw name="Should Be True" owner="BuiltIn">
+<arg>"${division}[status]" in ["ENABLE", "DISABLE"]</arg>
+<arg>msg=Invalid status value: ${division}[status]</arg>
+<doc>Fails if the given condition is not true.</doc>
+<status status="NOT RUN" start="2025-04-06T20:30:00.917048" elapsed="0.000022"/>
 </kw>
 <kw name="Log" owner="BuiltIn">
-<msg time="2025-04-05T16:10:42.982961" level="INFO">Authentication successful</msg>
-<arg>Authentication successful</arg>
+<arg>Successfully retrieved and validated division: ${division}</arg>
 <doc>Logs the given message with the given level.</doc>
-<status status="PASS" start="2025-04-05T16:10:42.982874" elapsed="0.000140"/>
+<status status="NOT RUN" start="2025-04-06T20:30:00.917334" elapsed="0.000022"/>
 </kw>
-<kw name="Log" owner="BuiltIn">
-<msg time="2025-04-05T16:10:42.983767" level="INFO">Response: {"userInfo":{"sub":"23c66717-8dca-4971-ad09-9681d632f09c","email_verified":false,"name":"Huy QC Manager","preferred_username":"huynh22.manager","given_name":"Huy","family_name":"QC Manager","email":"volibear153@gmail.com"},"warehouses":[{"id":6,"name":"Distribution Hub","code":"WH_6","address":"2924 Mount Street, CINCINNATI, OH 45268","acreage":50000,"createDate":"2025-03-03T04:40:09.315Z","status":"ENABLE","userIds":["23c66717-8dca-4971-ad09-9681d632f09c","c2f403dc-86e0-4986-884a-eb875caa8f15","7094178e-56ce-449f-804f-6fab9a4b1a74","93e527b4-9844-4df0-bd9f-387e30c60acc"]},{"id":7,"name":"Fulfillment Zone","code":"WH_7","address":"29715 3rd Street, Royalworth, Missouri - 57379, Germany","acreage":50000,"createDate":"2025-03-03T04:41:13.434Z","status":"ENABLE","userIds":["23c66717-8dca-4971-ad09-9681d632f09c","c2f403dc-86e0-4986-884a-eb875caa8f15","7094178e-56ce-449f-804f-6fab9a4b1a74","93e527b4-9844-4df0-bd9f-387e30c60acc"]}]}</msg>
-<arg>Response: ${response.text}</arg>
-<doc>Logs the given message with the given level.</doc>
-<status status="PASS" start="2025-04-05T16:10:42.983260" elapsed="0.000554"/>
-</kw>
-<doc>Verify that a user can access protected resources with a valid token</doc>
-<tag>authentication</tag>
+<doc>Test retrieving a specific division</doc>
 <tag>positive</tag>
-<status status="PASS" start="2025-04-05T16:10:42.915107" elapsed="0.068952"/>
+<tag>retrieve</tag>
+<status status="FAIL" start="2025-04-06T20:30:00.877096" elapsed="0.040569">Could not get length of '62'.</status>
 </test>
-<test id="s1-s1-t3" name="User Authentication Should Fail With Invalid Token" line="73">
-<kw name="Create Session" owner="RequestsLibrary">
-<msg time="2025-04-05T16:10:42.985757" level="INFO">Creating Session using : alias=vkho_invalid, url=https://api.vkho.net, headers={},                     cookies={}, auth=None, timeout=None, proxies=None, verify=True,                     debug=0 </msg>
-<arg>vkho_invalid</arg>
-<arg>${BASE_URL}</arg>
-<arg>verify=True</arg>
-<arg>disable_warnings=True</arg>
-<doc>Create Session: create a HTTP session to a server</doc>
-<status status="PASS" start="2025-04-05T16:10:42.985514" elapsed="0.000408"/>
+<test id="s1-s1-t5" name="05 - Get Non-Existent Division Test" line="504">
+<kw name="Set Variable" owner="BuiltIn">
+<msg time="2025-04-06T20:30:00.919952" level="INFO">${non_existent_id} = 99999999</msg>
+<var>${non_existent_id}</var>
+<arg>99999999</arg>
+<doc>Returns the given values which can then be assigned to a variables.</doc>
+<status status="PASS" start="2025-04-06T20:30:00.919700" elapsed="0.000318"/>
 </kw>
 <kw name="Create Dictionary" owner="BuiltIn">
-<msg time="2025-04-05T16:10:42.986360" level="INFO">${headers} = {'Authorization': 'Bearer InvalidToken123', 'Content-Type': 'application/json'}</msg>
+<msg time="2025-04-06T20:30:00.920721" level="INFO">${headers} = {'Content-Type': 'application/json', 'Authorization': 'Bearer eyJhbGciOiJSUzI1NiIsInR5cCIgOiAiSldUIiwia2lkIiA6ICI0TVhBLW1VYjduYV90RjNJd1VrWXNreHZrbVNqQWJpSEV6MnFpN3ZaRGhJIn0.eyJleHAiOjE3NDM5NzE0MDAsIm...</msg>
 <var>${headers}</var>
-<arg>Authorization=Bearer InvalidToken123</arg>
 <arg>Content-Type=application/json</arg>
+<arg>Authorization=${AUTH_TOKEN}</arg>
 <doc>Creates and returns a dictionary based on the given ``items``.</doc>
-<status status="PASS" start="2025-04-05T16:10:42.986194" elapsed="0.000192"/>
+<status status="PASS" start="2025-04-06T20:30:00.920456" elapsed="0.000294"/>
 </kw>
 <kw name="Run Keyword And Expect Error" owner="BuiltIn">
 <kw name="GET On Session" owner="RequestsLibrary">
-<msg time="2025-04-05T16:10:43.019134" level="INFO">GET Request : url=https://api.vkho.net/auth/authenticate 
- path_url=/auth/authenticate 
- headers={'User-Agent': 'python-requests/2.32.3', 'Accept-Encoding': 'gzip, deflate', 'Accept': '*/*', 'Connection': 'keep-alive', 'Authorization': 'Bearer InvalidToken123', 'Content-Type': 'application/json'} 
+<msg time="2025-04-06T20:30:00.938499" level="INFO">GET Request : url=https://api.vkho.net/divison/get-one/99999999 
+ path_url=/divison/get-one/99999999 
+ headers={'User-Agent': 'python-requests/2.32.3', 'Accept-Encoding': 'gzip, deflate', 'Accept': '*/*', 'Connection': 'keep-alive', 'Content-Type': 'application/json', 'Authorization': 'Bearer eyJhbGciOiJSUzI1NiIsInR5cCIgOiAiSldUIiwia2lkIiA6ICI0TVhBLW1VYjduYV90RjNJd1VrWXNreHZrbVNqQWJpSEV6MnFpN3ZaRGhJIn0.eyJleHAiOjE3NDM5NzE0MDAsImlhdCI6MTc0Mzk0NjIwMCwianRpIjoiMzJjYWViNzItZTYyOS00MmY1LTkzYzYtOWU3ZGYyYmY1MzM0IiwiaXNzIjoiaHR0cHM6Ly9rYy5jb25jb24udm4vcmVhbG1zL3ZraG9fc3RhZyIsInN1YiI6IjIzYzY2NzE3LThkY2EtNDk3MS1hZDA5LTk2ODFkNjMyZjA5YyIsInR5cCI6IkJlYXJlciIsImF6cCI6InZraG9fYXBwIiwic2lkIjoiZTk3MmEwMzMtYmM5OS00MGEwLWExYmItODQxZmQ0NTQ2MTUwIiwiYWNyIjoiMSIsImFsbG93ZWQtb3JpZ2lucyI6WyIqIl0sInJlYWxtX2FjY2VzcyI6eyJyb2xlcyI6WyJtYW5hZ2VyIiwic3RhZmYiXX0sInNjb3BlIjoib3BlbmlkIHByb2ZpbGUgZW1haWwiLCJlbWFpbF92ZXJpZmllZCI6ZmFsc2UsIm5hbWUiOiJIdXkgUUMgTWFuYWdlciIsInByZWZlcnJlZF91c2VybmFtZSI6Imh1eW5oMjIubWFuYWdlciIsImdpdmVuX25hbWUiOiJIdXkiLCJmYW1pbHlfbmFtZSI6IlFDIE1hbmFnZXIiLCJlbWFpbCI6InZvbGliZWFyMTUzQGdtYWlsLmNvbSJ9.OlrsF3qEIsR8V2esJF-h61KSD6qFthku-_AROGCqgv_axJ4rYRDtHAH45EVpO6S2lFBWyAVD5FWTyKwD7gIqdcgWFY-il1PXc96toA0PtmsKsv-qOG0DxuF5z3CWhGClvMAtrPoJpmFtmT6XL6Xk-FNbSiQa0mFd70O52NYpyIKamOW4qJsVaY8PXGgEdPJXqGSgf0PAm4Mj_Fh7IWByi2c5Wi8paXHyHbWrRJs23UCAUjwu3MavbByXCq_z7yKfQIRt8qkfP8Qb5MEpSduTZwHgHxS8aoPmoRoKmgIaJctKFvpChGYq1AvJVnC-WYwBY8vLPbjnIkYxn30E4d5Q4g'} 
  body=None 
  </msg>
-<msg time="2025-04-05T16:10:43.019203" level="INFO">GET Response : url=https://api.vkho.net/auth/authenticate 
- status=401, reason=Unauthorized 
- headers={'Access-Control-Allow-Origin': '*', 'Alt-Svc': 'h3=":443"; ma=2592000', 'Content-Length': '111', 'Content-Type': 'application/json; charset=utf-8', 'Date': 'Sat, 05 Apr 2025 09:10:43 GMT', 'Etag': 'W/"6f-aDhmRUcIY16a0hoAfoHOLjQ2u+o"', 'Server': 'Caddy'} 
- body={"statusCode":401,"timestamp":"2025-04-05T09:10:43.040Z","path":"/auth/authenticate","message":"Invalid token"} 
+<msg time="2025-04-06T20:30:00.938587" level="INFO">GET Response : url=https://api.vkho.net/divison/get-one/99999999 
+ status=500, reason=Internal Server Error 
+ headers={'Access-Control-Allow-Origin': '*', 'Alt-Svc': 'h3=":443"; ma=2592000', 'Content-Length': '122', 'Content-Type': 'application/json; charset=utf-8', 'Date': 'Sun, 06 Apr 2025 13:30:00 GMT', 'Etag': 'W/"7a-R0dLGfyg32TBiH33ippOJ8Y7L2U"', 'Server': 'Caddy'} 
+ body={"statusCode":500,"timestamp":"2025-04-06T13:30:00.974Z","path":"/divison/get-one/99999999","message":"Not found divison"} 
  </msg>
-<msg time="2025-04-05T16:10:43.019352" level="FAIL">HTTPError: 401 Client Error: Unauthorized for url: https://api.vkho.net/auth/authenticate</msg>
-<arg>vkho_invalid</arg>
-<arg>/auth/authenticate</arg>
+<msg time="2025-04-06T20:30:00.938689" level="FAIL">Url: https://api.vkho.net/divison/get-one/99999999 Expected status: 500 != 200</msg>
+<arg>vkho</arg>
+<arg>/divison/get-one/${non_existent_id}</arg>
 <arg>headers=${headers}</arg>
+<arg>expected_status=200</arg>
 <doc>Sends a GET request on a previously created HTTP Session.</doc>
-<status status="FAIL" start="2025-04-05T16:10:42.986772" elapsed="0.035101">HTTPError: 401 Client Error: Unauthorized for url: https://api.vkho.net/auth/authenticate</status>
+<status status="FAIL" start="2025-04-06T20:30:00.921843" elapsed="0.018794">Url: https://api.vkho.net/divison/get-one/99999999 Expected status: 500 != 200</status>
 </kw>
 <arg>*</arg>
 <arg>GET On Session</arg>
-<arg>vkho_invalid</arg>
-<arg>/auth/authenticate</arg>
+<arg>vkho</arg>
+<arg>/divison/get-one/${non_existent_id}</arg>
 <arg>headers=${headers}</arg>
+<arg>expected_status=200</arg>
 <doc>Runs the keyword and checks that the expected error occurred.</doc>
-<status status="PASS" start="2025-04-05T16:10:42.986636" elapsed="0.035459"/>
+<status status="PASS" start="2025-04-06T20:30:00.921097" elapsed="0.019725"/>
 </kw>
 <kw name="Log" owner="BuiltIn">
-<msg time="2025-04-05T16:10:43.022636" level="INFO">Authentication failed as expected with invalid token</msg>
-<arg>Authentication failed as expected with invalid token</arg>
+<msg time="2025-04-06T20:30:00.941282" level="INFO">Successfully verified that retrieving a non-existent division fails</msg>
+<arg>Successfully verified that retrieving a non-existent division fails</arg>
 <doc>Logs the given message with the given level.</doc>
-<status status="PASS" start="2025-04-05T16:10:43.022485" elapsed="0.000221"/>
+<status status="PASS" start="2025-04-06T20:30:00.941145" elapsed="0.000196"/>
 </kw>
-<doc>Verify that authentication fails with an invalid token</doc>
-<tag>authentication</tag>
+<doc>Test retrieving a division that doesn't exist</doc>
 <tag>negative</tag>
-<status status="PASS" start="2025-04-05T16:10:42.985032" elapsed="0.037887"/>
+<tag>retrieve</tag>
+<status status="PASS" start="2025-04-06T20:30:00.919204" elapsed="0.022363"/>
 </test>
-<test id="s1-s1-t4" name="User Should Not Be Able To Login With Invalid Credentials" line="94">
-<kw name="Create Session" owner="RequestsLibrary">
-<msg time="2025-04-05T16:10:43.024487" level="INFO">Creating Session using : alias=vkho_negative, url=https://api.vkho.net, headers={},                     cookies={}, auth=None, timeout=None, proxies=None, verify=True,                     debug=0 </msg>
-<arg>vkho_negative</arg>
-<arg>${BASE_URL}</arg>
-<arg>verify=True</arg>
-<arg>disable_warnings=True</arg>
-<doc>Create Session: create a HTTP session to a server</doc>
-<status status="PASS" start="2025-04-05T16:10:43.024245" elapsed="0.000391"/>
+<test id="s1-s1-t6" name="06 - Update Division Test" line="524">
+<kw name="Run Keyword If" owner="BuiltIn">
+<arg>"${TEST_DIVISION_ID}" == "${EMPTY}"</arg>
+<arg>Create Test Division</arg>
+<doc>Runs the given keyword with the given arguments, if ``condition`` is true.</doc>
+<status status="PASS" start="2025-04-06T20:30:00.943386" elapsed="0.000636"/>
+</kw>
+<kw name="Set Variable" owner="BuiltIn">
+<msg time="2025-04-06T20:30:00.944621" level="INFO">${updated_name} = Test Division 1743946200 Updated</msg>
+<var>${updated_name}</var>
+<arg>${TEST_DIVISION_NAME} Updated</arg>
+<doc>Returns the given values which can then be assigned to a variables.</doc>
+<status status="PASS" start="2025-04-06T20:30:00.944323" elapsed="0.000362"/>
 </kw>
 <kw name="Create Dictionary" owner="BuiltIn">
-<msg time="2025-04-05T16:10:43.025025" level="INFO">${headers} = {'Content-Type': 'application/json'}</msg>
+<msg time="2025-04-06T20:30:00.945418" level="INFO">${update_data} = {'id': '62', 'name': 'Test Division 1743946200 Updated', 'warehouseId': '6', 'status': 'ENABLE'}</msg>
+<var>${update_data}</var>
+<arg>id=${TEST_DIVISION_ID}</arg>
+<arg>name=${updated_name}</arg>
+<arg>warehouseId=${WAREHOUSE_ID}</arg>
+<arg>status=ENABLE</arg>
+<doc>Creates and returns a dictionary based on the given ``items``.</doc>
+<status status="PASS" start="2025-04-06T20:30:00.945128" elapsed="0.000318"/>
+</kw>
+<kw name="Update Division">
+<kw name="Should Not Be Empty" owner="BuiltIn">
+<msg time="2025-04-06T20:30:00.946632" level="INFO">Length is 2.</msg>
+<arg>${division_id}</arg>
+<arg>msg=Division ID cannot be empty</arg>
+<doc>Verifies that the given item is not empty.</doc>
+<status status="PASS" start="2025-04-06T20:30:00.946330" elapsed="0.000417"/>
+</kw>
+<kw name="Dictionary Should Contain Key" owner="Collections">
+<arg>${update_data}</arg>
+<arg>id</arg>
+<arg>msg=Update data must contain id field</arg>
+<doc>Fails if ``key`` is not found from ``dictionary``.</doc>
+<status status="PASS" start="2025-04-06T20:30:00.946890" elapsed="0.000278"/>
+</kw>
+<kw name="Should Be Equal" owner="BuiltIn">
+<arg>${update_data}[id]</arg>
+<arg>${division_id}</arg>
+<arg>msg=Update data ID must match division_id parameter</arg>
+<doc>Fails if the given objects are unequal.</doc>
+<status status="PASS" start="2025-04-06T20:30:00.947354" elapsed="0.000290"/>
+</kw>
+<kw name="Dictionary Should Contain Key" owner="Collections">
+<arg>${update_data}</arg>
+<arg>name</arg>
+<arg>msg=Update data missing required field: name</arg>
+<doc>Fails if ``key`` is not found from ``dictionary``.</doc>
+<status status="PASS" start="2025-04-06T20:30:00.947748" elapsed="0.000161"/>
+</kw>
+<kw name="Dictionary Should Contain Key" owner="Collections">
+<arg>${update_data}</arg>
+<arg>warehouseId</arg>
+<arg>msg=Update data missing required field: warehouseId</arg>
+<doc>Fails if ``key`` is not found from ``dictionary``.</doc>
+<status status="PASS" start="2025-04-06T20:30:00.948142" elapsed="0.000158"/>
+</kw>
+<kw name="Dictionary Should Contain Key" owner="Collections">
+<arg>${update_data}</arg>
+<arg>status</arg>
+<arg>msg=Update data missing required field: status</arg>
+<doc>Fails if ``key`` is not found from ``dictionary``.</doc>
+<status status="PASS" start="2025-04-06T20:30:00.948409" elapsed="0.000145"/>
+</kw>
+<kw name="Create Dictionary" owner="BuiltIn">
+<msg time="2025-04-06T20:30:00.948892" level="INFO">${headers} = {'Content-Type': 'application/json', 'Authorization': 'Bearer eyJhbGciOiJSUzI1NiIsInR5cCIgOiAiSldUIiwia2lkIiA6ICI0TVhBLW1VYjduYV90RjNJd1VrWXNreHZrbVNqQWJpSEV6MnFpN3ZaRGhJIn0.eyJleHAiOjE3NDM5NzE0MDAsIm...</msg>
 <var>${headers}</var>
 <arg>Content-Type=application/json</arg>
+<arg>Authorization=${AUTH_TOKEN}</arg>
 <doc>Creates and returns a dictionary based on the given ``items``.</doc>
-<status status="PASS" start="2025-04-05T16:10:43.024873" elapsed="0.000175"/>
+<status status="PASS" start="2025-04-06T20:30:00.948679" elapsed="0.000249"/>
 </kw>
-<kw name="Create Dictionary" owner="BuiltIn">
-<msg time="2025-04-05T16:10:43.025415" level="INFO">${body} = {'username': 'invalid_user', 'password': 'invalid_password'}</msg>
-<var>${body}</var>
-<arg>username=invalid_user</arg>
-<arg>password=invalid_password</arg>
-<doc>Creates and returns a dictionary based on the given ``items``.</doc>
-<status status="PASS" start="2025-04-05T16:10:43.025268" elapsed="0.000170"/>
-</kw>
-<kw name="Run Keyword And Expect Error" owner="BuiltIn">
-<kw name="POST On Session" owner="RequestsLibrary">
-<msg time="2025-04-05T16:10:43.203727" level="INFO">POST Request : url=https://api.vkho.net/auth/login 
- path_url=/auth/login 
- headers={'User-Agent': 'python-requests/2.32.3', 'Accept-Encoding': 'gzip, deflate', 'Accept': '*/*', 'Connection': 'keep-alive', 'Content-Type': 'application/json', 'Content-Length': '60'} 
- body=b'{"username": "invalid_user", "password": "invalid_password"}' 
+<kw name="PUT On Session" owner="RequestsLibrary">
+<msg time="2025-04-06T20:30:00.979187" level="INFO">PUT Request : url=https://api.vkho.net/divison/update 
+ path_url=/divison/update 
+ headers={'User-Agent': 'python-requests/2.32.3', 'Accept-Encoding': 'gzip, deflate', 'Accept': '*/*', 'Connection': 'keep-alive', 'Content-Type': 'application/json', 'Authorization': 'Bearer eyJhbGciOiJSUzI1NiIsInR5cCIgOiAiSldUIiwia2lkIiA6ICI0TVhBLW1VYjduYV90RjNJd1VrWXNreHZrbVNqQWJpSEV6MnFpN3ZaRGhJIn0.eyJleHAiOjE3NDM5NzE0MDAsImlhdCI6MTc0Mzk0NjIwMCwianRpIjoiMzJjYWViNzItZTYyOS00MmY1LTkzYzYtOWU3ZGYyYmY1MzM0IiwiaXNzIjoiaHR0cHM6Ly9rYy5jb25jb24udm4vcmVhbG1zL3ZraG9fc3RhZyIsInN1YiI6IjIzYzY2NzE3LThkY2EtNDk3MS1hZDA5LTk2ODFkNjMyZjA5YyIsInR5cCI6IkJlYXJlciIsImF6cCI6InZraG9fYXBwIiwic2lkIjoiZTk3MmEwMzMtYmM5OS00MGEwLWExYmItODQxZmQ0NTQ2MTUwIiwiYWNyIjoiMSIsImFsbG93ZWQtb3JpZ2lucyI6WyIqIl0sInJlYWxtX2FjY2VzcyI6eyJyb2xlcyI6WyJtYW5hZ2VyIiwic3RhZmYiXX0sInNjb3BlIjoib3BlbmlkIHByb2ZpbGUgZW1haWwiLCJlbWFpbF92ZXJpZmllZCI6ZmFsc2UsIm5hbWUiOiJIdXkgUUMgTWFuYWdlciIsInByZWZlcnJlZF91c2VybmFtZSI6Imh1eW5oMjIubWFuYWdlciIsImdpdmVuX25hbWUiOiJIdXkiLCJmYW1pbHlfbmFtZSI6IlFDIE1hbmFnZXIiLCJlbWFpbCI6InZvbGliZWFyMTUzQGdtYWlsLmNvbSJ9.OlrsF3qEIsR8V2esJF-h61KSD6qFthku-_AROGCqgv_axJ4rYRDtHAH45EVpO6S2lFBWyAVD5FWTyKwD7gIqdcgWFY-il1PXc96toA0PtmsKsv-qOG0DxuF5z3CWhGClvMAtrPoJpmFtmT6XL6Xk-FNbSiQa0mFd70O52NYpyIKamOW4qJsVaY8PXGgEdPJXqGSgf0PAm4Mj_Fh7IWByi2c5Wi8paXHyHbWrRJs23UCAUjwu3MavbByXCq_z7yKfQIRt8qkfP8Qb5MEpSduTZwHgHxS8aoPmoRoKmgIaJctKFvpChGYq1AvJVnC-WYwBY8vLPbjnIkYxn30E4d5Q4g', 'Content-Length': '96'} 
+ body=b'{"id": "62", "name": "Test Division 1743946200 Updated", "warehouseId": "6", "status": "ENABLE"}' 
  </msg>
-<msg time="2025-04-05T16:10:43.203792" level="INFO">POST Response : url=https://api.vkho.net/auth/login 
- status=401, reason=Unauthorized 
- headers={'Access-Control-Allow-Origin': '*', 'Alt-Svc': 'h3=":443"; ma=2592000', 'Content-Length': '115', 'Content-Type': 'application/json; charset=utf-8', 'Date': 'Sat, 05 Apr 2025 09:10:43 GMT', 'Etag': 'W/"73-/SGFZldAtei7mJquOE2Almf/VP8"', 'Server': 'Caddy'} 
- body={"statusCode":401,"timestamp":"2025-04-05T09:10:43.224Z","path":"/auth/login","message":"Invalid user credentials"} 
+<msg time="2025-04-06T20:30:00.979314" level="INFO">PUT Response : url=https://api.vkho.net/divison/update 
+ status=200, reason=OK 
+ headers={'Access-Control-Allow-Origin': '*', 'Alt-Svc': 'h3=":443"; ma=2592000', 'Content-Length': '177', 'Content-Type': 'application/json; charset=utf-8', 'Date': 'Sun, 06 Apr 2025 13:30:01 GMT', 'Etag': 'W/"b1-Magb4dhduRBhVf1cZICJBQMQr0c"', 'Server': 'Caddy'} 
+ body={"id":62,"code":"62","name":"Test Division 1743946200 Updated","createDate":"2025-04-06T13:30:00.883Z","updateDate":"2025-04-06T13:30:01.011Z","status":"ENABLE","warehouseId":6} 
  </msg>
-<msg time="2025-04-05T16:10:43.203894" level="FAIL">HTTPError: 401 Client Error: Unauthorized for url: https://api.vkho.net/auth/login</msg>
-<arg>vkho_negative</arg>
-<arg>/auth/login</arg>
-<arg>json=${body}</arg>
+<msg time="2025-04-06T20:30:00.979634" level="INFO">${response} = &lt;Response [200]&gt;</msg>
+<var>${response}</var>
+<arg>vkho</arg>
+<arg>/divison/update</arg>
+<arg>json=${update_data}</arg>
 <arg>headers=${headers}</arg>
-<doc>Sends a POST request on a previously created HTTP Session.</doc>
-<status status="FAIL" start="2025-04-05T16:10:43.025835" elapsed="0.178675">HTTPError: 401 Client Error: Unauthorized for url: https://api.vkho.net/auth/login</status>
+<arg>expected_status=200</arg>
+<doc>Sends a PUT request on a previously created HTTP Session.</doc>
+<status status="PASS" start="2025-04-06T20:30:00.949061" elapsed="0.030621"/>
 </kw>
-<arg>*</arg>
-<arg>POST On Session</arg>
-<arg>vkho_negative</arg>
-<arg>/auth/login</arg>
-<arg>json=${body}</arg>
-<arg>headers=${headers}</arg>
-<doc>Runs the keyword and checks that the expected error occurred.</doc>
-<status status="PASS" start="2025-04-05T16:10:43.025699" elapsed="0.178902"/>
+<kw name="Evaluate" owner="BuiltIn">
+<msg time="2025-04-06T20:30:00.982577" level="INFO">${json} = {'id': 62, 'code': '62', 'name': 'Test Division 1743946200 Updated', 'createDate': '2025-04-06T13:30:00.883Z', 'updateDate': '2025-04-06T13:30:01.011Z', 'status': 'ENABLE', 'warehouseId': 6}</msg>
+<var>${json}</var>
+<arg>json.loads('''${response.text}''')</arg>
+<arg>json</arg>
+<doc>Evaluates the given expression in Python and returns the result.</doc>
+<status status="PASS" start="2025-04-06T20:30:00.979896" elapsed="0.002788"/>
+</kw>
+<kw name="Should Not Be Empty" owner="BuiltIn">
+<msg time="2025-04-06T20:30:00.983289" level="INFO">Length is 7.</msg>
+<arg>${json}</arg>
+<arg>msg=Update division response was empty</arg>
+<doc>Verifies that the given item is not empty.</doc>
+<status status="PASS" start="2025-04-06T20:30:00.982954" elapsed="0.000428"/>
+</kw>
+<kw name="Dictionary Should Contain Key" owner="Collections">
+<arg>${json}</arg>
+<arg>id</arg>
+<arg>msg=Update division response missing ID field</arg>
+<doc>Fails if ``key`` is not found from ``dictionary``.</doc>
+<status status="PASS" start="2025-04-06T20:30:00.983558" elapsed="0.000655"/>
+</kw>
+<return>
+<value>${json}</value>
+<status status="PASS" start="2025-04-06T20:30:00.984416" elapsed="0.000133"/>
+</return>
+<msg time="2025-04-06T20:30:00.984816" level="INFO">${updated_division} = {'id': 62, 'code': '62', 'name': 'Test Division 1743946200 Updated', 'createDate': '2025-04-06T13:30:00.883Z', 'updateDate': '2025-04-06T13:30:01.011Z', 'status': 'ENABLE', 'warehouseId': 6}</msg>
+<var>${updated_division}</var>
+<arg>${TEST_DIVISION_ID}</arg>
+<arg>${update_data}</arg>
+<doc>Update an existing division</doc>
+<status status="PASS" start="2025-04-06T20:30:00.945854" elapsed="0.038997"/>
+</kw>
+<kw name="Should Be Equal" owner="BuiltIn">
+<arg>${updated_division}[name]</arg>
+<arg>${updated_name}</arg>
+<arg>msg=Updated division name does not match expected value</arg>
+<doc>Fails if the given objects are unequal.</doc>
+<status status="PASS" start="2025-04-06T20:30:00.985633" elapsed="0.000665"/>
+</kw>
+<kw name="Set Global Variable" owner="BuiltIn">
+<msg time="2025-04-06T20:30:00.987316" level="INFO">${TEST_DIVISION_NAME} = Test Division 1743946200 Updated</msg>
+<arg>${TEST_DIVISION_NAME}</arg>
+<arg>${updated_name}</arg>
+<doc>Makes a variable available globally in all tests and suites.</doc>
+<status status="PASS" start="2025-04-06T20:30:00.986967" elapsed="0.000406"/>
 </kw>
 <kw name="Log" owner="BuiltIn">
-<msg time="2025-04-05T16:10:43.205045" level="INFO">Login failed as expected with invalid credentials</msg>
-<arg>Login failed as expected with invalid credentials</arg>
+<msg time="2025-04-06T20:30:00.987847" level="INFO">Successfully updated division: Test Division 1743946200 Updated</msg>
+<arg>Successfully updated division: ${updated_division}[name]</arg>
 <doc>Logs the given message with the given level.</doc>
-<status status="PASS" start="2025-04-05T16:10:43.204944" elapsed="0.000140"/>
+<status status="PASS" start="2025-04-06T20:30:00.987681" elapsed="0.000211"/>
 </kw>
-<doc>Verify that login fails with invalid credentials</doc>
-<tag>authentication</tag>
-<tag>login</tag>
-<tag>negative</tag>
-<status status="PASS" start="2025-04-05T16:10:43.023698" elapsed="0.181643"/>
+<doc>Test updating an existing division</doc>
+<tag>positive</tag>
+<tag>update</tag>
+<status status="PASS" start="2025-04-06T20:30:00.942797" elapsed="0.045571"/>
 </test>
-<doc>Simple API Authentication Test Suite for vKho API Tests login and authentication endpoints</doc>
-<status status="PASS" start="2025-04-05T16:10:42.132659" elapsed="1.073763"/>
+<test id="s1-s1-t7" name="07 - Update Division With Missing Required Field Test" line="552">
+<kw name="Run Keyword If" owner="BuiltIn">
+<arg>"${TEST_DIVISION_ID}" == "${EMPTY}"</arg>
+<arg>Create Test Division</arg>
+<doc>Runs the given keyword with the given arguments, if ``condition`` is true.</doc>
+<status status="PASS" start="2025-04-06T20:30:00.990445" elapsed="0.000617"/>
+</kw>
+<kw name="Create Dictionary" owner="BuiltIn">
+<msg time="2025-04-06T20:30:00.991645" level="INFO">${incomplete_data} = {'id': '62', 'name': 'Incomplete Update', 'warehouseId': '6'}</msg>
+<var>${incomplete_data}</var>
+<arg>id=${TEST_DIVISION_ID}</arg>
+<arg>name=Incomplete Update</arg>
+<arg>warehouseId=${WAREHOUSE_ID}</arg>
+<doc>Creates and returns a dictionary based on the given ``items``.</doc>
+<status status="PASS" start="2025-04-06T20:30:00.991373" elapsed="0.000299"/>
+</kw>
+<kw name="Run Keyword And Expect Error" owner="BuiltIn">
+<kw name="Update Division">
+<kw name="Should Not Be Empty" owner="BuiltIn">
+<msg time="2025-04-06T20:30:00.992780" level="INFO">Length is 2.</msg>
+<arg>${division_id}</arg>
+<arg>msg=Division ID cannot be empty</arg>
+<doc>Verifies that the given item is not empty.</doc>
+<status status="PASS" start="2025-04-06T20:30:00.992561" elapsed="0.000276"/>
+</kw>
+<kw name="Dictionary Should Contain Key" owner="Collections">
+<arg>${update_data}</arg>
+<arg>id</arg>
+<arg>msg=Update data must contain id field</arg>
+<doc>Fails if ``key`` is not found from ``dictionary``.</doc>
+<status status="PASS" start="2025-04-06T20:30:00.993013" elapsed="0.000160"/>
+</kw>
+<kw name="Should Be Equal" owner="BuiltIn">
+<arg>${update_data}[id]</arg>
+<arg>${division_id}</arg>
+<arg>msg=Update data ID must match division_id parameter</arg>
+<doc>Fails if the given objects are unequal.</doc>
+<status status="PASS" start="2025-04-06T20:30:00.993275" elapsed="0.000191"/>
+</kw>
+<kw name="Dictionary Should Contain Key" owner="Collections">
+<arg>${update_data}</arg>
+<arg>name</arg>
+<arg>msg=Update data missing required field: name</arg>
+<doc>Fails if ``key`` is not found from ``dictionary``.</doc>
+<status status="PASS" start="2025-04-06T20:30:00.993569" elapsed="0.000152"/>
+</kw>
+<kw name="Dictionary Should Contain Key" owner="Collections">
+<arg>${update_data}</arg>
+<arg>warehouseId</arg>
+<arg>msg=Update data missing required field: warehouseId</arg>
+<doc>Fails if ``key`` is not found from ``dictionary``.</doc>
+<status status="PASS" start="2025-04-06T20:30:00.993813" elapsed="0.000144"/>
+</kw>
+<kw name="Dictionary Should Contain Key" owner="Collections">
+<msg time="2025-04-06T20:30:00.994214" level="FAIL">Update data missing required field: status</msg>
+<arg>${update_data}</arg>
+<arg>status</arg>
+<arg>msg=Update data missing required field: status</arg>
+<doc>Fails if ``key`` is not found from ``dictionary``.</doc>
+<status status="FAIL" start="2025-04-06T20:30:00.994048" elapsed="0.000238">Update data missing required field: status</status>
+</kw>
+<kw name="Create Dictionary" owner="BuiltIn">
+<var>${headers}</var>
+<arg>Content-Type=application/json</arg>
+<arg>Authorization=${AUTH_TOKEN}</arg>
+<doc>Creates and returns a dictionary based on the given ``items``.</doc>
+<status status="NOT RUN" start="2025-04-06T20:30:00.994432" elapsed="0.000025"/>
+</kw>
+<kw name="PUT On Session" owner="RequestsLibrary">
+<var>${response}</var>
+<arg>vkho</arg>
+<arg>/divison/update</arg>
+<arg>json=${update_data}</arg>
+<arg>headers=${headers}</arg>
+<arg>expected_status=200</arg>
+<doc>Sends a PUT request on a previously created HTTP Session.</doc>
+<status status="NOT RUN" start="2025-04-06T20:30:00.994554" elapsed="0.000017"/>
+</kw>
+<kw name="Evaluate" owner="BuiltIn">
+<var>${json}</var>
+<arg>json.loads('''${response.text}''')</arg>
+<arg>json</arg>
+<doc>Evaluates the given expression in Python and returns the result.</doc>
+<status status="NOT RUN" start="2025-04-06T20:30:00.994757" elapsed="0.000051"/>
+</kw>
+<kw name="Should Not Be Empty" owner="BuiltIn">
+<arg>${json}</arg>
+<arg>msg=Update division response was empty</arg>
+<doc>Verifies that the given item is not empty.</doc>
+<status status="NOT RUN" start="2025-04-06T20:30:00.995012" elapsed="0.000024"/>
+</kw>
+<kw name="Dictionary Should Contain Key" owner="Collections">
+<arg>${json}</arg>
+<arg>id</arg>
+<arg>msg=Update division response missing ID field</arg>
+<doc>Fails if ``key`` is not found from ``dictionary``.</doc>
+<status status="NOT RUN" start="2025-04-06T20:30:00.995110" elapsed="0.000015"/>
+</kw>
+<return>
+<value>${json}</value>
+<status status="NOT RUN" start="2025-04-06T20:30:00.995164" elapsed="0.000017"/>
+</return>
+<arg>${TEST_DIVISION_ID}</arg>
+<arg>${incomplete_data}</arg>
+<doc>Update an existing division</doc>
+<status status="FAIL" start="2025-04-06T20:30:00.992171" elapsed="0.003138">Update data missing required field: status</status>
+</kw>
+<arg>*Update data missing required field: status*</arg>
+<arg>Update Division</arg>
+<arg>${TEST_DIVISION_ID}</arg>
+<arg>${incomplete_data}</arg>
+<doc>Runs the keyword and checks that the expected error occurred.</doc>
+<status status="PASS" start="2025-04-06T20:30:00.991939" elapsed="0.003602"/>
+</kw>
+<kw name="Log" owner="BuiltIn">
+<msg time="2025-04-06T20:30:00.995958" level="INFO">Successfully verified that updating a division with missing fields is rejected</msg>
+<arg>Successfully verified that updating a division with missing fields is rejected</arg>
+<doc>Logs the given message with the given level.</doc>
+<status status="PASS" start="2025-04-06T20:30:00.995853" elapsed="0.000146"/>
+</kw>
+<doc>Test updating a division with missing required fields</doc>
+<tag>negative</tag>
+<tag>update</tag>
+<status status="PASS" start="2025-04-06T20:30:00.989581" elapsed="0.006675"/>
+</test>
+<test id="s1-s1-t8" name="08 - Get All Divisions Test" line="572">
+<kw name="Get All Divisions">
+<kw name="Should Not Be Empty" owner="BuiltIn">
+<msg time="2025-04-06T20:30:00.998734" level="INFO">Length is 1.</msg>
+<arg>${warehouse_id}</arg>
+<arg>msg=Warehouse ID cannot be empty</arg>
+<doc>Verifies that the given item is not empty.</doc>
+<status status="PASS" start="2025-04-06T20:30:00.998580" elapsed="0.000200"/>
+</kw>
+<kw name="Create Dictionary" owner="BuiltIn">
+<msg time="2025-04-06T20:30:00.999076" level="INFO">${headers} = {'Content-Type': 'application/json', 'Authorization': 'Bearer eyJhbGciOiJSUzI1NiIsInR5cCIgOiAiSldUIiwia2lkIiA6ICI0TVhBLW1VYjduYV90RjNJd1VrWXNreHZrbVNqQWJpSEV6MnFpN3ZaRGhJIn0.eyJleHAiOjE3NDM5NzE0MDAsIm...</msg>
+<var>${headers}</var>
+<arg>Content-Type=application/json</arg>
+<arg>Authorization=${AUTH_TOKEN}</arg>
+<doc>Creates and returns a dictionary based on the given ``items``.</doc>
+<status status="PASS" start="2025-04-06T20:30:00.998891" elapsed="0.000209"/>
+</kw>
+<kw name="Create Dictionary" owner="BuiltIn">
+<msg time="2025-04-06T20:30:00.999364" level="INFO">${params} = {'warehouseId': '6'}</msg>
+<var>${params}</var>
+<arg>warehouseId=${warehouse_id}</arg>
+<doc>Creates and returns a dictionary based on the given ``items``.</doc>
+<status status="PASS" start="2025-04-06T20:30:00.999193" elapsed="0.000209"/>
+</kw>
+<kw name="Run Keyword If" owner="BuiltIn">
+<arg>"${filter_params}" != "${EMPTY}"</arg>
+<arg>Set To Dictionary</arg>
+<arg>${params}</arg>
+<arg>&amp;{filter_params}</arg>
+<doc>Runs the given keyword with the given arguments, if ``condition`` is true.</doc>
+<status status="PASS" start="2025-04-06T20:30:00.999515" elapsed="0.000558"/>
+</kw>
+<kw name="GET On Session" owner="RequestsLibrary">
+<msg time="2025-04-06T20:30:01.027811" level="INFO">GET Request : url=https://api.vkho.net/divison/get-all?warehouseId=6 
+ path_url=/divison/get-all?warehouseId=6 
+ headers={'User-Agent': 'python-requests/2.32.3', 'Accept-Encoding': 'gzip, deflate', 'Accept': '*/*', 'Connection': 'keep-alive', 'Content-Type': 'application/json', 'Authorization': 'Bearer eyJhbGciOiJSUzI1NiIsInR5cCIgOiAiSldUIiwia2lkIiA6ICI0TVhBLW1VYjduYV90RjNJd1VrWXNreHZrbVNqQWJpSEV6MnFpN3ZaRGhJIn0.eyJleHAiOjE3NDM5NzE0MDAsImlhdCI6MTc0Mzk0NjIwMCwianRpIjoiMzJjYWViNzItZTYyOS00MmY1LTkzYzYtOWU3ZGYyYmY1MzM0IiwiaXNzIjoiaHR0cHM6Ly9rYy5jb25jb24udm4vcmVhbG1zL3ZraG9fc3RhZyIsInN1YiI6IjIzYzY2NzE3LThkY2EtNDk3MS1hZDA5LTk2ODFkNjMyZjA5YyIsInR5cCI6IkJlYXJlciIsImF6cCI6InZraG9fYXBwIiwic2lkIjoiZTk3MmEwMzMtYmM5OS00MGEwLWExYmItODQxZmQ0NTQ2MTUwIiwiYWNyIjoiMSIsImFsbG93ZWQtb3JpZ2lucyI6WyIqIl0sInJlYWxtX2FjY2VzcyI6eyJyb2xlcyI6WyJtYW5hZ2VyIiwic3RhZmYiXX0sInNjb3BlIjoib3BlbmlkIHByb2ZpbGUgZW1haWwiLCJlbWFpbF92ZXJpZmllZCI6ZmFsc2UsIm5hbWUiOiJIdXkgUUMgTWFuYWdlciIsInByZWZlcnJlZF91c2VybmFtZSI6Imh1eW5oMjIubWFuYWdlciIsImdpdmVuX25hbWUiOiJIdXkiLCJmYW1pbHlfbmFtZSI6IlFDIE1hbmFnZXIiLCJlbWFpbCI6InZvbGliZWFyMTUzQGdtYWlsLmNvbSJ9.OlrsF3qEIsR8V2esJF-h61KSD6qFthku-_AROGCqgv_axJ4rYRDtHAH45EVpO6S2lFBWyAVD5FWTyKwD7gIqdcgWFY-il1PXc96toA0PtmsKsv-qOG0DxuF5z3CWhGClvMAtrPoJpmFtmT6XL6Xk-FNbSiQa0mFd70O52NYpyIKamOW4qJsVaY8PXGgEdPJXqGSgf0PAm4Mj_Fh7IWByi2c5Wi8paXHyHbWrRJs23UCAUjwu3MavbByXCq_z7yKfQIRt8qkfP8Qb5MEpSduTZwHgHxS8aoPmoRoKmgIaJctKFvpChGYq1AvJVnC-WYwBY8vLPbjnIkYxn30E4d5Q4g'} 
+ body=None 
+ </msg>
+<msg time="2025-04-06T20:30:01.028074" level="INFO">GET Response : url=https://api.vkho.net/divison/get-all?warehouseId=6 
+ status=200, reason=OK 
+ headers={'Access-Control-Allow-Origin': '*', 'Alt-Svc': 'h3=":443"; ma=2592000', 'Content-Length': '7755', 'Content-Type': 'application/json; charset=utf-8', 'Date': 'Sun, 06 Apr 2025 13:30:01 GMT', 'Etag': 'W/"1e4b-mPqHf4srz4kU0Yfn1CsopgCt+gI"', 'Server': 'Caddy'} 
+ body={"totalItem":43,"data":[{"id":20,"code":"20","name":"Electronics - Consumer electronics","createDate":"2025-03-03T07:31:22.728Z","updateDate":"2025-03-03T07:31:22.729Z","status":"ENABLE","warehouseId":6},{"id":21,"code":"21","name":"Apparel - \tClothing and accessories","createDate":"2025-03-03T07:31:22.748Z","updateDate":"2025-03-03T07:31:22.748Z","status":"ENABLE","warehouseId":6},{"id":22,"code":"22","name":"Home &amp; Garden - Home improvement and decoration","createDate":"2025-03-03T07:31:22.757Z","updateDate":"2025-03-03T07:31:22.757Z","status":"ENABLE","warehouseId":6},{"id":23,"code":"23","name":"Sports &amp; Outdoors - Sporting goods, camping","createDate":"2025-03-03T07:31:22.766Z","updateDate":"2025-03-03T07:31:22.766Z","status":"ENABLE","warehouseId":6},{"id":24,"code":"24","name":"Health &amp; Beauty - Cosmetics, wellness","createDate":"2025-03-03T07:31:22.776Z","updateDate":"2025-03-03T07:31:22.776Z","status":"ENABLE","warehouseId":6},{"id":25,"code":"25","name":"Automotive - Car parts and accessories","createDate":"2025-03-03T07:31:22.785Z","updateDate":"2025-03-03T07:31:22.785Z","status":"ENABLE","warehouseId":6},{"id":26,"code":"26","name":"Test Division 1743414870 Updated","createDate":"2025-03-31T09:54:28.545Z","updateDate":"2025-03-31T09:54:28.671Z","status":"DISABLE","warehouseId":6},{"id":27,"code":"27","name":"Test Division 1743416437 Updated","createDate":"2025-03-31T10:20:35.962Z","updateDate":"2025-03-31T10:20:36.122Z","status":"DISABLE","warehouseId":6},{"id":28,"code":"28","name":"Test Division 1743427787 Updated","createDate":"2025-03-31T13:29:47.800Z","updateDate":"2025-03-31T13:29:48.076Z","status":"DISABLE","warehouseId":6},{"id":29,"code":"29","name":"Test Division 1743428262 Updated","createDate":"2025-03-31T13:37:42.629Z","updateDate":"2025-03-31T13:37:42.752Z","status":"DISABLE","warehouseId":6},{"id":30,"code":"30","name":"Test Division 1743432162 Updated","createDate":"2025-03-31T14:42:43.228Z","updateDate":"2025-03-31T14:42:43.362Z","status":"DISABLE","warehouseId":6},{"id":31,"code":"31","name":"Test Division 1743436063 Updated","createDate":"2025-03-31T15:47:44.431Z","updateDate":"2025-03-31T15:47:44.550Z","status":"DISABLE","warehouseId":6},{"id":32,"code":"32","name":"Test Division 1743480519 Updated","createDate":"2025-04-01T04:08:40.484Z","updateDate":"2025-04-01T04:08:40.649Z","status":"DISABLE","warehouseId":6},{"id":33,"code":"33","name":"Test Division 1743483640 Updated","createDate":"2025-04-01T05:00:41.979Z","updateDate":"2025-04-01T05:00:42.143Z","status":"DISABLE","warehouseId":6},{"id":34,"code":"34","name":"Test Division 1743486409 Updated","createDate":"2025-04-01T05:46:50.396Z","updateDate":"2025-04-01T05:46:50.530Z","status":"DISABLE","warehouseId":6},{"id":35,"code":"35","name":"Test Division 1743491113 Updated","createDate":"2025-04-01T07:05:13.766Z","updateDate":"2025-04-01T07:05:13.863Z","status":"DISABLE","warehouseId":6},{"id":36,"code":"36","name":"Test Division 1743491153 Updated","createDate":"2025-04-01T07:05:53.029Z","updateDate":"2025-04-01T07:05:53.135Z","status":"DISABLE","warehouseId":6},{"id":37,"code":"37","name":"Test Division 1743505757 Updated","createDate":"2025-04-01T11:09:18.561Z","updateDate":"2025-04-01T11:09:18.693Z","status":"DISABLE","warehouseId":6},{"id":38,"code":"38","name":"Test Division 1743514563 Updated","createDate":"2025-04-01T13:36:04.010Z","updateDate":"2025-04-01T13:36:04.140Z","status":"DISABLE","warehouseId":6},{"id":39,"code":"39","name":"Test Division 1743517751 Updated","createDate":"2025-04-01T14:29:12.622Z","updateDate":"2025-04-01T14:29:12.757Z","status":"DISABLE","warehouseId":6},{"id":40,"code":"40","name":"Test Division 1743518053 Updated","createDate":"2025-04-01T14:34:14.603Z","updateDate":"2025-04-01T14:34:14.768Z","status":"DISABLE","warehouseId":6},{"id":41,"code":"41","name":"Test Division 1743518188 Updated","createDate":"2025-04-01T14:36:28.956Z","updateDate":"2025-04-01T14:36:29.100Z","status":"DISABLE","warehouseId":6},{"id":42,"code":"42","name":"Test Division 1743518275 Updated","createDate":"2025-04-01T14:37:56.535Z","updateDate":"2025-04-01T14:37:56.655Z","status":"DISABLE","warehouseId":6},{"id":43,"code":"43","name":"Test Division 1743518359 Updated","createDate":"2025-04-01T14:39:20.111Z","updateDate":"2025-04-01T14:39:20.240Z","status":"DISABLE","warehouseId":6},{"id":44,"code":"44","name":"Test Division 1743587139 Updated","createDate":"2025-04-02T09:45:39.365Z","updateDate":"2025-04-02T09:45:39.474Z","status":"DISABLE","warehouseId":6},{"id":45,"code":"45","name":"Test Division 1743587281 Updated","createDate":"2025-04-02T09:48:02.151Z","updateDate":"2025-04-02T09:48:02.281Z","status":"DISABLE","warehouseId":6},{"id":46,"code":"46","name":"Test Division 1743588136 Updated","createDate":"2025-04-02T10:02:17.179Z","updateDate":"2025-04-02T10:02:17.300Z","status":"DISABLE","warehouseId":6},{"id":47,"code":"47","name":"Test Division 1743844360 Updated","createDate":"2025-04-05T09:12:40.511Z","updateDate":"2025-04-05T09:12:40.614Z","status":"DISABLE","warehouseId":6},{"id":48,"code":"48","name":"Test Division 1743844599 Updated","createDate":"2025-04-05T09:16:39.657Z","updateDate":"2025-04-05T09:16:39.761Z","status":"DISABLE","warehouseId":6},{"id":49,"code":"49","name":"Test Division 1743916991 Updated","createDate":"2025-04-06T05:23:11.233Z","updateDate":"2025-04-06T05:23:11.381Z","status":"DISABLE","warehouseId":6},{"id":50,"code":"50","name":"Test Division 1743917596 Updated","createDate":"2025-04-06T05:33:16.604Z","updateDate":"2025-04-06T05:33:16.758Z","status":"DISABLE","warehouseId":6},{"id":51,"code":"51","name":"Test Division 1743943322 Updated","createDate":"2025-04-06T12:42:02.687Z","updateDate":"2025-04-06T12:42:02.807Z","status":"DISABLE","warehouseId":6},{"id":52,"code":"52","name":"Test Division 1743944150 Updated","createDate":"2025-04-06T12:55:50.706Z","updateDate":"2025-04-06T12:55:50.826Z","status":"DISABLE","warehouseId":6},{"id":53,"code":"53","name":"Test Division 1743944762 Updated","createDate":"2025-04-06T13:06:02.311Z","updateDate":"2025-04-06T13:06:02.498Z","status":"DISABLE","warehouseId":6},{"id":54,"code":"54","name":"Test Division 1743944974 Updated","createDate":"2025-04-06T13:09:34.985Z","updateDate":"2025-04-06T13:09:35.110Z","status":"DISABLE","warehouseId":6},{"id":55,"code":"55","name":"Test Division 1743945129 Updated","createDate":"2025-04-06T13:12:09.832Z","updateDate":"2025-04-06T13:12:09.953Z","status":"DISABLE","warehouseId":6},{"id":56,"code":"56","name":"Test Division 1743945220 Updated","createDate":"2025-04-06T13:13:40.331Z","updateDate":"2025-04-06T13:13:40.452Z","status":"DISABLE","warehouseId":6},{"id":57,"code":"57","name":"Test Division 1743945333 Updated","createDate":"2025-04-06T13:15:33.344Z","updateDate":"2025-04-06T13:15:33.472Z","status":"DISABLE","warehouseId":6},{"id":58,"code":"58","name":"Test Division 1743945477 Updated","createDate":"2025-04-06T13:17:57.696Z","updateDate":"2025-04-06T13:17:57.832Z","status":"DISABLE","warehouseId":6},{"id":59,"code":"59","name":"Test Division 1743945773 Updated","createDate":"2025-04-06T13:22:53.464Z","updateDate":"2025-04-06T13:22:53.588Z","status":"ENABLE","warehouseId":6},{"id":60,"code":"60","name":"Test Division 1743946100 Updated","createDate":"2025-04-06T13:28:20.761Z","updateDate":"2025-04-06T13:28:20.881Z","status":"ENABLE","warehouseId":6},{"id":61,"code":"61","name":"Test Division 1743946176 Updated","createDate":"2025-04-06T13:29:36.404Z","updateDate":"2025-04-06T13:29:36.527Z","status":"ENABLE","warehouseId":6},{"id":62,"code":"62","name":"Test Division 1743946200 Updated","createDate":"2025-04-06T13:30:00.883Z","updateDate":"2025-04-06T13:30:01.011Z","status":"ENABLE","warehouseId":6}]} 
+ </msg>
+<msg time="2025-04-06T20:30:01.028439" level="INFO">${response} = &lt;Response [200]&gt;</msg>
+<var>${response}</var>
+<arg>vkho</arg>
+<arg>/divison/get-all</arg>
+<arg>params=${params}</arg>
+<arg>headers=${headers}</arg>
+<arg>expected_status=200</arg>
+<doc>Sends a GET request on a previously created HTTP Session.</doc>
+<status status="PASS" start="2025-04-06T20:30:01.000181" elapsed="0.028295"/>
+</kw>
+<kw name="Set Variable" owner="BuiltIn">
+<msg time="2025-04-06T20:30:01.031005" level="INFO">${json_response} = {'totalItem': 43, 'data': [{'id': 20, 'code': '20', 'name': 'Electronics - Consumer electronics', 'createDate': '2025-03-03T07:31:22.728Z', 'updateDate': '2025-03-03T07:31:22.729Z', 'status': 'ENABLE'...</msg>
+<var>${json_response}</var>
+<arg>${response.json()}</arg>
+<doc>Returns the given values which can then be assigned to a variables.</doc>
+<status status="PASS" start="2025-04-06T20:30:01.028700" elapsed="0.002530"/>
+</kw>
+<kw name="Dictionary Should Contain Key" owner="Collections">
+<arg>${json_response}</arg>
+<arg>data</arg>
+<doc>Fails if ``key`` is not found from ``dictionary``.</doc>
+<status status="PASS" start="2025-04-06T20:30:01.031576" elapsed="0.000346"/>
+</kw>
+<kw name="Dictionary Should Contain Key" owner="Collections">
+<arg>${json_response}</arg>
+<arg>totalItem</arg>
+<doc>Fails if ``key`` is not found from ``dictionary``.</doc>
+<status status="PASS" start="2025-04-06T20:30:01.032159" elapsed="0.000221"/>
+</kw>
+<kw name="Set Variable" owner="BuiltIn">
+<msg time="2025-04-06T20:30:01.033084" level="INFO">${divisions} = [{'id': 20, 'code': '20', 'name': 'Electronics - Consumer electronics', 'createDate': '2025-03-03T07:31:22.728Z', 'updateDate': '2025-03-03T07:31:22.729Z', 'status': 'ENABLE', 'warehouseId': 6}, {'id'...</msg>
+<var>${divisions}</var>
+<arg>${json_response}[data]</arg>
+<doc>Returns the given values which can then be assigned to a variables.</doc>
+<status status="PASS" start="2025-04-06T20:30:01.032572" elapsed="0.000576"/>
+</kw>
+<kw name="Set Variable" owner="BuiltIn">
+<msg time="2025-04-06T20:30:01.033664" level="INFO">${total_count} = 43</msg>
+<var>${total_count}</var>
+<arg>${json_response}[totalItem]</arg>
+<doc>Returns the given values which can then be assigned to a variables.</doc>
+<status status="PASS" start="2025-04-06T20:30:01.033366" elapsed="0.000326"/>
+</kw>
+<kw name="Log" owner="BuiltIn">
+<msg time="2025-04-06T20:30:01.034216" level="INFO">Total divisions: 43</msg>
+<arg>Total divisions: ${total_count}</arg>
+<doc>Logs the given message with the given level.</doc>
+<status status="PASS" start="2025-04-06T20:30:01.033906" elapsed="0.000385"/>
+</kw>
+<kw name="Log" owner="BuiltIn">
+<msg time="2025-04-06T20:30:01.034968" level="INFO">Division array: [{'id': 20, 'code': '20', 'name': 'Electronics - Consumer electronics', 'createDate': '2025-03-03T07:31:22.728Z', 'updateDate': '2025-03-03T07:31:22.729Z', 'status': 'ENABLE', 'warehouseId': 6}, {'id': 21, 'code': '21', 'name': 'Apparel - \tClothing and accessories', 'createDate': '2025-03-03T07:31:22.748Z', 'updateDate': '2025-03-03T07:31:22.748Z', 'status': 'ENABLE', 'warehouseId': 6}, {'id': 22, 'code': '22', 'name': 'Home &amp; Garden - Home improvement and decoration', 'createDate': '2025-03-03T07:31:22.757Z', 'updateDate': '2025-03-03T07:31:22.757Z', 'status': 'ENABLE', 'warehouseId': 6}, {'id': 23, 'code': '23', 'name': 'Sports &amp; Outdoors - Sporting goods, camping', 'createDate': '2025-03-03T07:31:22.766Z', 'updateDate': '2025-03-03T07:31:22.766Z', 'status': 'ENABLE', 'warehouseId': 6}, {'id': 24, 'code': '24', 'name': 'Health &amp; Beauty - Cosmetics, wellness', 'createDate': '2025-03-03T07:31:22.776Z', 'updateDate': '2025-03-03T07:31:22.776Z', 'status': 'ENABLE', 'warehouseId': 6}, {'id': 25, 'code': '25', 'name': 'Automotive - Car parts and accessories', 'createDate': '2025-03-03T07:31:22.785Z', 'updateDate': '2025-03-03T07:31:22.785Z', 'status': 'ENABLE', 'warehouseId': 6}, {'id': 26, 'code': '26', 'name': 'Test Division 1743414870 Updated', 'createDate': '2025-03-31T09:54:28.545Z', 'updateDate': '2025-03-31T09:54:28.671Z', 'status': 'DISABLE', 'warehouseId': 6}, {'id': 27, 'code': '27', 'name': 'Test Division 1743416437 Updated', 'createDate': '2025-03-31T10:20:35.962Z', 'updateDate': '2025-03-31T10:20:36.122Z', 'status': 'DISABLE', 'warehouseId': 6}, {'id': 28, 'code': '28', 'name': 'Test Division 1743427787 Updated', 'createDate': '2025-03-31T13:29:47.800Z', 'updateDate': '2025-03-31T13:29:48.076Z', 'status': 'DISABLE', 'warehouseId': 6}, {'id': 29, 'code': '29', 'name': 'Test Division 1743428262 Updated', 'createDate': '2025-03-31T13:37:42.629Z', 'updateDate': '2025-03-31T13:37:42.752Z', 'status': 'DISABLE', 'warehouseId': 6}, {'id': 30, 'code': '30', 'name': 'Test Division 1743432162 Updated', 'createDate': '2025-03-31T14:42:43.228Z', 'updateDate': '2025-03-31T14:42:43.362Z', 'status': 'DISABLE', 'warehouseId': 6}, {'id': 31, 'code': '31', 'name': 'Test Division 1743436063 Updated', 'createDate': '2025-03-31T15:47:44.431Z', 'updateDate': '2025-03-31T15:47:44.550Z', 'status': 'DISABLE', 'warehouseId': 6}, {'id': 32, 'code': '32', 'name': 'Test Division 1743480519 Updated', 'createDate': '2025-04-01T04:08:40.484Z', 'updateDate': '2025-04-01T04:08:40.649Z', 'status': 'DISABLE', 'warehouseId': 6}, {'id': 33, 'code': '33', 'name': 'Test Division 1743483640 Updated', 'createDate': '2025-04-01T05:00:41.979Z', 'updateDate': '2025-04-01T05:00:42.143Z', 'status': 'DISABLE', 'warehouseId': 6}, {'id': 34, 'code': '34', 'name': 'Test Division 1743486409 Updated', 'createDate': '2025-04-01T05:46:50.396Z', 'updateDate': '2025-04-01T05:46:50.530Z', 'status': 'DISABLE', 'warehouseId': 6}, {'id': 35, 'code': '35', 'name': 'Test Division 1743491113 Updated', 'createDate': '2025-04-01T07:05:13.766Z', 'updateDate': '2025-04-01T07:05:13.863Z', 'status': 'DISABLE', 'warehouseId': 6}, {'id': 36, 'code': '36', 'name': 'Test Division 1743491153 Updated', 'createDate': '2025-04-01T07:05:53.029Z', 'updateDate': '2025-04-01T07:05:53.135Z', 'status': 'DISABLE', 'warehouseId': 6}, {'id': 37, 'code': '37', 'name': 'Test Division 1743505757 Updated', 'createDate': '2025-04-01T11:09:18.561Z', 'updateDate': '2025-04-01T11:09:18.693Z', 'status': 'DISABLE', 'warehouseId': 6}, {'id': 38, 'code': '38', 'name': 'Test Division 1743514563 Updated', 'createDate': '2025-04-01T13:36:04.010Z', 'updateDate': '2025-04-01T13:36:04.140Z', 'status': 'DISABLE', 'warehouseId': 6}, {'id': 39, 'code': '39', 'name': 'Test Division 1743517751 Updated', 'createDate': '2025-04-01T14:29:12.622Z', 'updateDate': '2025-04-01T14:29:12.757Z', 'status': 'DISABLE', 'warehouseId': 6}, {'id': 40, 'code': '40', 'name': 'Test Division 1743518053 Updated', 'createDate': '2025-04-01T14:34:14.603Z', 'updateDate': '2025-04-01T14:34:14.768Z', 'status': 'DISABLE', 'warehouseId': 6}, {'id': 41, 'code': '41', 'name': 'Test Division 1743518188 Updated', 'createDate': '2025-04-01T14:36:28.956Z', 'updateDate': '2025-04-01T14:36:29.100Z', 'status': 'DISABLE', 'warehouseId': 6}, {'id': 42, 'code': '42', 'name': 'Test Division 1743518275 Updated', 'createDate': '2025-04-01T14:37:56.535Z', 'updateDate': '2025-04-01T14:37:56.655Z', 'status': 'DISABLE', 'warehouseId': 6}, {'id': 43, 'code': '43', 'name': 'Test Division 1743518359 Updated', 'createDate': '2025-04-01T14:39:20.111Z', 'updateDate': '2025-04-01T14:39:20.240Z', 'status': 'DISABLE', 'warehouseId': 6}, {'id': 44, 'code': '44', 'name': 'Test Division 1743587139 Updated', 'createDate': '2025-04-02T09:45:39.365Z', 'updateDate': '2025-04-02T09:45:39.474Z', 'status': 'DISABLE', 'warehouseId': 6}, {'id': 45, 'code': '45', 'name': 'Test Division 1743587281 Updated', 'createDate': '2025-04-02T09:48:02.151Z', 'updateDate': '2025-04-02T09:48:02.281Z', 'status': 'DISABLE', 'warehouseId': 6}, {'id': 46, 'code': '46', 'name': 'Test Division 1743588136 Updated', 'createDate': '2025-04-02T10:02:17.179Z', 'updateDate': '2025-04-02T10:02:17.300Z', 'status': 'DISABLE', 'warehouseId': 6}, {'id': 47, 'code': '47', 'name': 'Test Division 1743844360 Updated', 'createDate': '2025-04-05T09:12:40.511Z', 'updateDate': '2025-04-05T09:12:40.614Z', 'status': 'DISABLE', 'warehouseId': 6}, {'id': 48, 'code': '48', 'name': 'Test Division 1743844599 Updated', 'createDate': '2025-04-05T09:16:39.657Z', 'updateDate': '2025-04-05T09:16:39.761Z', 'status': 'DISABLE', 'warehouseId': 6}, {'id': 49, 'code': '49', 'name': 'Test Division 1743916991 Updated', 'createDate': '2025-04-06T05:23:11.233Z', 'updateDate': '2025-04-06T05:23:11.381Z', 'status': 'DISABLE', 'warehouseId': 6}, {'id': 50, 'code': '50', 'name': 'Test Division 1743917596 Updated', 'createDate': '2025-04-06T05:33:16.604Z', 'updateDate': '2025-04-06T05:33:16.758Z', 'status': 'DISABLE', 'warehouseId': 6}, {'id': 51, 'code': '51', 'name': 'Test Division 1743943322 Updated', 'createDate': '2025-04-06T12:42:02.687Z', 'updateDate': '2025-04-06T12:42:02.807Z', 'status': 'DISABLE', 'warehouseId': 6}, {'id': 52, 'code': '52', 'name': 'Test Division 1743944150 Updated', 'createDate': '2025-04-06T12:55:50.706Z', 'updateDate': '2025-04-06T12:55:50.826Z', 'status': 'DISABLE', 'warehouseId': 6}, {'id': 53, 'code': '53', 'name': 'Test Division 1743944762 Updated', 'createDate': '2025-04-06T13:06:02.311Z', 'updateDate': '2025-04-06T13:06:02.498Z', 'status': 'DISABLE', 'warehouseId': 6}, {'id': 54, 'code': '54', 'name': 'Test Division 1743944974 Updated', 'createDate': '2025-04-06T13:09:34.985Z', 'updateDate': '2025-04-06T13:09:35.110Z', 'status': 'DISABLE', 'warehouseId': 6}, {'id': 55, 'code': '55', 'name': 'Test Division 1743945129 Updated', 'createDate': '2025-04-06T13:12:09.832Z', 'updateDate': '2025-04-06T13:12:09.953Z', 'status': 'DISABLE', 'warehouseId': 6}, {'id': 56, 'code': '56', 'name': 'Test Division 1743945220 Updated', 'createDate': '2025-04-06T13:13:40.331Z', 'updateDate': '2025-04-06T13:13:40.452Z', 'status': 'DISABLE', 'warehouseId': 6}, {'id': 57, 'code': '57', 'name': 'Test Division 1743945333 Updated', 'createDate': '2025-04-06T13:15:33.344Z', 'updateDate': '2025-04-06T13:15:33.472Z', 'status': 'DISABLE', 'warehouseId': 6}, {'id': 58, 'code': '58', 'name': 'Test Division 1743945477 Updated', 'createDate': '2025-04-06T13:17:57.696Z', 'updateDate': '2025-04-06T13:17:57.832Z', 'status': 'DISABLE', 'warehouseId': 6}, {'id': 59, 'code': '59', 'name': 'Test Division 1743945773 Updated', 'createDate': '2025-04-06T13:22:53.464Z', 'updateDate': '2025-04-06T13:22:53.588Z', 'status': 'ENABLE', 'warehouseId': 6}, {'id': 60, 'code': '60', 'name': 'Test Division 1743946100 Updated', 'createDate': '2025-04-06T13:28:20.761Z', 'updateDate': '2025-04-06T13:28:20.881Z', 'status': 'ENABLE', 'warehouseId': 6}, {'id': 61, 'code': '61', 'name': 'Test Division 1743946176 Updated', 'createDate': '2025-04-06T13:29:36.404Z', 'updateDate': '2025-04-06T13:29:36.527Z', 'status': 'ENABLE', 'warehouseId': 6}, {'id': 62, 'code': '62', 'name': 'Test Division 1743946200 Updated', 'createDate': '2025-04-06T13:30:00.883Z', 'updateDate': '2025-04-06T13:30:01.011Z', 'status': 'ENABLE', 'warehouseId': 6}]</msg>
+<arg>Division array: ${divisions}</arg>
+<doc>Logs the given message with the given level.</doc>
+<status status="PASS" start="2025-04-06T20:30:01.034510" elapsed="0.000727"/>
+</kw>
+<for flavor="IN">
+<iter>
+<kw name="Validate Division Response">
+<kw name="Should Have Keys">
+<for flavor="IN">
+<iter>
+<kw name="Dictionary Should Contain Key" owner="Collections">
+<arg>${dict}</arg>
+<arg>${key}</arg>
+<arg>msg=Response missing required field: ${key}</arg>
+<doc>Fails if ``key`` is not found from ``dictionary``.</doc>
+<status status="PASS" start="2025-04-06T20:30:01.037305" elapsed="0.000204"/>
+</kw>
+<var name="${key}">id</var>
+<status status="PASS" start="2025-04-06T20:30:01.037218" elapsed="0.000341"/>
+</iter>
+<iter>
+<kw name="Dictionary Should Contain Key" owner="Collections">
+<arg>${dict}</arg>
+<arg>${key}</arg>
+<arg>msg=Response missing required field: ${key}</arg>
+<doc>Fails if ``key`` is not found from ``dictionary``.</doc>
+<status status="PASS" start="2025-04-06T20:30:01.037706" elapsed="0.000211"/>
+</kw>
+<var name="${key}">name</var>
+<status status="PASS" start="2025-04-06T20:30:01.037634" elapsed="0.000324"/>
+</iter>
+<iter>
+<kw name="Dictionary Should Contain Key" owner="Collections">
+<arg>${dict}</arg>
+<arg>${key}</arg>
+<arg>msg=Response missing required field: ${key}</arg>
+<doc>Fails if ``key`` is not found from ``dictionary``.</doc>
+<status status="PASS" start="2025-04-06T20:30:01.038106" elapsed="0.000208"/>
+</kw>
+<var name="${key}">status</var>
+<status status="PASS" start="2025-04-06T20:30:01.038030" elapsed="0.000326"/>
+</iter>
+<iter>
+<kw name="Dictionary Should Contain Key" owner="Collections">
+<arg>${dict}</arg>
+<arg>${key}</arg>
+<arg>msg=Response missing required field: ${key}</arg>
+<doc>Fails if ``key`` is not found from ``dictionary``.</doc>
+<status status="PASS" start="2025-04-06T20:30:01.038521" elapsed="0.000188"/>
+</kw>
+<var name="${key}">warehouseId</var>
+<status status="PASS" start="2025-04-06T20:30:01.038433" elapsed="0.000353"/>
+</iter>
+<var>${key}</var>
+<value>@{keys}</value>
+<status status="PASS" start="2025-04-06T20:30:01.037115" elapsed="0.001759"/>
+</for>
+<arg>${division}</arg>
+<arg>id</arg>
+<arg>name</arg>
+<arg>status</arg>
+<arg>warehouseId</arg>
+<doc>Verify dictionary contains all required keys</doc>
+<status status="PASS" start="2025-04-06T20:30:01.036898" elapsed="0.002074"/>
+</kw>
+<kw name="Should Not Be Empty" owner="BuiltIn">
+<msg time="2025-04-06T20:30:01.039369" level="FAIL">Could not get length of '20'.</msg>
+<arg>${division}[id]</arg>
+<doc>Verifies that the given item is not empty.</doc>
+<status status="FAIL" start="2025-04-06T20:30:01.039140" elapsed="0.001112">Could not get length of '20'.</status>
+</kw>
+<kw name="Should Not Be Empty" owner="BuiltIn">
+<arg>${division}[name]</arg>
+<doc>Verifies that the given item is not empty.</doc>
+<status status="NOT RUN" start="2025-04-06T20:30:01.040379" elapsed="0.000022"/>
+</kw>
+<kw name="Should Be Equal" owner="BuiltIn">
+<arg>${division}[warehouseId]</arg>
+<arg>${WAREHOUSE_ID}</arg>
+<doc>Fails if the given objects are unequal.</doc>
+<status status="NOT RUN" start="2025-04-06T20:30:01.040500" elapsed="0.000018"/>
+</kw>
+<arg>${division}</arg>
+<doc>Validate division response structure and content</doc>
+<status status="FAIL" start="2025-04-06T20:30:01.035710" elapsed="0.004900">Could not get length of '20'.</status>
+</kw>
+<kw name="Log" owner="BuiltIn">
+<arg>Validated division: ${division}</arg>
+<doc>Logs the given message with the given level.</doc>
+<status status="NOT RUN" start="2025-04-06T20:30:01.040703" elapsed="0.000025"/>
+</kw>
+<var name="${division}">{'id': 20, 'code': '20', 'name': 'Electronics - Consumer electronics', 'createDate': '2025-03-03T07:31:22.728Z', 'updateDate': '2025-03-03T07:31:22.729Z', 'status': 'ENABLE', 'warehouseId': 6}</var>
+<status status="FAIL" start="2025-04-06T20:30:01.035550" elapsed="0.005222">Could not get length of '20'.</status>
+</iter>
+<var>${division}</var>
+<value>@{divisions}</value>
+<status status="FAIL" start="2025-04-06T20:30:01.035322" elapsed="0.005516">Could not get length of '20'.</status>
+</for>
+<return>
+<value>${divisions}</value>
+<status status="NOT RUN" start="2025-04-06T20:30:01.040904" elapsed="0.000027"/>
+</return>
+<var>${divisions}</var>
+<doc>Retrieve all divisions with array response handling</doc>
+<status status="FAIL" start="2025-04-06T20:30:00.997873" elapsed="0.043198">Could not get length of '20'.</status>
+</kw>
+<kw name="Should Be True" owner="BuiltIn">
+<arg>isinstance($divisions, list)</arg>
+<arg>msg=Response should be a list of divisions</arg>
+<doc>Fails if the given condition is not true.</doc>
+<status status="NOT RUN" start="2025-04-06T20:30:01.041395" elapsed="0.000032"/>
+</kw>
+<kw name="Get Length" owner="BuiltIn">
+<var>${count}</var>
+<arg>${divisions}</arg>
+<doc>Returns and logs the length of the given item as an integer.</doc>
+<status status="NOT RUN" start="2025-04-06T20:30:01.041765" elapsed="0.000026"/>
+</kw>
+<kw name="Should Be True" owner="BuiltIn">
+<arg>${count} &gt;= 0</arg>
+<arg>msg=Should have zero or more divisions</arg>
+<doc>Fails if the given condition is not true.</doc>
+<status status="NOT RUN" start="2025-04-06T20:30:01.042024" elapsed="0.000022"/>
+</kw>
+<kw name="Log" owner="BuiltIn">
+<arg>Retrieved ${count} divisions</arg>
+<doc>Logs the given message with the given level.</doc>
+<status status="NOT RUN" start="2025-04-06T20:30:01.042326" elapsed="0.000029"/>
+</kw>
+<for flavor="IN">
+<iter>
+<kw name="Should Have Keys">
+<arg>${division}</arg>
+<arg>id</arg>
+<arg>name</arg>
+<arg>status</arg>
+<arg>warehouseId</arg>
+<doc>Verify dictionary contains all required keys</doc>
+<status status="NOT RUN" start="2025-04-06T20:30:01.043332" elapsed="0.000027"/>
+</kw>
+<kw name="Should Be Integer">
+<arg>${division}[id]</arg>
+<doc>Verify value is an integer</doc>
+<status status="NOT RUN" start="2025-04-06T20:30:01.043516" elapsed="0.000035"/>
+</kw>
+<kw name="Should Be String">
+<arg>${division}[name]</arg>
+<doc>Verify value is a string</doc>
+<status status="NOT RUN" start="2025-04-06T20:30:01.043658" elapsed="0.000020"/>
+</kw>
+<kw name="Should Be String">
+<arg>${division}[status]</arg>
+<doc>Verify value is a string</doc>
+<status status="NOT RUN" start="2025-04-06T20:30:01.043823" elapsed="0.000019"/>
+</kw>
+<kw name="Should Be Integer">
+<arg>${division}[warehouseId]</arg>
+<doc>Verify value is an integer</doc>
+<status status="NOT RUN" start="2025-04-06T20:30:01.043943" elapsed="0.000019"/>
+</kw>
+<kw name="Should Be True" owner="BuiltIn">
+<arg>"${division}[status]" in ["ENABLE", "DISABLE"]</arg>
+<arg>msg=Invalid status value: ${division}[status]</arg>
+<doc>Fails if the given condition is not true.</doc>
+<status status="NOT RUN" start="2025-04-06T20:30:01.044068" elapsed="0.000019"/>
+</kw>
+<kw name="Should Be Equal As Integers" owner="BuiltIn">
+<arg>${division}[warehouseId]</arg>
+<arg>${WAREHOUSE_ID}</arg>
+<arg>msg=Division belongs to incorrect warehouse</arg>
+<doc>Fails if objects are unequal after converting them to integers.</doc>
+<status status="NOT RUN" start="2025-04-06T20:30:01.044187" elapsed="0.000018"/>
+</kw>
+<kw name="Log" owner="BuiltIn">
+<arg>Validated division: ${division}</arg>
+<doc>Logs the given message with the given level.</doc>
+<status status="NOT RUN" start="2025-04-06T20:30:01.044309" elapsed="0.000018"/>
+</kw>
+<var name="${division}"/>
+<status status="NOT RUN" start="2025-04-06T20:30:01.043162" elapsed="0.001198"/>
+</iter>
+<var>${division}</var>
+<value>@{divisions}</value>
+<status status="NOT RUN" start="2025-04-06T20:30:01.042975" elapsed="0.001419"/>
+</for>
+<kw name="Log" owner="BuiltIn">
+<arg>Successfully validated all ${count} divisions</arg>
+<doc>Logs the given message with the given level.</doc>
+<status status="NOT RUN" start="2025-04-06T20:30:01.044710" elapsed="0.000028"/>
+</kw>
+<doc>Test retrieving all divisions with array response handling</doc>
+<tag>positive</tag>
+<tag>retrieve</tag>
+<status status="FAIL" start="2025-04-06T20:30:00.997266" elapsed="0.048164">Could not get length of '20'.</status>
+</test>
+<test id="s1-s1-t9" name="09 - Delete Division Test" line="615">
+<kw name="Run Keyword If" owner="BuiltIn">
+<arg>"${TEST_DIVISION_ID}" == "${EMPTY}"</arg>
+<arg>Create Test Division</arg>
+<doc>Runs the given keyword with the given arguments, if ``condition`` is true.</doc>
+<status status="PASS" start="2025-04-06T20:30:01.048357" elapsed="0.001910"/>
+</kw>
+<kw name="Delete Division">
+<kw name="Should Not Be Empty" owner="BuiltIn">
+<msg time="2025-04-06T20:30:01.051602" level="INFO">Length is 2.</msg>
+<arg>${division_id}</arg>
+<arg>msg=Division ID cannot be empty</arg>
+<doc>Verifies that the given item is not empty.</doc>
+<status status="PASS" start="2025-04-06T20:30:01.051430" elapsed="0.000230"/>
+</kw>
+<kw name="Create Dictionary" owner="BuiltIn">
+<msg time="2025-04-06T20:30:01.052196" level="INFO">${headers} = {'Content-Type': 'application/json', 'Authorization': 'Bearer eyJhbGciOiJSUzI1NiIsInR5cCIgOiAiSldUIiwia2lkIiA6ICI0TVhBLW1VYjduYV90RjNJd1VrWXNreHZrbVNqQWJpSEV6MnFpN3ZaRGhJIn0.eyJleHAiOjE3NDM5NzE0MDAsIm...</msg>
+<var>${headers}</var>
+<arg>Content-Type=application/json</arg>
+<arg>Authorization=${AUTH_TOKEN}</arg>
+<doc>Creates and returns a dictionary based on the given ``items``.</doc>
+<status status="PASS" start="2025-04-06T20:30:01.051822" elapsed="0.000418"/>
+</kw>
+<kw name="DELETE On Session" owner="RequestsLibrary">
+<msg time="2025-04-06T20:30:01.115236" level="INFO">DELETE Request : url=https://api.vkho.net/divison/delete/62 
+ path_url=/divison/delete/62 
+ headers={'User-Agent': 'python-requests/2.32.3', 'Accept-Encoding': 'gzip, deflate', 'Accept': '*/*', 'Connection': 'keep-alive', 'Content-Type': 'application/json', 'Authorization': 'Bearer eyJhbGciOiJSUzI1NiIsInR5cCIgOiAiSldUIiwia2lkIiA6ICI0TVhBLW1VYjduYV90RjNJd1VrWXNreHZrbVNqQWJpSEV6MnFpN3ZaRGhJIn0.eyJleHAiOjE3NDM5NzE0MDAsImlhdCI6MTc0Mzk0NjIwMCwianRpIjoiMzJjYWViNzItZTYyOS00MmY1LTkzYzYtOWU3ZGYyYmY1MzM0IiwiaXNzIjoiaHR0cHM6Ly9rYy5jb25jb24udm4vcmVhbG1zL3ZraG9fc3RhZyIsInN1YiI6IjIzYzY2NzE3LThkY2EtNDk3MS1hZDA5LTk2ODFkNjMyZjA5YyIsInR5cCI6IkJlYXJlciIsImF6cCI6InZraG9fYXBwIiwic2lkIjoiZTk3MmEwMzMtYmM5OS00MGEwLWExYmItODQxZmQ0NTQ2MTUwIiwiYWNyIjoiMSIsImFsbG93ZWQtb3JpZ2lucyI6WyIqIl0sInJlYWxtX2FjY2VzcyI6eyJyb2xlcyI6WyJtYW5hZ2VyIiwic3RhZmYiXX0sInNjb3BlIjoib3BlbmlkIHByb2ZpbGUgZW1haWwiLCJlbWFpbF92ZXJpZmllZCI6ZmFsc2UsIm5hbWUiOiJIdXkgUUMgTWFuYWdlciIsInByZWZlcnJlZF91c2VybmFtZSI6Imh1eW5oMjIubWFuYWdlciIsImdpdmVuX25hbWUiOiJIdXkiLCJmYW1pbHlfbmFtZSI6IlFDIE1hbmFnZXIiLCJlbWFpbCI6InZvbGliZWFyMTUzQGdtYWlsLmNvbSJ9.OlrsF3qEIsR8V2esJF-h61KSD6qFthku-_AROGCqgv_axJ4rYRDtHAH45EVpO6S2lFBWyAVD5FWTyKwD7gIqdcgWFY-il1PXc96toA0PtmsKsv-qOG0DxuF5z3CWhGClvMAtrPoJpmFtmT6XL6Xk-FNbSiQa0mFd70O52NYpyIKamOW4qJsVaY8PXGgEdPJXqGSgf0PAm4Mj_Fh7IWByi2c5Wi8paXHyHbWrRJs23UCAUjwu3MavbByXCq_z7yKfQIRt8qkfP8Qb5MEpSduTZwHgHxS8aoPmoRoKmgIaJctKFvpChGYq1AvJVnC-WYwBY8vLPbjnIkYxn30E4d5Q4g', 'Content-Length': '0'} 
+ body=None 
+ </msg>
+<msg time="2025-04-06T20:30:01.115314" level="INFO">DELETE Response : url=https://api.vkho.net/divison/delete/62 
+ status=500, reason=Internal Server Error 
+ headers={'Access-Control-Allow-Origin': '*', 'Alt-Svc': 'h3=":443"; ma=2592000', 'Content-Length': '113', 'Content-Type': 'application/json; charset=utf-8', 'Date': 'Sun, 06 Apr 2025 13:30:01 GMT', 'Etag': 'W/"71-cUhO0NBHxQvkNtD5cN782QMAlg4"', 'Server': 'Caddy'} 
+ body={"statusCode":500,"timestamp":"2025-04-06T13:30:01.152Z","path":"/divison/delete/62","message":"Cannot disable!"} 
+ </msg>
+<msg time="2025-04-06T20:30:01.115409" level="FAIL">Url: https://api.vkho.net/divison/delete/62 Expected status: 500 != 200</msg>
+<var>${response}</var>
+<arg>vkho</arg>
+<arg>/divison/delete/${division_id}</arg>
+<arg>headers=${headers}</arg>
+<arg>expected_status=200</arg>
+<doc>Sends a DELETE request on a previously created HTTP Session.</doc>
+<status status="FAIL" start="2025-04-06T20:30:01.052375" elapsed="0.063791">Url: https://api.vkho.net/divison/delete/62 Expected status: 500 != 200</status>
+</kw>
+<return>
+<value>${TRUE}</value>
+<status status="NOT RUN" start="2025-04-06T20:30:01.116244" elapsed="0.000019"/>
+</return>
+<var>${result}</var>
+<arg>${TEST_DIVISION_ID}</arg>
+<doc>Delete a division from the system</doc>
+<status status="FAIL" start="2025-04-06T20:30:01.051038" elapsed="0.065306">Url: https://api.vkho.net/divison/delete/62 Expected status: 500 != 200</status>
+</kw>
+<kw name="Should Be True" owner="BuiltIn">
+<arg>${result}</arg>
+<arg>msg=Delete division operation failed</arg>
+<doc>Fails if the given condition is not true.</doc>
+<status status="NOT RUN" start="2025-04-06T20:30:01.116659" elapsed="0.000022"/>
+</kw>
+<kw name="Create Dictionary" owner="BuiltIn">
+<var>${headers}</var>
+<arg>Content-Type=application/json</arg>
+<arg>Authorization=${AUTH_TOKEN}</arg>
+<doc>Creates and returns a dictionary based on the given ``items``.</doc>
+<status status="NOT RUN" start="2025-04-06T20:30:01.116909" elapsed="0.000021"/>
+</kw>
+<kw name="GET On Session" owner="RequestsLibrary">
+<var>${response}</var>
+<arg>vkho</arg>
+<arg>/divison/get-one/${TEST_DIVISION_ID}</arg>
+<arg>headers=${headers}</arg>
+<arg>expected_status=any</arg>
+<doc>Sends a GET request on a previously created HTTP Session.</doc>
+<status status="NOT RUN" start="2025-04-06T20:30:01.117189" elapsed="0.000021"/>
+</kw>
+<kw name="Run Keyword If" owner="BuiltIn">
+<var>${is_deleted}</var>
+<arg>${response.status_code} == 404</arg>
+<arg>Set Variable</arg>
+<arg>${TRUE}</arg>
+<arg>ELSE</arg>
+<arg>Set Variable</arg>
+<arg>${FALSE}</arg>
+<doc>Runs the given keyword with the given arguments, if ``condition`` is true.</doc>
+<status status="NOT RUN" start="2025-04-06T20:30:01.117507" elapsed="0.000035"/>
+</kw>
+<kw name="Should Be True" owner="BuiltIn">
+<arg>${is_deleted}</arg>
+<arg>msg=Division was not properly deleted or marked as deleted</arg>
+<doc>Fails if the given condition is not true.</doc>
+<status status="NOT RUN" start="2025-04-06T20:30:01.117757" elapsed="0.000021"/>
+</kw>
+<kw name="Log" owner="BuiltIn">
+<arg>Successfully verified deletion of division with ID: ${TEST_DIVISION_ID}</arg>
+<doc>Logs the given message with the given level.</doc>
+<status status="NOT RUN" start="2025-04-06T20:30:01.118037" elapsed="0.000022"/>
+</kw>
+<doc>Test deleting a division</doc>
+<tag>delete</tag>
+<tag>positive</tag>
+<status status="FAIL" start="2025-04-06T20:30:01.047013" elapsed="0.071333">Url: https://api.vkho.net/divison/delete/62 Expected status: 500 != 200</status>
+</test>
+<test id="s1-s1-t10" name="10 - Delete Non-Existent Division Test" line="644">
+<kw name="Set Variable" owner="BuiltIn">
+<msg time="2025-04-06T20:30:01.120357" level="INFO">${non_existent_id} = 99999999</msg>
+<var>${non_existent_id}</var>
+<arg>99999999</arg>
+<doc>Returns the given values which can then be assigned to a variables.</doc>
+<status status="PASS" start="2025-04-06T20:30:01.120203" elapsed="0.000182"/>
+</kw>
+<kw name="Create Dictionary" owner="BuiltIn">
+<msg time="2025-04-06T20:30:01.120859" level="INFO">${headers} = {'Content-Type': 'application/json', 'Authorization': 'Bearer eyJhbGciOiJSUzI1NiIsInR5cCIgOiAiSldUIiwia2lkIiA6ICI0TVhBLW1VYjduYV90RjNJd1VrWXNreHZrbVNqQWJpSEV6MnFpN3ZaRGhJIn0.eyJleHAiOjE3NDM5NzE0MDAsIm...</msg>
+<var>${headers}</var>
+<arg>Content-Type=application/json</arg>
+<arg>Authorization=${AUTH_TOKEN}</arg>
+<doc>Creates and returns a dictionary based on the given ``items``.</doc>
+<status status="PASS" start="2025-04-06T20:30:01.120640" elapsed="0.000245"/>
+</kw>
+<kw name="Run Keyword And Expect Error" owner="BuiltIn">
+<kw name="DELETE On Session" owner="RequestsLibrary">
+<msg time="2025-04-06T20:30:01.162387" level="INFO">DELETE Request : url=https://api.vkho.net/divison/delete/99999999 
+ path_url=/divison/delete/99999999 
+ headers={'User-Agent': 'python-requests/2.32.3', 'Accept-Encoding': 'gzip, deflate', 'Accept': '*/*', 'Connection': 'keep-alive', 'Content-Type': 'application/json', 'Authorization': 'Bearer eyJhbGciOiJSUzI1NiIsInR5cCIgOiAiSldUIiwia2lkIiA6ICI0TVhBLW1VYjduYV90RjNJd1VrWXNreHZrbVNqQWJpSEV6MnFpN3ZaRGhJIn0.eyJleHAiOjE3NDM5NzE0MDAsImlhdCI6MTc0Mzk0NjIwMCwianRpIjoiMzJjYWViNzItZTYyOS00MmY1LTkzYzYtOWU3ZGYyYmY1MzM0IiwiaXNzIjoiaHR0cHM6Ly9rYy5jb25jb24udm4vcmVhbG1zL3ZraG9fc3RhZyIsInN1YiI6IjIzYzY2NzE3LThkY2EtNDk3MS1hZDA5LTk2ODFkNjMyZjA5YyIsInR5cCI6IkJlYXJlciIsImF6cCI6InZraG9fYXBwIiwic2lkIjoiZTk3MmEwMzMtYmM5OS00MGEwLWExYmItODQxZmQ0NTQ2MTUwIiwiYWNyIjoiMSIsImFsbG93ZWQtb3JpZ2lucyI6WyIqIl0sInJlYWxtX2FjY2VzcyI6eyJyb2xlcyI6WyJtYW5hZ2VyIiwic3RhZmYiXX0sInNjb3BlIjoib3BlbmlkIHByb2ZpbGUgZW1haWwiLCJlbWFpbF92ZXJpZmllZCI6ZmFsc2UsIm5hbWUiOiJIdXkgUUMgTWFuYWdlciIsInByZWZlcnJlZF91c2VybmFtZSI6Imh1eW5oMjIubWFuYWdlciIsImdpdmVuX25hbWUiOiJIdXkiLCJmYW1pbHlfbmFtZSI6IlFDIE1hbmFnZXIiLCJlbWFpbCI6InZvbGliZWFyMTUzQGdtYWlsLmNvbSJ9.OlrsF3qEIsR8V2esJF-h61KSD6qFthku-_AROGCqgv_axJ4rYRDtHAH45EVpO6S2lFBWyAVD5FWTyKwD7gIqdcgWFY-il1PXc96toA0PtmsKsv-qOG0DxuF5z3CWhGClvMAtrPoJpmFtmT6XL6Xk-FNbSiQa0mFd70O52NYpyIKamOW4qJsVaY8PXGgEdPJXqGSgf0PAm4Mj_Fh7IWByi2c5Wi8paXHyHbWrRJs23UCAUjwu3MavbByXCq_z7yKfQIRt8qkfP8Qb5MEpSduTZwHgHxS8aoPmoRoKmgIaJctKFvpChGYq1AvJVnC-WYwBY8vLPbjnIkYxn30E4d5Q4g', 'Content-Length': '0'} 
+ body=None 
+ </msg>
+<msg time="2025-04-06T20:30:01.162580" level="INFO">DELETE Response : url=https://api.vkho.net/divison/delete/99999999 
+ status=500, reason=Internal Server Error 
+ headers={'Access-Control-Allow-Origin': '*', 'Alt-Svc': 'h3=":443"; ma=2592000', 'Content-Length': '121', 'Content-Type': 'application/json; charset=utf-8', 'Date': 'Sun, 06 Apr 2025 13:30:01 GMT', 'Etag': 'W/"79-EOs4bxnkz1vxNIBSKn3/UaaUM28"', 'Server': 'Caddy'} 
+ body={"statusCode":500,"timestamp":"2025-04-06T13:30:01.199Z","path":"/divison/delete/99999999","message":"Not found divison"} 
+ </msg>
+<msg time="2025-04-06T20:30:01.162687" level="FAIL">Url: https://api.vkho.net/divison/delete/99999999 Expected status: 500 != 200</msg>
+<arg>vkho</arg>
+<arg>/divison/delete/${non_existent_id}</arg>
+<arg>headers=${headers}</arg>
+<arg>expected_status=200</arg>
+<doc>Sends a DELETE request on a previously created HTTP Session.</doc>
+<status status="FAIL" start="2025-04-06T20:30:01.121280" elapsed="0.042163">Url: https://api.vkho.net/divison/delete/99999999 Expected status: 500 != 200</status>
+</kw>
+<arg>*</arg>
+<arg>DELETE On Session</arg>
+<arg>vkho</arg>
+<arg>/divison/delete/${non_existent_id}</arg>
+<arg>headers=${headers}</arg>
+<arg>expected_status=200</arg>
+<doc>Runs the keyword and checks that the expected error occurred.</doc>
+<status status="PASS" start="2025-04-06T20:30:01.121149" elapsed="0.042392"/>
+</kw>
+<kw name="Log" owner="BuiltIn">
+<msg time="2025-04-06T20:30:01.163941" level="INFO">Successfully verified that deleting a non-existent division fails</msg>
+<arg>Successfully verified that deleting a non-existent division fails</arg>
+<doc>Logs the given message with the given level.</doc>
+<status status="PASS" start="2025-04-06T20:30:01.163828" elapsed="0.000159"/>
+</kw>
+<doc>Test deleting a division that doesn't exist</doc>
+<tag>delete</tag>
+<tag>negative</tag>
+<status status="PASS" start="2025-04-06T20:30:01.119727" elapsed="0.044483"/>
+</test>
+<test id="s1-s1-t11" name="11 - Cleanup Test Environment" line="664">
+<kw name="Log" owner="BuiltIn">
+<msg time="2025-04-06T20:30:01.165560" level="INFO">Test environment cleaned up successfully</msg>
+<arg>Test environment cleaned up successfully</arg>
+<doc>Logs the given message with the given level.</doc>
+<status status="PASS" start="2025-04-06T20:30:01.165452" elapsed="0.000157"/>
+</kw>
+<doc>Clean up any resources created during tests</doc>
+<tag>cleanup</tag>
+<status status="PASS" start="2025-04-06T20:30:01.165005" elapsed="0.000809"/>
+</test>
+<doc>Comprehensive Test Suite for Division Operations in vKho API
+Includes proper parameter validation and error handling</doc>
+<status status="FAIL" start="2025-04-06T20:30:00.088248" elapsed="1.078431"/>
 </suite>
-<status status="PASS" start="2025-04-05T16:10:42.102825" elapsed="1.104918"/>
+<status status="FAIL" start="2025-04-06T20:30:00.055792" elapsed="1.112294"/>
 </suite>
 <statistics>
 <total>
-<stat pass="4" fail="0" skip="0">All Tests</stat>
+<stat pass="8" fail="3" skip="0">All Tests</stat>
 </total>
 <tag>
-<stat pass="4" fail="0" skip="0">authentication</stat>
-<stat pass="2" fail="0" skip="0">login</stat>
-<stat pass="2" fail="0" skip="0">negative</stat>
-<stat pass="2" fail="0" skip="0">positive</stat>
+<stat pass="1" fail="0" skip="0">cleanup</stat>
+<stat pass="2" fail="0" skip="0">create</stat>
+<stat pass="1" fail="1" skip="0">delete</stat>
+<stat pass="4" fail="0" skip="0">negative</stat>
+<stat pass="2" fail="3" skip="0">positive</stat>
+<stat pass="1" fail="2" skip="0">retrieve</stat>
+<stat pass="1" fail="0" skip="0">setup</stat>
+<stat pass="2" fail="0" skip="0">update</stat>
 </tag>
 <suite>
-<stat name="Auth" id="s1" pass="4" fail="0" skip="0">Auth</stat>
-<stat name="Auth Test" id="s1-s1" pass="4" fail="0" skip="0">Auth.Auth Test</stat>
+<stat name="Divisions" id="s1" pass="8" fail="3" skip="0">Divisions</stat>
+<stat name="Divisions" id="s1-s1" pass="8" fail="3" skip="0">Divisions.Divisions</stat>
 </suite>
 </statistics>
 <errors>
-<msg time="2025-04-05T16:10:42.613630" level="ERROR">Error in file 'D:\robot_file\Variables\variables.robot' on line 21: Setting variable '${TEST_PRODUCT_ORDER_ID} ${EMPTY}' failed: Invalid variable name '${TEST_PRODUCT_ORDER_ID} ${EMPTY}'.</msg>
-<msg time="2025-04-05T16:10:42.613821" level="ERROR">Error in file 'D:\robot_file\Variables\variables.robot' on line 22: Setting variable '${TEST_PRODUCT_ORDER_DATA} ${EMPTY}' failed: Invalid variable name '${TEST_PRODUCT_ORDER_DATA} ${EMPTY}'.</msg>
-<msg time="2025-04-05T16:10:42.614393" level="ERROR">Error in file 'D:\robot_file\Variables\variables.robot' on line 47: Setting variable '${PRODUCT_ORDER_STATUS_PENDING} PENDING' failed: Invalid variable name '${PRODUCT_ORDER_STATUS_PENDING} PENDING'.</msg>
-<msg time="2025-04-05T16:10:42.614531" level="ERROR">Error in file 'D:\robot_file\Variables\variables.robot' on line 48: Setting variable '${PRODUCT_ORDER_STATUS_COMPLETED} COMPLETED' failed: Invalid variable name '${PRODUCT_ORDER_STATUS_COMPLETED} COMPLETED'.</msg>
-<msg time="2025-04-05T16:10:42.614700" level="ERROR">Error in file 'D:\robot_file\Variables\variables.robot' on line 49: Setting variable '${PRODUCT_ORDER_STATUS_CANCELLED} CANCELLED' failed: Invalid variable name '${PRODUCT_ORDER_STATUS_CANCELLED} CANCELLED'.</msg>
 </errors>
 </robot>
